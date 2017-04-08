@@ -1,5 +1,6 @@
 #coding=utf-8
 import pymysql, configparser
+import datetime
 import tushare as ts
 from sqlalchemy import create_engine
 from traceback import print_exc
@@ -13,7 +14,9 @@ MySQL use 'utf8mb4' characterset
 API provided at http://tushare.org/trading.html
 
 """
-
+def getTime():
+    return str(datetime.datetime.now())
+    
 def connectConfigDB(section, configName = 'config.ini'):
     config = configparser.RawConfigParser()
     config.read(configName)
@@ -68,31 +71,6 @@ class StockInfoFetcher(IDataFetcher):
     def fetchByIndustry(self, industry):
         raise NotImplementedError()
 
-    """ fetch 
-    code,股票代码
-    name,名称
-    industry,所属行业
-    area,地区
-    pe,市盈率
-    outstanding,流通股本(亿)
-    totals,总股本(亿)
-    totalAssets,总资产(万)
-    liquidAssets,流动资产
-    fixedAssets,固定资产
-    reserved,公积金
-    reservedPerShare,每股公积金
-    esp,每股收益
-    bvps,每股净资
-    pb,市净率
-    timeToMarket,上市日期
-    undp,未分利润
-    perundp, 每股未分配
-    rev,收入同比(%)
-    profit,利润同比(%)
-    gpr,毛利率(%)
-    npr,净利润率(%)
-    holders,股东人数
-    """
     def fetchAll(self):
         tableName = 'stockBasics2'
         param = []
@@ -103,28 +81,29 @@ class StockInfoFetcher(IDataFetcher):
             cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
             sql = """
                 CREATE TABLE `%s`.`%s` (
-                    `name` VARCHAR(45) NOT NULL,
-                    `industry` VARCHAR(45) NULL,
-                    `area` VARCHAR(45) NULL,
-                    `pe` DOUBLE NULL,
-                    `outstanding` DOUBLE NULL,
-                    `totals` DOUBLE NULL,
-                    `totalAssets` DOUBLE NULL,
-                    `liquidAssets` DOUBLE NULL,
-                    `fixedAssets` DOUBLE NULL,
-                    `reserved` DOUBLE NULL,
-                    `reservedPerShare` DOUBLE NULL,
-                    `esp` DOUBLE NULL,
-                    `bvps` DOUBLE NULL,
-                    `pb` DOUBLE NULL,
-                    `timeToMarket` VARCHAR(45) NULL,
-                    `undp` DOUBLE NULL,
-                    `perundp` DOUBLE NULL,
-                    `rev` DOUBLE NULL,
-                    `profit` DOUBLE NULL,
-                    `gpr` DOUBLE NULL,
-                    `npr` DOUBLE NULL,
-                    `holders` INT NULL,
+                    `code` VARCHAR(10) NOT NULL COMMENT '股票代码',
+                    `name` VARCHAR(45) NOT NULL COMMENT '名称',
+                    `industry` VARCHAR(45) NULL COMMENT '所属行业',
+                    `area` VARCHAR(45) NULL COMMENT '地区',
+                    `pe` DOUBLE NULL COMMENT '市盈率',
+                    `outstanding` DOUBLE NULL COMMENT '流通股本(亿)',
+                    `totals` DOUBLE NULL COMMENT '总股本(亿)',
+                    `totalAssets` DOUBLE NULL COMMENT '总资产(万)',
+                    `liquidAssets` DOUBLE NULL COMMENT '流动资产',
+                    `fixedAssets` DOUBLE NULL COMMENT '固定资产',
+                    `reserved` DOUBLE NULL COMMENT '公积金',
+                    `reservedPerShare` DOUBLE NULL COMMENT '每股公积金',
+                    `esp` DOUBLE NULL COMMENT '每股收益',
+                    `bvps` DOUBLE NULL COMMENT '每股净资',
+                    `pb` DOUBLE NULL COMMENT '市净率',
+                    `timeToMarket` VARCHAR(45) NULL COMMENT '上市日期',
+                    `undp` DOUBLE NULL COMMENT '未分利润',
+                    `perundp` DOUBLE NULL COMMENT '每股未分配',
+                    `rev` DOUBLE NULL COMMENT '收入同比(%)',
+                    `profit` DOUBLE NULL COMMENT '利润同比(%)',
+                    `gpr` DOUBLE NULL COMMENT '毛利率(%)',
+                    `npr` DOUBLE NULL COMMENT '净利润率(%)',
+                    `holders` INT NULL COMMENT '股东人数',
                     PRIMARY KEY (`name`))
                     DEFAULT CHARSET=utf8mb4;
                     """ % (dbname, tableName)
@@ -137,7 +116,7 @@ class StockInfoFetcher(IDataFetcher):
                         (%s, %s, %s, %s, %s, %s, 
                         %s, %s, %s, %s, %s, %s, 
                         %s, %s, %s, %s, %s, %s,
-                        %s, %s, %s, %s)
+                        %s, %s, %s, %s, %s)
                     """
             for row in res.values:
                 # print (row.tolist())
@@ -184,29 +163,49 @@ class StockInfoFetcher(IDataFetcher):
             sql = """
                     CREATE TABLE 
                         `%s`.`%s` (
-                        `code` VARCHAR(10) NOT NULL,
-                        `name` VARCHAR(45) NULL,
-                        `industry` VARCHAR(45) NULL,
-                        PRIMARY KEY (`code`)
+                        `code` VARCHAR(10) NOT NULL COMMENT '股票代码',
+                        `name` VARCHAR(45) NULL COMMENT '股票名称',
+                        `date` VARCHAR(45) NULL COMMENT '更新时间',
+                        `changepercent` DOUBLE NULL COMMENT '涨跌幅',
+                        `trade` DOUBLE NULL COMMENT '现价',
+                        `open` DOUBLE NULL COMMENT '开盘价',
+                        `high` DOUBLE NULL COMMENT '最高价',
+                        `low` DOUBLE NULL COMMENT '最低价',
+                        `settlement` DOUBLE NULL COMMENT '昨日收盘价',
+                        `volume` DOUBLE NULL COMMENT '成交量',
+                        `turnoverratio` DOUBLE NULL COMMENT '换手率',
+                        `amount` DOUBLE NULL COMMENT '成交量',
+                        `per` DOUBLE NULL COMMENT '市盈率',
+                        `pb` DOUBLE NULL COMMENT '市净率',
+                        `mktcap` DOUBLE NULL COMMENT '总市值',
+                        `nmc` DOUBLE NULL COMMENT '流通市值',
+                        PRIMARY KEY (`code`, `date`)
                         ) DEFAULT CHARSET=utf8mb4;  
                     """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;  
             cursor.execute(sql)
             print ('table %s created' % tableName)
             # fetch and insert data
-            res = ts.get_stock_basics()
+            res = ts.get_today_all()
             sql = 'INSERT INTO `' + tableName + \
-                    """` values(%s, %s, %s)
+                    """` values(%s, %s, %s, %s, 
+                                    %s, %s, %s, %s, 
+                                    %s, %s, %s, %s, 
+                                    %s, %s, %s, %s)
                     """
-            for row in res.values:
-                item = [str(row[0]), str(row[1]), str(row[2])]
-                if row[0] in records:
-                    records[row[0]][1] = records[row[0]][1] + " " + row[2]
-                else:
-                    records[row[0]] = [row[1], row[2]]
+            # for row in res.values:
+            #     item = [str(row[0]), str(row[1]), str(row[2])]
+            #     if row[0] in records:
+            #         records[row[0]][1] = records[row[0]][1] + " " + row[2]
+            #     else:
+            #         records[row[0]] = [row[1], row[2]]
                 # param.append(item)
-            for (k, v) in records.items():
-                param.append([k] + v)
-                # print(param[-1])
+            # for (k, v) in records.items():
+                # param.append([k] + v)
+            for row in res.values:
+                tmp = row.tolist()
+                tmp.insert(2, getTime())
+                param.append(tmp)
+                print(tmp)
             cursor.executemany(sql, param)
             db.commit()
             print ('\ntable %s inserted %s records.' % (tableName, len(res.values)))
@@ -259,8 +258,7 @@ class TradeFetcher(IDataFetcher):
 def main():
     stk = StockInfoFetcher()
     trd = TradeFetcher()
-    trd.fetchByCode('600848')
-    
+    stk.buildStockList()
 
 if __name__ == '__main__':
     main()
