@@ -51,7 +51,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini" onload="onload()">
 <div class="wrapper">
 
     <!-- Main Header -->
@@ -291,7 +291,71 @@ desired effect
 
         <!-- Main content -->
         <section class="content">
+            <div class="row">
+                <div class="col-lg-10 col-xs-10">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3><span id="name">万科A</span> (<span id="code">000001</span>)</h3>
 
+                            <table class="table-responsive">
+                                <tr>
+                                    <td >
+                                        <p>现价：<span class="badge bg-yellow-active" id="trade">10.00</span></p>
+                                    </td>
+                                    <td>
+                                        <p>涨跌幅：<span class="badge bg-yellow-active" id="changepercent">10.00</span></p>
+                                    </td>
+                                    <td>
+                                        <p>开盘价：<span class="badge bg-yellow-active" id="open">10.00</span></p>
+                                    </td>
+                                    <td>
+                                        <p>最高价：<span class="badge bg-yellow-active" id="high">10.00</span></p>
+                                    </td>
+                                    <td >
+                                        <p>最低价：<span class="badge bg-yellow-active" id="low">10.00</span></p>
+                                    </td>
+                                    <td>
+                                        <p>昨日收盘价：<span class="badge bg-yellow-active" id="settlement">10.00</span></p>
+                                    </td>
+                                    <td>
+                                        <p>成交量：<span class="badge bg-yellow-active" id="volume">10.00</span></p>
+                                    </td>
+                                    <!---->
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>换手率：<span class="badge bg-yellow-active" id="turnoverratio">10.00</span></p>
+                                    </td>
+                                    <td>
+                                        <p>成交金额：<span class="badge bg-yellow-active" id="amount">10.00</span></p>
+                                    </td>
+                                    <td>
+                                        <p>市盈率：<span class="badge bg-yellow-active" id="per">10.00</span></p>
+                                    </td>
+                                    <td>
+                                        <p>市净率：<span class="badge bg-yellow-active" id="pb">10.00</span></p>
+                                    </td>
+                                    <td>
+                                        <p>总市值：<span class="badge bg-yellow-active" id="mktcap">10.00</span></p>
+                                    </td>
+                                    <td>
+                                        <p>流通市值：<span class="badge bg-yellow-active" id="nmc">10.00</span></p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p></p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <!--<a href="#" class="small-box-footer">-->
+                        <!--More info <i class="fa fa-arrow-circle-right"></i>-->
+                        <!--</a>-->
+                    </div>
+                </div>
+            </div>
 
         </section>
         <!-- /.content -->
@@ -395,6 +459,8 @@ desired effect
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/app.min.js"></script>
+
+<script src="application/stockinfo.js"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
