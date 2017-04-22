@@ -33,15 +33,30 @@ router.get('/realtime/:stockid', function(req, res, next) {
 });
 
 /* GET stock trading records. */
-router.get('/trades/:stockid/:limit',function (req, res) {
+router.get('/trades/:stockid/:limit?',function (req, res) {
     StockData.getLatestTradeRecords(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
+            res.json()
         }else{
             res.json(result)
         }
     }, req.params.limit)
 })
+
+
+/* GET block trading records. */
+router.get('/blocks/:stockid/:limit?',function (req, res) {
+    StockData.getBlockTradeRecords(req.params.stockid, function (err, result) {
+        if( err ){
+            console.log(err)
+            res.json()
+        }else{
+            res.json(result)
+        }
+    }, req.params.limit)
+})
+
 
 /* GET stock realtime quotes. */
 router.get('/quotes/:stockid',function (req, res) {
@@ -55,10 +70,12 @@ router.get('/quotes/:stockid',function (req, res) {
     })
 })
 
+
+
 /* GET stocks of the same industry or area.
 *  domain should be `industry` or `area`
 * */
-router.get('/rank/:domain/:field/:limit',function (req, res) {
+router.get('/rank/:domain/:field/:limit?',function (req, res) {
     StockData.getStocksByDomain(req.params.domain, req.params.field, function (err, result) {
         if( err ){
             console.log(err)
@@ -68,6 +85,34 @@ router.get('/rank/:domain/:field/:limit',function (req, res) {
         }
     }, req.params.limit)
 })
+
+
+/* GET news of a stock. */
+router.get('/news/:stockid/:limit?',function (req, res) {
+    StockData.getStockNews(req.params.stockid, function (err, result) {
+        if( err ){
+            console.log(err)
+            res.json()
+        }else{
+            res.json(result)
+        }
+    }, req.params.limit)
+})
+
+/* GET finantial news . */
+router.get('/newsList/:limit?',function (req, res) {
+    StockData.getFinancialNews(function (err, result) {
+        if( err ){
+            console.log(err)
+            res.json()
+        }else{
+            res.json(result)
+        }
+    }, req.params.limit)
+})
+
+
+
 
 
 module.exports = router;

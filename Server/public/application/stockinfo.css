@@ -8,3 +8,12 @@
     padding: 5px;
 }
 
+#financial-news-table td {
+    text-align: left;
+}
+
+#stock-news-table td {
+    text-align: left;
+}
+
+

@@ -365,7 +365,7 @@ desired effect
             <div class="row">
                 <div class="col-lg-6 col-xs-12">
                     <div class="box box-solid">
-                        <ul class="nav nav-tabs" id="curve-tab">
+                        <ul class="nav nav-tabs bg-gray-light" id="curve-tab">
                             <li><a href="#">分时</a> </li>
                             <li class="active"><a href="#">日K</a> </li>
                             <li><a href="#">月K</a> </li>
@@ -385,7 +385,7 @@ desired effect
 
                 <div class="col-lg-3 col-xs-6">
                     <div class="box box-info">
-                        <div class="box-header with-border">
+                        <div class="box-header with-border bg-gray-light">
                             <h3 class="box-title">明细</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -394,15 +394,7 @@ desired effect
                             </div>
                         </div>
                         <div class="box-body">
-                            <table id="trade-records-table" class="table table-hover table-bordered">
-                                <!--<tbody>-->
-                                <!--<tr>-->
-                                    <!--<th>时间</th>-->
-                                    <!--<th>成交价格</th>-->
-                                    <!--<th>成交量</th>-->
-                                    <!--<th>成交金额(元)</th>-->
-                                <!--</tr>-->
-                                <!--</tbody>-->
+                            <table id="trade-records-table" class="table table-hover table-bordered" data-striped="true">
                             </table>
                         </div>
                     </div>
@@ -410,7 +402,7 @@ desired effect
 
                 <div class="col-lg-3 col-xs-6">
                     <div class="box box-info">
-                        <div class="box-header with-border">
+                        <div class="box-header with-border bg-gray-light">
                             <h3 class="box-title">盘口</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -419,7 +411,7 @@ desired effect
                             </div>
                         </div>
                         <div class="box-body">
-                            <table id="quotes-table" class="table table-hover table-bordered">
+                            <table id="quotes-table" class="table table-hover table-bordered" data-show-header="false" data-striped="true">
                             </table>
                         </div>
                     </div>
@@ -430,7 +422,42 @@ desired effect
             <div class="row">
                 <div class="col-lg-6 col-xs-12">
                     <div class="box box-solid">
-                        <ul class="nav nav-tabs" id="rank-tab">
+                        <ul class="nav nav-tabs bg-gray-light" id="news-tab" >
+                            <li><a data-toggle="tab" href="#stock-news-table-tab">个股新闻</a> </li>
+                            <li class="active"><a data-toggle="tab" href="#financial-news-table-tab">相关新闻</a> </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade" id="stock-news-table-tab">
+                                <table  id="stock-news-table" data-show-header="false"></table>
+                            </div>
+                            <div class="tab-pane fade in active" id="financial-news-table-tab">
+                                <table id="financial-news-table" data-show-header="false"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-xs-12">
+                    <div class="box box-info">
+                        <div class="box-header with-border bg-gray-light">
+                            <h3 class="box-title">大单交易</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="block-records-table" class="table table-hover table-bordered" data-striped="true">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-xs-12">
+                    <div class="box box-solid">
+                        <ul class="nav nav-tabs bg-gray-light" id="rank-tab">
                             <li><a data-toggle="tab" href="#industry-rank-table-tab">同行业个股</a> </li>
                             <li class="active"><a data-toggle="tab" href="#area-rank-table-tab">同地区个股</a> </li>
                             <span class="label label-default pull-right"><h5 id="rank-field">  </h5></span>

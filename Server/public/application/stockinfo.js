@@ -11,6 +11,7 @@ function onload() {
     drawKCurve();
     buildTradeRecordTable();
     buildQuotesTable();
+    buildNewsTable();
     // buildRankingTable(); // only be executed after getStockBasic
 }
 
@@ -52,6 +53,7 @@ function getRealtimeData() {
 
 function buildTradeRecordTable() {
     var limit = 5
+    jQuery.fn.bootstrapTable
     $.get('/stocks/trades/' + code + '/' + limit, function (arr, status) {
         if( isSuccess(status) ){
             $('#trade-records-table').bootstrapTable({
@@ -62,7 +64,8 @@ function buildTradeRecordTable() {
                     },
                     {
                         field: 'price',
-                        title: '成交价格'
+                        title: '成交价格',
+                        formatter: 'redFormatter'
                     },
                     {
                         field: 'volume',
@@ -71,6 +74,35 @@ function buildTradeRecordTable() {
                     {
                         field: 'amount',
                         title: '成交金额(元)'
+                    }
+                ],
+                data: arr
+            })
+        }else{
+            console.log("status = " + status)
+        }
+    })
+
+    $.get('/stocks/blocks/' + code + "/" + 10, function (arr, status) {
+        if( isSuccess(status) ){
+            $('#block-records-table').bootstrapTable({
+                columns: [
+                    {
+                        field: 'price',
+                        title: '成交价'
+                    },
+                    {
+                        field: 'change',
+                        title: '平均溢价',
+                        formatter: 'redFormatter'
+                    },
+                    {
+                        field: 'volume',
+                        title: '成交量(万股)'
+                    },
+                    {
+                        field: 'date',
+                        title: '日期'
                     }
                 ],
                 data: arr
@@ -105,7 +137,8 @@ function buildQuotesTable() {
                     },
                     {
                         field: 'p',      // price
-                        title: '交易价格'
+                        title: '交易价格',
+                        formatter: 'redFormatter'
                     },
                     {
                         field: 'v',  // value
@@ -128,7 +161,8 @@ function buildRankingTable() {
         },
         {
             field: 'name',
-            title: '股票名称'
+            title: '股票名称',
+            formatter: 'LinkFormatter'
         },
         {
             field: 'trade',
@@ -136,7 +170,8 @@ function buildRankingTable() {
         },
         {
             field: 'changepercent',
-            title: '涨跌幅'
+            title: '涨跌幅',
+            formatter: 'redFormatter'
         },
         {
             field: 'mktcap',
@@ -190,6 +225,41 @@ function buildRankingTable() {
     })
 }
 
+function buildNewsTable() {
+    var columns = [
+        {
+            field: 'title',
+            formatter: 'LinkFormatter'
+        },
+        {
+            field: 'date'
+        }
+    ]
+    $.get('/stocks/news/' + code + "/10", function (arr, status) {
+        if( isSuccess(status) ){
+            $('#stock-news-table').bootstrapTable({
+                columns: columns,
+                data: arr
+            })
+        }else {
+            console.log('status = ' + status)
+        }
+    })
+
+    $.get('/stocks/newslist/10', function (arr, status) {
+        if( isSuccess(status) ){
+            $('#financial-news-table').bootstrapTable({
+                columns: [{ field: 'classify' }].concat(columns),
+                data: arr
+            })
+        }else {
+            console.log('status = ' + status)
+        }
+    })
+
+
+}
+
 function drawKCurve() {
     var trace1 = {
         x: ['2017-01-04', '2017-01-05', '2017-01-06', '2017-01-09', '2017-01-10', '2017-01-11', '2017-01-12', '2017-01-13', '2017-01-17', '2017-01-18', '2017-01-19', '2017-01-20', '2017-01-23', '2017-01-24', '2017-01-25', '2017-01-26', '2017-01-27', '2017-01-30', '2017-01-31', '2017-02-01', '2017-02-02', '2017-02-03', '2017-02-06', '2017-02-07', '2017-02-08', '2017-02-09', '2017-02-10', '2017-02-13', '2017-02-14', '2017-02-15'],
@@ -233,4 +303,15 @@ function drawKCurve() {
     };
 
     Plotly.plot('curve-day', data, layout);
+}
+
+
+function LinkFormatter(value, row) {
+    // return value
+    return "<a href='"+row.url+"'>"+value+"</a>";
+}
+
+
+function redFormatter(value) {
+    return "<span style='color:red'>" + value + "</span>"
 }

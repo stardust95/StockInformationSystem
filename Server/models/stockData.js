@@ -34,10 +34,21 @@ class StockData{
 
     static getLatestTradeRecords(code, callback, limit){
         var conn = StockData.getConnection()
-        var sql = "SELECT time, price, volume, amount FROM tradeRecords WHERE code = " + code
-        if( limit ){
-            sql += " LIMIT " + limit
+        var sql = "SELECT time, price, volume, amount FROM tradeRecords WHERE code = " + code + " ORDER BY time"
+        if( !limit ){
+            limit = 10
         }
+        sql += " LIMIT " + limit
+        conn.query(sql, callback)
+    }
+
+    static getBlockTradeRecords(code, callback, limit){
+        var conn = StockData.getConnection()
+        var sql = "SELECT * FROM tradeRecords WHERE code = " + code + " AND volume >= 8000 ORDER BY date"
+        if( !limit ){
+            limit = 10
+        }
+        sql += " LIMIT " + limit
         conn.query(sql, callback)
     }
 
@@ -51,9 +62,30 @@ class StockData{
     static getStocksByDomain(domain, field, callback, limit){
         var conn = StockData.getConnection()
         var sql = "SELECT * FROM stockPriceForRank WHERE `" + domain + "` = '"+ field +"' ORDER BY mktcap DESC"
-        if( limit ){
-            sql += " LIMIT " + limit
+        if( !limit ){
+            limit = 10
         }
+        sql += " LIMIT " + limit
+        conn.query(sql, callback)
+    }
+
+    static getStockNews(code, callback, limit){
+        var conn = StockData.getConnection()
+        var sql = "SELECT * FROM stockNews WHERE code = " + code + " ORDER BY date DESC"
+        if( !limit ){
+            limit = 10
+        }
+        sql += " LIMIT " + limit
+        conn.query(sql, callback)
+    }
+
+    static getFinancialNews(callback, limit){
+        var conn = StockData.getConnection()
+        var sql = "SELECT * FROM financialNews ORDER BY date DESC"
+        if( !limit ){
+            limit = 10
+        }
+        sql += " LIMIT " + limit
         conn.query(sql, callback)
     }
 
