@@ -3,18 +3,41 @@
  */
 
 var express = require('express');
-var stockData = require('../models/stockData')
+var StockData = require('../models/stockData')
 var router = express.Router();
 
 /* GET stock realtime data. */
 router.get('/realtime/:stockid', function(req, res, next) {
-    var result = stockData.getRealtimeData(req.params.stockid, function (err, result) {
+    StockData.getRealtimePrice(req.params.stockid, function (err, result) {
+        if( err ){
+            console.log(err)
+        }else{
+            res.json(result[0])
+        }
+    }, req.limit)
+});
+
+/* GET stock trading records. */
+router.get('/trades/:stockid/:limit',function (req, res) {
+    StockData.getLatestTradeRecords(req.params.stockid, function (err, result) {
+        if( err ){
+            console.log(err)
+        }else{
+            res.json(result)
+        }
+    }, req.params.limit)
+})
+
+router.get('/quotes/:stockid',function (req, res) {
+    StockData.getRealtimeQuotes(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
         }else{
             res.json(result[0])
         }
     })
-});
+})
+
+
 
 module.exports = router;

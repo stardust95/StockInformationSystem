@@ -21,12 +21,28 @@ class StockData{
         return mysql.createConnection(config);
     }
 
-    static getRealtimeData(code, callback) {
+    static getRealtimePrice(code, callback) {
         var conn = StockData.getConnection()
-
         conn.query("SELECT * FROM stockList WHERE code = " + code, callback)
-
     }
+
+    static getLatestTradeRecords(code, callback, limit){
+        var conn = StockData.getConnection()
+        var sql = "SELECT time, price, volume, amount FROM tradeRecords WHERE code = " + code
+        if( limit ){
+            sql += " LIMIT " + limit
+        }
+        conn.query(sql, callback)
+    }
+
+    static getRealtimeQuotes(code, callback){
+        var conn = StockData.getConnection()
+        var sql = "SELECT * FROM realtimeQuotes WHERE code = " + code + " LIMIT 1"
+        // sql += "ORDER BY DATE, TIME"
+        conn.query(sql, callback)
+    }
+
+
 }
 
 module.exports = StockData

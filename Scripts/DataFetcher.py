@@ -72,7 +72,7 @@ class StockInfoFetcher(IDataFetcher):
         raise NotImplementedError()
 
     def fetchAll(self):
-        tableName = 'stockBasics2'
+        tableName = 'stockBasics'
         param = []
         try:
             db, dbname = connectConfigDB('database')
@@ -132,9 +132,7 @@ class StockInfoFetcher(IDataFetcher):
             db.close()
         return True
 
-
     def buildIndexList(self):
-        param = []
         tableName = 'indexList'
         try:
             engine = createDbEngine('database')
@@ -150,7 +148,6 @@ class StockInfoFetcher(IDataFetcher):
 
     """
     def buildStockList(self):   
-        records = {}
         param = []
         tableName = 'stockList'
         try:
@@ -192,15 +189,6 @@ class StockInfoFetcher(IDataFetcher):
                                     %s, %s, %s, %s, 
                                     %s, %s, %s, %s)
                     """
-            # for row in res.values:
-            #     item = [str(row[0]), str(row[1]), str(row[2])]
-            #     if row[0] in records:
-            #         records[row[0]][1] = records[row[0]][1] + " " + row[2]
-            #     else:
-            #         records[row[0]] = [row[1], row[2]]
-                # param.append(item)
-            # for (k, v) in records.items():
-                # param.append([k] + v)
             for row in res.values:
                 tmp = row.tolist()
                 tmp.insert(2, getTime())
@@ -217,6 +205,60 @@ class StockInfoFetcher(IDataFetcher):
             db.close()
         return True
 
+    def fetchKCurve(self, code, ktype = 'D', start = None, end = None):
+        tableName = 'histData'
+        param = []
+        try:
+            db, dbname = connectConfigDB('database')
+            cursor = db.cursor()
+            cursor.execute("SET NAMES utf8mb4;")
+            cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
+            # db.commit()
+            # create table
+            sql = """
+                    CREATE TABLE 
+                        `%s`.`%s` (
+                        `code` VARCHAR(10) NOT NULL COMMENT '股票代码',
+                        `date` VARCHAR(45) NULL COMMENT '日期',
+                        `open` DOUBLE NULL COMMENT '开盘价',
+                        `high` DOUBLE NULL COMMENT '最高价',
+                        `close` DOUBLE NULL COMMENT '收盘价',
+                        `low` DOUBLE NULL COMMENT '最低价',
+                        `volume` DOUBLE NULL COMMENT '成交量',
+                        `price_change` DOUBLE NULL COMMENT '价格变动',
+                        `p_change` DOUBLE NULL COMMENT '涨跌幅',
+                        `ma5` DOUBLE NULL COMMENT '5日均价',
+                        `ma10` DOUBLE NULL COMMENT '10日均价',
+                        `ma20` DOUBLE NULL COMMENT '20日均价',
+                        `v_ma5` DOUBLE NULL COMMENT '5日均量',
+                        `v_ma10` DOUBLE NULL COMMENT '10日均量',
+                        `v_ma20` DOUBLE NULL COMMENT '20日均量',
+                        PRIMARY KEY (`code`, `date`)
+                        ) DEFAULT CHARSET=utf8mb4;  
+                    """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;  
+            cursor.execute(sql)
+            print ('table %s created' % tableName)
+            # fetch and insert data
+            res = ts.get_hist_data(code, start=start, end=end, ktype=ktype)
+            sql = 'INSERT INTO `' + tableName + \
+                    """` values(%s, %s, %s, %s, 
+                                    %s, %s, %s, %s, 
+                                    %s, %s, %s, %s, 
+                                    %s, %s, %s)
+                    """
+            for i in range(0, len(res.values)):
+                param.append([code, res.index[i]] + res.values[i].tolist())
+            cursor.executemany(sql, param)
+            db.commit()
+            print ('\ntable %s inserted %s records.' % (tableName, len(res.values)))
+        except:
+            print_exc()
+            db.rollback()
+            return False
+        finally:
+            db.close()
+
+
 class TradeFetcher(IDataFetcher):
     def __init__(self):
         pass
@@ -224,19 +266,22 @@ class TradeFetcher(IDataFetcher):
     def fetchByName(self, name):
         raise NotImplementedError()
     
-    def fetchByCode(self, code):
+    def fetchByCode(self, code, date = None):
         param = []
         tableName = 'tradeRecords'
         try:
             db, dbname = connectConfigDB('database')
             cursor = db.cursor()
             sql = 'INSERT INTO `' + tableName + \
-                    """` values(%s, %s, %s, %s, %s, %s, %s, %s)
+                    """` values(%s, %s, %s, %s, 
+                                    %s, %s, %s, %s)
                     """
             # fetch and insert data
-            res = ts.get_today_ticks(code)
+            if date is None:
+                date = str(datetime.datetime.now()).split()[0]
+            res = ts.get_tick_data(code, date)
             for row in res.values:
-                param.append([code] + row.tolist())
+                param.append([code, date] + row.tolist())
             cursor.executemany(sql, param)
             db.commit()
             print ('\ntable %s inserted %s records.' % (tableName, len(res.values)))
@@ -253,12 +298,24 @@ class TradeFetcher(IDataFetcher):
     
     def fetchAll(self):
         raise NotImplementedError()
+    
+    def fetchRealtimeQuotes(self, code):
+        tableName = 'realtimeQuotes'
+        try:
+            engine = createDbEngine('database')
+            df = ts.get_realtime_quotes(code)
+            df.to_sql(tableName, engine, if_exists='replace')
+        except:
+            print_exc()
+            return False
+        return True
 
 
 def main():
     stk = StockInfoFetcher()
     trd = TradeFetcher()
-    stk.buildStockList()
+    # trd.fetchByCode('000001', '2017-04-20')
+    trd.fetchRealtimeQuotes('000001')
 
 if __name__ == '__main__':
     main()
