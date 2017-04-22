@@ -2,12 +2,16 @@
  * Created by stardust on 2017/4/20.
  */
 
+var code = '000001';
+var stock;
 
 function onload() {
+    getStockBasic();
     getRealtimeData();
     drawKCurve();
     buildTradeRecordTable();
     buildQuotesTable();
+    // buildRankingTable(); // only be executed after getStockBasic
 }
 
 
@@ -16,10 +20,22 @@ function onload() {
 function isSuccess(status) {
     return status === "success"
 }
+
+function getStockBasic() {
+    $.get('/stocks/info/' + code, function (data, status) {
+        if( isSuccess(status) ){
+            stock = data
+            buildRankingTable()
+        }else {
+            console.log('status = ' + status)
+        }
+    })
+}
+
 // data retrieve functions
 function getRealtimeData() {
 
-    $.get('/stocks/realtime/000001', function (object, status) {
+    $.get('/stocks/realtime/' + code, function (object, status) {
         if( isSuccess(status) ){
             object["mktcap"] = Math.floor(object["mktcap"])
             object["nmc"] = Math.floor(object["nmc"])
@@ -35,7 +51,6 @@ function getRealtimeData() {
 }
 
 function buildTradeRecordTable() {
-    var code = '000001'
     var limit = 5
     $.get('/stocks/trades/' + code + '/' + limit, function (arr, status) {
         if( isSuccess(status) ){
@@ -68,7 +83,6 @@ function buildTradeRecordTable() {
 
 function buildQuotesTable() {
     var number = ['①', '②', '③', '④', '⑤']
-    var code = '000001'
     $.get('/stocks/quotes/' + code, function (data, status) {
         if( isSuccess(status) ){
             var arr = []
@@ -90,11 +104,11 @@ function buildQuotesTable() {
                         // title: ''
                     },
                     {
-                        field: 'p'      // price
+                        field: 'p',      // price
                         title: '交易价格'
                     },
                     {
-                        field: 'v'  // value
+                        field: 'v',  // value
                         title: '交易量'
                     },
                 ],
@@ -102,6 +116,76 @@ function buildQuotesTable() {
             })
         }else{
             console.log('status = ' + status)
+        }
+    })
+}
+
+function buildRankingTable() {
+    let columns = [
+        {
+            field: 'index',
+            title: '排名'
+        },
+        {
+            field: 'name',
+            title: '股票名称'
+        },
+        {
+            field: 'trade',
+            title: '当前价格'
+        },
+        {
+            field: 'changepercent',
+            title: '涨跌幅'
+        },
+        {
+            field: 'mktcap',
+            title: '市值'
+        },
+        {
+            field: 'per',
+            title: '市盈率'
+        }
+    ]
+
+    $.get('/stocks/rank/industry/' + stock.industry + "/10", function (result, status) {
+        if( isSuccess(status) ){
+            for(let index in result){
+                result[index]['index'] = Number(index)+1
+                result[index]['mktcap'] = Math.round(result[index]['mktcap'])
+            }
+            $('#industry-rank-table').bootstrapTable({
+                columns: columns,
+                data: result
+            })
+        }else{
+            console.log('status = ' + status)
+        }
+    })
+
+    $.get('/stocks/rank/area/' + stock.area + "/10", function (result, status) {
+        if( isSuccess(status) ){
+            for(let index in result){
+                result[index]['index'] = Number(index)+1
+                result[index]['mktcap'] = Math.round(result[index]['mktcap'])
+            }
+            $('#area-rank-table').bootstrapTable({
+                columns: columns,
+                data: result
+            })
+        }else{
+            console.log('status = ' + status)
+        }
+    })
+
+    document.getElementById('rank-field').innerText = stock.area
+
+    $('#rank-tab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var elem = document.getElementById('rank-field')
+        if( e.target.innerText === "同行业个股" ){
+            elem.innerHTML = stock.industry
+        }else{
+            elem.innerHTML = stock.area
         }
     })
 }
@@ -121,9 +205,9 @@ function drawKCurve() {
         yaxis: 'y'
     };
 
-    var data = [trace1];
+    let data = [trace1];
 
-    var layout = {
+    let layout = {
         dragmode: 'zoom',
         margin: {
             r: 10,
@@ -148,5 +232,5 @@ function drawKCurve() {
         }
     };
 
-    Plotly.plot('plotly-div', data, layout);
+    Plotly.plot('curve-day', data, layout);
 }

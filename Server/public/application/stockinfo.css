@@ -1,3 +1,10 @@
-td {
+.table td {
+    text-align: center;
+}
+.table th {
+    text-align: center;
+}
+#basic-data-table td{
     padding: 5px;
 }
+

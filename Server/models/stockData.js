@@ -12,13 +12,19 @@ var config = {
     database: "stockG5"
 };
 
+var pool = mysql.createPool(config)
+
 class StockData{
     constructor() {
-
     }
 
     static getConnection(){
-        return mysql.createConnection(config);
+        return pool
+    }
+
+    static getBasicInformation(code, callback){ // TODO: Optimize the schema of stockBasics
+        var conn = StockData.getConnection()
+        conn.query("SELECT A.* FROM stockBasics as A, stockList as B WHERE A.name = B.name AND code = " + code, callback)
     }
 
     static getRealtimePrice(code, callback) {
@@ -39,6 +45,15 @@ class StockData{
         var conn = StockData.getConnection()
         var sql = "SELECT * FROM realtimeQuotes WHERE code = " + code + " LIMIT 1"
         // sql += "ORDER BY DATE, TIME"
+        conn.query(sql, callback)
+    }
+
+    static getStocksByDomain(domain, field, callback, limit){
+        var conn = StockData.getConnection()
+        var sql = "SELECT * FROM stockPriceForRank WHERE `" + domain + "` = '"+ field +"' ORDER BY mktcap DESC"
+        if( limit ){
+            sql += " LIMIT " + limit
+        }
         conn.query(sql, callback)
     }
 

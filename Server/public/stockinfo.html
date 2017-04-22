@@ -303,7 +303,7 @@ desired effect
                         <div class="inner">
                             <h3><span id="name">万科A</span> (<span id="code">000001</span>)</h3>
 
-                            <table class="table-responsive">
+                            <table class="table-responsive" id="basic-data-table">
                                 <tr>
                                     <td>
                                         现价：<span class="badge bg-yellow-active" id="trade">10.00</span>
@@ -365,18 +365,19 @@ desired effect
             <div class="row">
                 <div class="col-lg-6 col-xs-12">
                     <div class="box box-solid">
-                        <ul class="nav nav-tabs">
+                        <ul class="nav nav-tabs" id="curve-tab">
                             <li><a href="#">分时</a> </li>
                             <li class="active"><a href="#">日K</a> </li>
-                            <li><a href="#">周K</a> </li>
                             <li><a href="#">月K</a> </li>
                             <li><a href="#">5分钟K</a> </li>
                             <li><a href="#">15分钟K</a> </li>
                             <li><a href="#">30分钟K</a> </li>
                             <li><a href="#">60分钟K</a> </li>
                         </ul>
-                        <div id="plotly-div">
+                        <div class="tab-content">
+                            <div id="curve-day">
 
+                            </div>
                         </div>
 
                 </div>
@@ -424,9 +425,25 @@ desired effect
                     </div>
                 </div>
 
+            </div>
 
-
-
+            <div class="row">
+                <div class="col-lg-6 col-xs-12">
+                    <div class="box box-solid">
+                        <ul class="nav nav-tabs" id="rank-tab">
+                            <li><a data-toggle="tab" href="#industry-rank-table-tab">同行业个股</a> </li>
+                            <li class="active"><a data-toggle="tab" href="#area-rank-table-tab">同地区个股</a> </li>
+                            <span class="label label-default pull-right"><h5 id="rank-field">  </h5></span>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade" id="industry-rank-table-tab">
+                                <table  id="industry-rank-table"></table>
+                            </div>
+                            <div class="tab-pane fade in active" id="area-rank-table-tab">
+                                <table id="area-rank-table"></table>
+                            </div>
+                        </div>
+                    </div>
             </div>
 
         </section>
