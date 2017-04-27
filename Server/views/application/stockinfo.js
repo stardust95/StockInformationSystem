@@ -2,7 +2,7 @@
  * Created by stardust on 2017/4/20.
  */
 
-var code = '000001';
+var code = "{{ code }}";
 var stock;
 var company;
 

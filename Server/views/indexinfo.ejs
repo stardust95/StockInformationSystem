@@ -231,7 +231,7 @@
         <!-- Main content -->
         <section class="content">
             <div class="row ">
-            <div class="col-lg-2 col-xs-6" style="padding-right: 0px; padding-left: 0px">
+            <div class="col-md-2 col-xs-6" style="padding-right: 0px; padding-left: 0px">
                 <div class="transparent box box-solid bg-gray-light">
                     <div class="box-body">
 
@@ -241,47 +241,6 @@
                             </div>
                             <div class="box-body text-muted text-sm no-padding">
                                 <table class="table table-condensed no-header" id="stock-basic-table">
-                                    <!--<tr>-->
-                                        <!--<td>1.</td>-->
-                                        <!--<td>Update software</td>-->
-                                        <!--<td>-->
-                                            <!--<div class="progress progress-xs">-->
-                                                <!--<div class="progress-bar progress-bar-danger" style="width: 55%"></div>-->
-                                            <!--</div>-->
-                                        <!--</td>-->
-                                        <!--<td><span class="badge bg-red">55%</span></td>-->
-                                    <!--</tr>-->
-                                    <!--<tr>-->
-                                        <!--<td>2.</td>-->
-                                        <!--<td>Clean database</td>-->
-                                        <!--<td>-->
-                                            <!--<div class="progress progress-xs">-->
-                                                <!--<div class="progress-bar progress-bar-yellow" style="width: 70%"></div>-->
-                                            <!--</div>-->
-                                        <!--</td>-->
-                                        <!--<td><span class="badge bg-yellow">70%</span></td>-->
-                                    <!--</tr>-->
-                                    <!--<tr>-->
-                                        <!--<td>3.</td>-->
-                                        <!--<td>Cron job running</td>-->
-                                        <!--<td>-->
-                                            <!--<div class="progress progress-xs progress-striped active">-->
-                                                <!--<div class="progress-bar progress-bar-primary" style="width: 30%"></div>-->
-                                            <!--</div>-->
-                                        <!--</td>-->
-                                        <!--<td><span class="badge bg-light-blue">30%</span></td>-->
-                                    <!--</tr>-->
-                                    <!--<tr>-->
-                                        <!--<td>4.</td>-->
-                                        <!--<td>Fix and squish bugs</td>-->
-                                        <!--<td>-->
-                                            <!--<div class="progress progress-xs progress-striped active">-->
-                                                <!--<div class="progress-bar progress-bar-success" style="width: 90%"></div>-->
-                                            <!--</div>-->
-                                        <!--</td>-->
-                                        <!--<td><span class="badge bg-green">90%</span></td>-->
-                                    <!--</tr>-->
-                                    <!--</tbody>-->
                                 </table>
                             </div>
                         </div>
@@ -298,13 +257,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-10 col-xs-12">
+            <div class="col-md-10 col-xs-12">
             <div class="row">
-                <div class="col-lg-12 col-xs-12">
+                <div class="col-md-12 col-xs-12">
                     <!-- small box -->
                     <div class="small-box bg-green">
                         <div class="inner">
-                            <h3><span id="name">万科A</span> (<span id="code">000001</span>)</h3>
+                            <h3><span id="name">万科A</span> (<span id="code"><%= code %></span>)</h3>
 
                             <table class="table-responsive" id="basic-data-table">
                                 <tr>
@@ -366,7 +325,7 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-6 col-xs-12">
+                <div class="col-md-6 col-xs-12">
                     <div class="box box-solid">
                         <ul class="nav nav-tabs bg-gray-light" id="curve-tab">
                             <li><a href="#">分时</a> </li>
@@ -386,7 +345,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-xs-6">
+                <div class="col-md-4 col-xs-6">
                     <div class="box box-info">
                         <div class="box-header with-border bg-gray-light">
                             <h3 class="box-title">明细</h3>
@@ -403,7 +362,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-xs-6">
+                <div class="col-md-2 col-xs-6">
                     <div class="box box-info">
                         <div class="box-header with-border bg-gray-light">
                             <h3 class="box-title">盘口</h3>
@@ -423,7 +382,7 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-6 col-xs-12">
+                <div class="col-md-6 col-xs-12">
                     <div class="box box-solid">
                         <ul class="nav nav-tabs bg-gray-light" id="news-tab" >
                             <li><a data-toggle="tab" href="#stock-news-table-tab">个股新闻</a> </li>
@@ -439,7 +398,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-xs-12">
+                <div class="col-md-6 col-xs-12">
                     <div class="box box-info">
                         <div class="box-header with-border bg-gray-light">
                             <h3 class="box-title">大单交易</h3>
@@ -460,7 +419,7 @@
 
                 <div class="row">
 
-                    <div class="col-lg-6 col-xs-12">
+                    <div class="col-md-6 col-xs-12">
                         <div class="box box-solid">
                             <ul class="nav nav-tabs bg-gray-light" id="rank-tab">
                                 <li><a data-toggle="tab" href="#industry-rank-table-tab">同行业个股</a> </li>
@@ -477,7 +436,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-xs-12">
+                    <div class="col-md-6 col-xs-12">
                     <div class="box box-info">
                         <div class="box-header with-border bg-gray-light">
                             <h3 class="box-title">净利润成长性</h3>

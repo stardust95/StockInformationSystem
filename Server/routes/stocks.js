@@ -7,6 +7,7 @@ var StockData = require('../models/stockData')
 var router = express.Router();
 
 
+
 /* GET stock basic info. */
 router.get('/info/:stockid', function(req, res, next) {
     StockData.getBasicInformation(req.params.stockid, function (err, result) {
