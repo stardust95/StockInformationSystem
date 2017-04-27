@@ -2,7 +2,7 @@
  * Created by stardust on 2017/4/20.
  */
 
-var code = "{{ code }}";
+var code = document.getElementById('code').innerText;
 var stock;
 var company;
 
