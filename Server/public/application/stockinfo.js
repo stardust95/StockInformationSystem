@@ -7,6 +7,12 @@ var stock;
 var company;
 
 function onload() {
+
+    var name = 'active';
+    $('#nav-home').removeClass(name);
+    $('#nav-index').removeClass(name);
+    $('#nav-stock').removeClass(name).addClass(name);
+
     getStockBasic();
     getRealtimeData();
     drawKCurve();

@@ -6,6 +6,11 @@ var code = document.getElementById('code').innerText
 var index
 
 function onload() {
+    var name = 'active';
+    $('#nav-home').removeClass(name);
+    $('#nav-index').removeClass(name).addClass(name);
+    $('#nav-stock').removeClass(name);
+
     getIndexRealtimeData()
 }
 
@@ -14,7 +19,8 @@ function isSuccess(status) {
 }
 
 function formatNumber(num) {
-    if( Math.round(num) != num ){
+
+    if( $.isNumeric(num) && Math.round(num) != num ){
         return Number(num).toFixed(2)
     }else{
         return num
