@@ -8,7 +8,8 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var stocks = require('./routes/stocks');
-
+var indexs = require('./routes/indexdetails');
+var indexlist = require('./routes/indexlist');
 var app = express();
 
 // view engine setup
@@ -26,6 +27,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/stocks', stocks);
+app.use('/indexs', indexs);
+app.use('/indexlist', indexlist);
 
 
 // catch 404 and forward to error handler
@@ -43,7 +46,7 @@ app.use(function(err, req, res, next) {
 
     // render the error page
     // res.status(err.status || 500);
-    res.render('error', { status: err.status || 500});
+    res.render('error', { status: err.status || 500, message: err.message});
 
     // res.status(err.status || 500).json({
     //     message: err.message,

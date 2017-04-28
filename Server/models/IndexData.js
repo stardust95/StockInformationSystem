@@ -40,3 +40,5 @@ class IndexData{
     }
 
 }
+
+module.exports = IndexData

@@ -19,7 +19,7 @@
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/admin-lte/2.3.11/css/skins/_all-skins.min.css">
 
-    <link rel="stylesheet" href="/application/stockinfo.css">
+    <link rel="stylesheet" href="/application/indexdetail.css">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -46,7 +46,7 @@
 
                         <div class="panel box box-primary">
                             <div class="box-header with-border">
-                                个股概况
+                                最近浏览
                             </div>
                             <div class="box-body text-muted text-sm no-padding">
                                 <table class="table table-condensed no-header" id="stock-basic-table">
@@ -56,7 +56,7 @@
 
                         <div class="panel box box-primary">
                             <div class="box-header with-border">
-                                公司简介
+                                操盘必读
                             </div>
                             <div class="box-body text-muted text-sm" id="company-info-list">
 
@@ -74,49 +74,52 @@
                             <div class="inner">
                                 <h3><span id="name">万科A</span> (<span id="code"><%= code %></span>)</h3>
 
-                                <table class="table-responsive" id="basic-data-table">
+                                <table class="table-responsive" id="realtime-table">
                                     <tr>
+                                        <!--<td>-->
+                                            <!--均价：<span class="badge bg-yellow-active" id="trade">&#45;&#45;</span>-->
+                                        <!--</td>-->
+                                        <!--<td>-->
+                                            <!--现手：<span class="badge bg-yellow-active" id="curvolume">--</span>-->
+                                        <!--</td>-->
+                                        <!--<td>-->
+                                            <!--换手率：<span class="badge bg-yellow-active" id="turnoverratio">&#45;&#45;</span>-->
+                                        <!--</td>-->
+                                        <!--<td>-->
+                                            <!--量比：<span class="badge bg-yellow-active" id="high">--</span>-->
+                                        <!--</td>-->
                                         <td>
-                                            现价：<span class="badge bg-yellow-active" id="trade">10.00</span>
-                                        </td>
-                                        <td>
-                                            涨跌幅：<span class="badge bg-yellow-active" id="changepercent">10.00</span>
-                                        </td>
-                                        <td>
-                                            开盘价：<span class="badge bg-yellow-active" id="open">10.00</span>
-                                        </td>
-                                        <td>
-                                            最高价：<span class="badge bg-yellow-active" id="high">10.00</span>
+                                            总手：<span class="badge bg-yellow-active" id="volume">--</span>
                                         </td>
                                         <td >
-                                            最低价：<span class="badge bg-yellow-active" id="low">10.00</span>
+                                            最高：<span class="badge bg-yellow-active" id="high">--</span>
                                         </td>
                                         <td>
-                                            昨日收盘价：<span class="badge bg-yellow-active" id="settlement">10.00</span>
+                                            涨停：<span class="badge bg-yellow-active" id="uplimit">--</span>
                                         </td>
                                         <td>
-                                            成交量：<span class="badge bg-yellow-active" id="volume">10.00</span>
+                                            昨收：<span class="badge bg-yellow-active" id="preclose">--</span>
                                         </td>
                                         <!---->
                                     </tr>
                                     <tr>
+                                        <!--<td>-->
+                                            <!--市盈：<span class="badge bg-yellow-active" id="turnoverratio">--</span>-->
+                                        <!--</td>-->
                                         <td>
-                                            换手率：<span class="badge bg-yellow-active" id="turnoverratio">10.00</span>
+                                            总金额：<span class="badge bg-yellow-active" id="amount">--</span>
                                         </td>
                                         <td>
-                                            成交金额：<span class="badge bg-yellow-active" id="amount">10.00</span>
+                                            最低：<span class="badge bg-yellow-active" id="low">--</span>
                                         </td>
                                         <td>
-                                            市盈率：<span class="badge bg-yellow-active" id="per">10.00</span>
+                                            跌停：<span class="badge bg-yellow-active" id="downlimit">--</span>
                                         </td>
                                         <td>
-                                            市净率：<span class="badge bg-yellow-active" id="pb">10.00</span>
+                                            今开：<span class="badge bg-yellow-active" id="open">--</span>
                                         </td>
                                         <td>
-                                            总市值：<span class="badge bg-yellow-active" id="mktcap">10.00</span>
-                                        </td>
-                                        <td>
-                                            流通市值：<span class="badge bg-yellow-active" id="nmc">10.00</span>
+                                            振幅：<span class="badge bg-yellow-active" id="change">--</span>
                                         </td>
                                     </tr>
                                 </table>
@@ -174,7 +177,7 @@
                     <div class="col-md-2 col-xs-6">
                         <div class="box box-info">
                             <div class="box-header with-border bg-gray-light">
-                                <h3 class="box-title">盘口</h3>
+                                <h3 class="box-title">报价</h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse">
                                         <i class="fa fa-minus"></i>
@@ -182,7 +185,7 @@
                                 </div>
                             </div>
                             <div class="box-body">
-                                <table id="quotes-table" class="table table-hover table-bordered" data-show-header="false" data-striped="true">
+                                <table id="price-table" class="table table-hover table-bordered" data-show-header="false" data-striped="true">
                                 </table>
                             </div>
                         </div>
@@ -294,7 +297,7 @@
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-<script src="/application/indexinfo.js"></script>
+<script src="/application/indexdetail.js"></script>
 
 </body>
 </html>

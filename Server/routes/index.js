@@ -12,9 +12,7 @@ router.get('/stock/:stockid', function (req, res) {
 
 
 router.get('/index/:indexid', function (req, res) {
-    res.render('indexinfo', {code : req.params.indexid})
+    res.render('indexdetail', {code : req.params.indexid})
 })
-
-
 
 module.exports = router;
