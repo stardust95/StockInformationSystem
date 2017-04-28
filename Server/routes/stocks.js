@@ -7,6 +7,7 @@ var StockData = require('../models/stockData')
 var router = express.Router();
 
 
+
 /* GET stock basic info. */
 router.get('/info/:stockid', function(req, res, next) {
     StockData.getBasicInformation(req.params.stockid, function (err, result) {
@@ -111,7 +112,29 @@ router.get('/newsList/:limit?',function (req, res) {
     }, req.params.limit)
 })
 
+/* GET information of a company. */
+router.get('/comp/:stockid',function (req, res) {
+    StockData.getCompanyInfo(req.params.stockid, function (err, result) {
+        if( err ){
+            console.log(err)
+            res.json()
+        }else{
+            res.json(result[0])
+        }
+    })
+})
 
+/* GET profits of a company. */
+router.get('/profit/:stockid',function (req, res) {
+    StockData.getCompanyProfit(req.params.stockid, function (err, result) {
+        if( err ){
+            console.log(err)
+            res.json()
+        }else{
+            res.json(result)
+        }
+    })
+})
 
 
 

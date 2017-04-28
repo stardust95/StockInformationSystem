@@ -2,8 +2,9 @@
  * Created by stardust on 2017/4/20.
  */
 
-var code = '000001';
+var code = document.getElementById('code').innerText;
 var stock;
+var company;
 
 function onload() {
     getStockBasic();
@@ -12,7 +13,8 @@ function onload() {
     buildTradeRecordTable();
     buildQuotesTable();
     buildNewsTable();
-    // buildRankingTable(); // only be executed after getStockBasic
+    buildCompanyInfoView();
+    drawProfitChart();
 }
 
 
@@ -23,8 +25,41 @@ function isSuccess(status) {
 }
 
 function getStockBasic() {
+
+    var fields = [ '股票代码',
+                        '名称',
+                        '所属行业',
+                        '地区',
+                        '市盈率',
+                        '流通股本(亿)',
+                        '总股本(亿)',
+                        '总资产(万)',
+                        '流动资产',
+                        '固定资产',
+                        '公积金',
+                        '每股公积金',
+                        '每股收益',
+                        '每股净资',
+                        '市净率',
+                        '上市日期',
+                        '未分利润',
+                        '每股未分配',
+                        '收入同比(%)',
+                        '利润同比(%)',
+                        '毛利率(%)',
+                        '净利润率(%)',
+                        '股东人数']
+
     $.get('/stocks/info/' + code, function (data, status) {
         if( isSuccess(status) ){
+            var table = document.getElementById('stock-basic-table')
+            var index = 0
+            for(var prop in data){
+                table.innerHTML += "<tr>"
+                                                        + "<td class='pull-left text-bold'>" + fields[index++] + "</td>"
+                                                        + "<td class='pull-right'>" + data[prop] + "</td>"
+                                                    + "</tr>"
+            }
             stock = data
             buildRankingTable()
         }else {
@@ -153,6 +188,20 @@ function buildQuotesTable() {
     })
 }
 
+function buildCompanyInfoView() {
+    $.get('/stocks/comp/' + code, function (object, status) {
+        if( isSuccess(status) ){
+            var treeview = document.getElementById('company-info-list')
+            for(var prop in object){
+                treeview.innerHTML += "<p> · " + prop + "： " + object[prop] + "</p>"
+                // treeview.appendChild("<li>" + prop + "： " + object[prop])
+            }
+        }else {
+            console.log('status = ' + status)
+        }
+    })
+}
+
 function buildRankingTable() {
     let columns = [
         {
@@ -257,6 +306,119 @@ function buildNewsTable() {
         }
     })
 
+
+}
+
+function drawProfitChart() {
+    $.get('/stocks/profit/'+code, function (arr, status) {
+        if( isSuccess(status) ){
+            var dates = []
+            var business_incomes = []
+            var net_profit_ratios = []
+            var net_profits = []
+            for(var index in arr){
+                // if( !dates.includes(arr[index]['date']) ){
+                dates.push(arr[index]['date'])
+                business_incomes.push(arr[index]['business_income'])
+                net_profit_ratios.push(arr[index]['net_profit_ratio'])
+                net_profits.push(arr[index]['net_profits'])
+                // }
+            }
+            $('#profit-chart').highcharts({
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: dates
+                },
+                yAxis: [{ // Primary yAxis
+                    labels: {
+                        format: '{value}%',
+                        style: {
+                            color: Highcharts.getOptions().colors[2]
+                        }
+                    },
+                    title: {
+                        text: '净利润率',
+                        style: {
+                            color: Highcharts.getOptions().colors[2]
+                        }
+                    },
+                    opposite: true
+                }, { // Secondary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: '净利润',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
+                    },
+                    labels: {
+                        format: '{value} ',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
+                    }
+                }, { // Tertiary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: '营业收入',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
+                    },
+                    labels: {
+                        format: '{value} ',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
+                    },
+                    opposite: true
+                }],
+                tooltip: {
+                    shared: true
+                },
+                legend: {       // ?
+                    layout: 'vertical',
+                    align: 'left',
+                    x: 80,
+                    verticalAlign: 'top',
+                    y: 55,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                },
+                series: [{
+                    name: '净利润',
+                    type: 'column',
+                    yAxis: 1,
+                    data: net_profits,
+                    tooltip: {
+                        valueSuffix: ' 万元'
+                    }
+                }, {
+                    name: '营业收入',
+                    type: 'column',
+                    yAxis: 2,
+                    data: business_incomes,
+                    marker: {
+                        enabled: false
+                    },
+                    tooltip: {
+                        valueSuffix: ' 百万'
+                    }
+                }, {
+                    name: '净利润率',
+                    type: 'spline',
+                    data: net_profit_ratios,
+                    tooltip: {
+                        valueSuffix: ' %'
+                    }
+                }]
+            })
+        }else{
+            console.log('status = ' + status)
+        }
+    })
 
 }
 

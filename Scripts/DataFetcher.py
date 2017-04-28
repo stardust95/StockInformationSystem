@@ -2,6 +2,7 @@
 import pymysql, configparser
 import datetime
 import tushare as ts
+import pandas as pd
 from sqlalchemy import create_engine
 from traceback import print_exc
 from abc import ABCMeta, abstractmethod, abstractproperty
@@ -259,6 +260,108 @@ class StockInfoFetcher(IDataFetcher):
             db.close()
         return True
     
+    def fetchCompanyProfitByQuarter(self, year, quarter, drop = False):
+        tableName = 'companyProfit'
+        param = []
+        try:
+            db, dbname = connectConfigDB('database')
+            cursor = db.cursor()
+            cursor.execute("SET NAMES utf8mb4;")
+            if drop:
+                cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
+                sql = """CREATE TABLE 
+                            `%s`.`%s` (
+                                `code` varchar(10) NOT NULL COMMENT '股票代码',
+                                `name` varchar(45) DEFAULT NULL COMMENT '公司名称',
+                                `roe` double DEFAULT NULL COMMENT '净资产收益率',
+                                `net_profit_ratio` double DEFAULT NULL COMMENT '净利率',
+                                `gross_profit_rate` double DEFAULT NULL COMMENT '毛利率',
+                                `net_profits` double DEFAULT NULL COMMENT '净利润(万元)',
+                                `esp` double DEFAULT NULL COMMENT '每股收益',
+                                `business_income` double DEFAULT NULL COMMENT '营业收入(百万元)',
+                                `bips` double DEFAULT NULL COMMENT '每股主营业务收入(元)',
+                                `date` varchar(45) NOT NULL DEFAULT '' COMMENT '季度(YYYY-Q)',
+                                PRIMARY KEY (`code`, `date`)
+                            ) DEFAULT CHARSET=utf8mb4;  
+                        """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;
+                cursor.execute(sql)
+                print ('table %s created' % tableName)
+            # fetch and insert data
+            res = ts.get_profit_data(year, quarter)
+            res = res.where(pd.notnull(res), 0)
+            sql = 'INSERT IGNORE INTO `' + tableName + \
+                    """` values(%s, %s, %s, %s, %s,
+                                     %s, %s, %s, %s, %s)
+                    """
+            for row in res.values:
+                param.append(row.tolist() + [str(year)+"-"+str(quarter)])
+            cursor.executemany(sql, param)
+            db.commit()
+            print ('\ntable %s inserted %s records.' % (tableName, len(res.values)))
+        except:
+            print_exc()
+            db.rollback()
+            return False
+        finally:
+            db.close()
+        return True
+
+    def fetchCompanyInfoByCode(self, code):
+        tableName = 'companyInfo'
+        param = []
+        try:
+            db, dbname = connectConfigDB('database')
+            cursor = db.cursor()
+            cursor.execute("SET NAMES utf8mb4;")
+            cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
+            # db.commit()
+            # create table
+            sql = """CREATE TABLE 
+                        `%s`.`%s` (
+                            `证券代码` VARCHAR(10) DEFAULT NULL,
+                            `证券简称` TEXT DEFAULT NULL,
+                            `公司名称` TEXT DEFAULT NULL,
+                            `公司英文名称` TEXT DEFAULT NULL,
+                            `交易所` TEXT DEFAULT NULL,
+                            `公司曾有名称` TEXT DEFAULT NULL,
+                            `证券简称更名历史` TEXT DEFAULT NULL,
+                            `公司注册国家` TEXT DEFAULT NULL,
+                            `省份` TEXT DEFAULT NULL,
+                            `城市` TEXT DEFAULT NULL,
+                            `工商登记号` TEXT DEFAULT NULL,
+                            `注册地址` TEXT DEFAULT NULL,
+                            `办公地址` TEXT DEFAULT NULL,
+                            `注册资本` TEXT DEFAULT NULL,
+                            `邮政编码` TEXT DEFAULT NULL,
+                            `联系电话` TEXT DEFAULT NULL,
+                            `公司传真` TEXT DEFAULT NULL,
+                            `法人代表` TEXT DEFAULT NULL,
+                            `总经理` TEXT DEFAULT NULL,
+                            `成立日期` TEXT DEFAULT NULL,
+                            `职工总数` TEXT DEFAULT NULL,
+                            PRIMARY KEY (`证券代码`)
+                        ) DEFAULT CHARSET=utf8mb4;  
+            """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;
+            cursor.execute(sql)
+            print ('table %s created' % tableName)
+            # fetch and insert data
+            df = pd.read_html('http://q.stock.sohu.com/cn/%s/gsjj.shtml' % code)[2]
+            for row in df.values:
+                param += row[1::2].tolist()
+            sql = 'INSERT INTO `' + tableName + \
+                    """` values('%s', '%s', '%s', '%s', '%s','%s', '%s', '%s', '%s', '%s','%s', '%s', '%s', '%s', '%s','%s', '%s', '%s', '%s','%s', '%s')
+                    """ % tuple(param)
+            cursor.execute(sql)
+            db.commit()
+            print ('\ntable %s inserted %s records.' % (tableName, 1))
+        except:
+            print_exc()
+            db.rollback()
+            return False
+        finally:
+            db.close()
+        return True
+
     def fetchNewsByCode(self, code):
         tableName = 'stockNews'
         param = []
@@ -440,12 +543,98 @@ class TradeFetcher(IDataFetcher):
 def main():
     stk = StockInfoFetcher()
     trd = TradeFetcher()
-    
+    # stk.fetchCompanyInfoByCode('000001')
+    years = [2015, 2016, 2017]
+    drop = True
+    for year in years:
+        for q in range(1, 5):
+            stk.fetchCompanyProfitByQuarter(year, q, drop)
+            drop = False
     # stk.fetchFinancialNews()
-    trd.fetchByCode('000001', '2016-12-19')
+    # trd.fetchByCode('000001', '2016-12-19')
     # trd.fetchRealtimeQuotes('000001')
     # trd.fetchBlockTradeByCode('000001', '2017-04-20')
 if __name__ == '__main__':
     main()
 
 
+'''
+
+CREATE TABLE `companyFinReport` (
+  `code` varchar(10) NOT NULL COMMENT '股票代码',
+  `name` varchar(45) DEFAULT NULL COMMENT '公司名称',
+  `esp` double DEFAULT NULL COMMENT '每股收益',
+  `eps_yoy` double DEFAULT NULL COMMENT '每股收益同比(%)',
+  `bvps` double DEFAULT NULL COMMENT '每股净资产',
+  `roe` double DEFAULT NULL COMMENT '净资产收益率(%)',
+  `epcf` double DEFAULT NULL COMMENT '每股现金流量(元)',
+  `net_profits` double DEFAULT NULL COMMENT '净利润(万元)',
+  `profits_yoy` double DEFAULT NULL COMMENT '净利润同比(%)',
+  `distrib` varchar(45) DEFAULT NULL COMMENT '分配方案',
+  `date` varchar(45) NULL DEFAULT '' COMMENT '日期',
+  PRIMARY KEY (`code`,`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+CREATE TABLE `stockFlows` (
+  `code` varchar(10) NOT NULL COMMENT '股票代码',
+  `name` varchar(45) DEFAULT NULL COMMENT '公司名称',
+  `inflow` bigint DEFAULT NULL COMMENT '流入资金',
+  `outflow` bigint DEFAULT NULL COMMENT '流出资金',
+  `flow` bigint DEFAULT NULL COMMENT '净流入',
+  `changepercent` double DEFAULT NULL COMMENT '涨跌幅',
+  `date` varchar(45) NULL DEFAULT '' COMMENT '日期',
+  PRIMARY KEY (`code`,`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `indexContainStocks` (
+  `indexCode` varchar(10) NOT NULL COMMENT '指数代码',
+  `indexName` varchar(45) DEFAULT NULL COMMENT '指数名称',
+  `stockCode` varchar(10) NOT NULL DEFAULT '' COMMENT '股票代码',
+  `stockName` varchar(45) DEFAULT NULL COMMENT '股票名称',
+  `contribution` double DEFAULT NULL COMMENT '贡献点数(%)',
+  `hot` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`indexCode`,`stockCode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE `indexTradeRecords` (
+  `code` varchar(10) NOT NULL COMMENT '股指代码',
+  `date` varchar(45) NOT NULL COMMENT '日期',
+  `time` varchar(45) NOT NULL COMMENT '交易时间',
+  `price` double NOT NULL COMMENT '成交价格',
+  `volume` int(11) DEFAULT NULL COMMENT '成交手',
+  `amount` int(11) DEFAULT NULL COMMENT '成交金额(元)'
+) DEFAULT CHARSET=utf8mb4;
+
+
+
+CREATE TABLE `companyInfo` (
+  `证券代码` TEXT DEFAULT NULL,
+  `证券简称` TEXT DEFAULT NULL,
+  `公司名称` TEXT DEFAULT NULL,
+  `公司英文名称` TEXT DEFAULT NULL,
+  `交易所` TEXT DEFAULT NULL,
+  `公司曾有名称` TEXT DEFAULT NULL,
+  `证券简称更名历史` TEXT DEFAULT NULL,
+  `公司注册国家` TEXT DEFAULT NULL,
+  `省份` TEXT DEFAULT NULL,
+  `城市` TEXT DEFAULT NULL,
+  `工商登记号` TEXT DEFAULT NULL,
+  `注册地址` TEXT DEFAULT NULL,
+  `办公地址` TEXT DEFAULT NULL,
+  `注册资本` TEXT DEFAULT NULL,
+  `邮政编码` TEXT DEFAULT NULL,
+  `联系电话` TEXT DEFAULT NULL,
+  `公司传真` TEXT DEFAULT NULL,
+  `法人代表` TEXT DEFAULT NULL,
+  `总经理` TEXT DEFAULT NULL,
+  `成立日期` TEXT DEFAULT NULL,
+  `职工总数` TEXT DEFAULT NULL,
+  PRIMARY KEY (`股票代码`)
+) DEFAULT CHARSET=utf8mb4;
+
+
+
+'''

@@ -18,6 +18,15 @@
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
 
+  <link rel="stylesheet" href="application/stockinfo.css">
+  <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+        page. However, you can choose any other skin. Make sure you
+        apply the skin class to the body tag so the changes take effect.
+  -->
+  <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -25,6 +34,7 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
+
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 <body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
@@ -215,76 +225,223 @@
     </nav>
   </header>
   <!-- Full Width Column -->
+
+  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <div class="container">
-      <!-- Content Header (Page header) -->
-      <section class="content-header">
-        <h1>
-          Top Navigation
-          <small>Example 2.0</small>
-        </h1>
-        <ol class="breadcrumb">
-          <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-          <li><a href="#">Layout</a></li>
-          <li class="active">Top Navigation</li>
-        </ol>
-      </section>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Page Header
+        <small>Optional description</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+        <li class="active">Here</li>
+      </ol>
+    </section>
 
-      <!-- Main content -->
-      <section class="content">
-        <div class="callout callout-info">
-          <h4>Tip!</h4>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-lg-12 col-xs-12">
+          <!-- small box -->
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3><span id="name">万科A</span> (<span id="code">000001</span>)</h3>
 
-          <p>Add the layout-top-nav class to the body tag to get this layout. This feature can also be used with a
-            sidebar! So use this class if you want to remove the custom dropdown menus from the navbar and use regular
-            links instead.</p>
-        </div>
-        <div class="callout callout-danger">
-          <h4>Warning!</h4>
+              <table class="table-responsive" id="basic-data-table">
+                <tr>
+                  <td>
+                    现价：<span class="badge bg-yellow-active" id="trade">10.00</span>
+                  </td>
+                  <td>
+                    涨跌幅：<span class="badge bg-yellow-active" id="changepercent">10.00</span>
+                  </td>
+                  <td>
+                    开盘价：<span class="badge bg-yellow-active" id="open">10.00</span>
+                  </td>
+                  <td>
+                    最高价：<span class="badge bg-yellow-active" id="high">10.00</span>
+                  </td>
+                  <td >
+                    最低价：<span class="badge bg-yellow-active" id="low">10.00</span>
+                  </td>
+                  <td>
+                    昨日收盘价：<span class="badge bg-yellow-active" id="settlement">10.00</span>
+                  </td>
+                  <td>
+                    成交量：<span class="badge bg-yellow-active" id="volume">10.00</span>
+                  </td>
+                  <!---->
+                </tr>
+                <tr>
+                  <td>
+                    换手率：<span class="badge bg-yellow-active" id="turnoverratio">10.00</span>
+                  </td>
+                  <td>
+                    成交金额：<span class="badge bg-yellow-active" id="amount">10.00</span>
+                  </td>
+                  <td>
+                    市盈率：<span class="badge bg-yellow-active" id="per">10.00</span>
+                  </td>
+                  <td>
+                    市净率：<span class="badge bg-yellow-active" id="pb">10.00</span>
+                  </td>
+                  <td>
+                    总市值：<span class="badge bg-yellow-active" id="mktcap">10.00</span>
+                  </td>
+                  <td>
+                    流通市值：<span class="badge bg-yellow-active" id="nmc">10.00</span>
+                  </td>
+                </tr>
+              </table>
 
-          <p>The construction of this layout differs from the normal one. In other words, the HTML markup of the navbar
-            and the content will slightly differ than that of the normal layout.</p>
-        </div>
-        <div class="box box-default">
-          <div class="box-header with-border">
-            <h3 class="box-title">Blank Box</h3>
+              <p></p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <!--<a href="#" class="small-box-footer">-->
+            <!--More info <i class="fa fa-arrow-circle-right"></i>-->
+            <!--</a>-->
           </div>
-          <div class="box-body">
-            The great content goes here
-          </div>
-          <!-- /.box-body -->
         </div>
-        <!-- /.box -->
-      </section>
-      <!-- /.content -->
-    </div>
-    <!-- /.container -->
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 col-xs-12">
+          <div class="box box-solid">
+            <ul class="nav nav-tabs bg-gray-light" id="curve-tab">
+              <li><a href="#">分时</a> </li>
+              <li class="active"><a href="#">日K</a> </li>
+              <li><a href="#">月K</a> </li>
+              <li><a href="#">5分钟K</a> </li>
+              <li><a href="#">15分钟K</a> </li>
+              <li><a href="#">30分钟K</a> </li>
+              <li><a href="#">60分钟K</a> </li>
+            </ul>
+            <div class="tab-content">
+              <div id="curve-day">
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-xs-6">
+          <div class="box box-info">
+            <div class="box-header with-border bg-gray-light">
+              <h3 class="box-title">明细</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                  <i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="box-body">
+              <table id="trade-records-table" class="table table-hover table-bordered" data-striped="true">
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-xs-6">
+          <div class="box box-info">
+            <div class="box-header with-border bg-gray-light">
+              <h3 class="box-title">盘口</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                  <i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="box-body">
+              <table id="quotes-table" class="table table-hover table-bordered" data-show-header="false" data-striped="true">
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 col-xs-12">
+          <div class="box box-solid">
+            <ul class="nav nav-tabs bg-gray-light" id="news-tab" >
+              <li><a data-toggle="tab" href="#stock-news-table-tab">个股新闻</a> </li>
+              <li class="active"><a data-toggle="tab" href="#financial-news-table-tab">相关新闻</a> </li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane fade" id="stock-news-table-tab">
+                <table  id="stock-news-table" data-show-header="false"></table>
+              </div>
+              <div class="tab-pane fade in active" id="financial-news-table-tab">
+                <table id="financial-news-table" data-show-header="false"></table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-xs-12">
+          <div class="box box-info">
+            <div class="box-header with-border bg-gray-light">
+              <h3 class="box-title">大单交易</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                  <i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="box-body">
+              <table id="block-records-table" class="table table-hover table-bordered" data-striped="true">
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 col-xs-12">
+          <div class="box box-solid">
+            <ul class="nav nav-tabs bg-gray-light" id="rank-tab">
+              <li><a data-toggle="tab" href="#industry-rank-table-tab">同行业个股</a> </li>
+              <li class="active"><a data-toggle="tab" href="#area-rank-table-tab">同地区个股</a> </li>
+              <span class="label label-default pull-right"><h5 id="rank-field">  </h5></span>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane fade" id="industry-rank-table-tab">
+                <table  id="industry-rank-table"></table>
+              </div>
+              <div class="tab-pane fade in active" id="area-rank-table-tab">
+                <table id="area-rank-table"></table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </section>
+    <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    <div class="container">
-      <div class="pull-right hidden-xs">
-        <b>Version</b> 2.3.8
-      </div>
-      <strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
-      reserved.
-    </div>
-    <!-- /.container -->
-  </footer>
-</div>
-<!-- ./wrapper -->
 
-<!-- jQuery 2.2.3 -->
-<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="../../bootstrap/js/bootstrap.min.js"></script>
-<!-- SlimScroll -->
-<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
-<!-- FastClick -->
-<script src="../../plugins/fastclick/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="../../dist/js/app.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../../dist/js/demo.js"></script>
+
+  <!-- jQuery 2.2.3 -->
+  <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="bootstrap/js/bootstrap.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="dist/js/app.min.js"></script>
+
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+  <script src="plugins/plotly/plotly-latest.min.js"></script>
+
+
+
+  <script src="application/stockinfo.js"></script>
 </body>
 </html>

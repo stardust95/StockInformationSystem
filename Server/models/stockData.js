@@ -89,6 +89,23 @@ class StockData{
         conn.query(sql, callback)
     }
 
+    static getCompanyFinReport(code, callback){
+        var conn = StockData.getConnection()
+        var sql = "SELECT * FROM companyFinReport WHERE `code` = " + code
+        conn.query(sql, callback)
+    }
+
+    static getCompanyProfit(code, callback){
+        var conn = StockData.getConnection()
+        var sql = "SELECT * FROM companyProfit WHERE `code` = " + code + " ORDER BY DATE"
+        conn.query(sql, callback)
+    }
+
+    static getCompanyInfo(code,callback){
+        var conn = StockData.getConnection()
+        var sql = "SELECT * FROM companyInfo WHERE `证券代码` = "+ code
+        conn.query(sql, callback)
+    }
 
 }
 

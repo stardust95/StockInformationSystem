@@ -4,6 +4,12 @@
 .table th {
     text-align: center;
 }
+
+.transparent {
+    background-color: transparent;
+    box-shadow: none;
+}
+
 #basic-data-table td{
     padding: 5px;
 }
@@ -16,4 +22,10 @@
     text-align: left;
 }
 
+#company-info-treeview li{
+    color: whitesmoke;
+    padding: 3px;
+    white-space: pre-wrap; !important;
+
+}
 
