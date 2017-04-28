@@ -43,11 +43,12 @@ app.use(function(err, req, res, next) {
 
     // render the error page
     // res.status(err.status || 500);
-    // res.render('index');
-    res.status(err.status || 500).json({
-        message: err.message,
-        error: err
-    });
+    res.render('error', { status: err.status || 500});
+
+    // res.status(err.status || 500).json({
+    //     message: err.message,
+    //     error: err
+    // });
 });
 
 module.exports = app;
