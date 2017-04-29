@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="14b0475e-32bd-4761-ab25-1c2809748c61" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/IndexListData.js" afterPath="$PROJECT_DIR$/models/IndexListData.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -452,7 +452,7 @@
       <workItem from="1493359831190" duration="5569000" />
       <workItem from="1493380584595" duration="336000" />
       <workItem from="1493381206954" duration="3533000" />
-      <workItem from="1493384879627" duration="75000" />
+      <workItem from="1493384879627" duration="93000" />
     </task>
     <task id="LOCAL-00001" summary="04-28 14:23 update top layout in layout.ejs">
       <created>1493360664513</created>
@@ -465,7 +465,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="109285000" />
+    <option name="totallyTimeSpent" value="109303000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="886" extended-state="6" />

@@ -2,8 +2,6 @@
 var getConnection = require('./DbConnection')
 
 
-var pool = mysql.createPool(config)
-
 class IndexListData{
 
     static getIndexList(callback) {
