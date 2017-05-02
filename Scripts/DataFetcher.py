@@ -306,44 +306,45 @@ class StockInfoFetcher(IDataFetcher):
             db.close()
         return True
 
-    def fetchCompanyInfoByCode(self, code):
+    def fetchCompanyInfoByCode(self, code, drop = False):
         tableName = 'companyInfo'
         param = []
         try:
             db, dbname = connectConfigDB('database')
             cursor = db.cursor()
             cursor.execute("SET NAMES utf8mb4;")
-            cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
-            # db.commit()
-            # create table
-            sql = """CREATE TABLE 
-                        `%s`.`%s` (
-                            `证券代码` VARCHAR(10) DEFAULT NULL,
-                            `证券简称` TEXT DEFAULT NULL,
-                            `公司名称` TEXT DEFAULT NULL,
-                            `公司英文名称` TEXT DEFAULT NULL,
-                            `交易所` TEXT DEFAULT NULL,
-                            `公司曾有名称` TEXT DEFAULT NULL,
-                            `证券简称更名历史` TEXT DEFAULT NULL,
-                            `公司注册国家` TEXT DEFAULT NULL,
-                            `省份` TEXT DEFAULT NULL,
-                            `城市` TEXT DEFAULT NULL,
-                            `工商登记号` TEXT DEFAULT NULL,
-                            `注册地址` TEXT DEFAULT NULL,
-                            `办公地址` TEXT DEFAULT NULL,
-                            `注册资本` TEXT DEFAULT NULL,
-                            `邮政编码` TEXT DEFAULT NULL,
-                            `联系电话` TEXT DEFAULT NULL,
-                            `公司传真` TEXT DEFAULT NULL,
-                            `法人代表` TEXT DEFAULT NULL,
-                            `总经理` TEXT DEFAULT NULL,
-                            `成立日期` TEXT DEFAULT NULL,
-                            `职工总数` TEXT DEFAULT NULL,
-                            PRIMARY KEY (`证券代码`)
-                        ) DEFAULT CHARSET=utf8mb4;  
-            """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;
-            cursor.execute(sql)
-            print ('table %s created' % tableName)
+            if drop:
+                cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
+                # db.commit()
+                # create table
+                sql = """CREATE TABLE 
+                            `%s`.`%s` (
+                                `证券代码` VARCHAR(10) DEFAULT NULL,
+                                `证券简称` TEXT DEFAULT NULL,
+                                `公司名称` TEXT DEFAULT NULL,
+                                `公司英文名称` TEXT DEFAULT NULL,
+                                `交易所` TEXT DEFAULT NULL,
+                                `公司曾有名称` TEXT DEFAULT NULL,
+                                `证券简称更名历史` TEXT DEFAULT NULL,
+                                `公司注册国家` TEXT DEFAULT NULL,
+                                `省份` TEXT DEFAULT NULL,
+                                `城市` TEXT DEFAULT NULL,
+                                `工商登记号` TEXT DEFAULT NULL,
+                                `注册地址` TEXT DEFAULT NULL,
+                                `办公地址` TEXT DEFAULT NULL,
+                                `注册资本` TEXT DEFAULT NULL,
+                                `邮政编码` TEXT DEFAULT NULL,
+                                `联系电话` TEXT DEFAULT NULL,
+                                `公司传真` TEXT DEFAULT NULL,
+                                `法人代表` TEXT DEFAULT NULL,
+                                `总经理` TEXT DEFAULT NULL,
+                                `成立日期` TEXT DEFAULT NULL,
+                                `职工总数` TEXT DEFAULT NULL,
+                                PRIMARY KEY (`证券代码`)
+                            ) DEFAULT CHARSET=utf8mb4;  
+                """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;
+                cursor.execute(sql)
+                print ('table %s created' % tableName)
             # fetch and insert data
             df = pd.read_html('http://q.stock.sohu.com/cn/%s/gsjj.shtml' % code)[2]
             for row in df.values:
@@ -362,29 +363,28 @@ class StockInfoFetcher(IDataFetcher):
             db.close()
         return True
 
-    def fetchNewsByCode(self, code):
+    def fetchNewsByCode(self, code, drop = False):
         tableName = 'stockNews'
         param = []
         try:
             db, dbname = connectConfigDB('database')
             cursor = db.cursor()
             cursor.execute("SET NAMES utf8mb4;")
-            cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
-            # db.commit()
-            # create table
-            sql = """
-                    CREATE TABLE 
-                        `%s`.`%s` (
-                        `code` VARCHAR(10) NOT NULL COMMENT '股票代码',
-                        `title` VARCHAR(45) NULL COMMENT '标题',
-                        `type` VARCHAR(45) NULL COMMENT '类型',
-                        `date` VARCHAR(45) NULL COMMENT '日期',
-                        `url` TEXT NULL COMMENT '链接',
-                        PRIMARY KEY (`code`, `title`, `date`)
-                        ) DEFAULT CHARSET=utf8mb4;  
-                    """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;  
-            cursor.execute(sql)
-            print ('table %s created' % tableName)
+            if drop:
+                cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
+                sql = """
+                        CREATE TABLE 
+                            `%s`.`%s` (
+                            `code` VARCHAR(10) NOT NULL COMMENT '股票代码',
+                            `title` VARCHAR(45) NULL COMMENT '标题',
+                            `type` VARCHAR(45) NULL COMMENT '类型',
+                            `date` VARCHAR(45) NULL COMMENT '日期',
+                            `url` TEXT NULL COMMENT '链接',
+                            PRIMARY KEY (`code`, `title`, `date`)
+                            ) DEFAULT CHARSET=utf8mb4;  
+                        """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;  
+                cursor.execute(sql)
+                print ('table %s created' % tableName)
             # fetch and insert data
             res = ts.get_notices(code)
             sql = 'INSERT IGNORE INTO `' + tableName + \
@@ -403,28 +403,29 @@ class StockInfoFetcher(IDataFetcher):
             db.close()
         return True
 
-    def fetchFinancialNews(self):
+    def fetchFinancialNews(self, drop = False):
         tableName = 'financialNews'
         param = []
         try:
             db, dbname = connectConfigDB('database')
             cursor = db.cursor()
             cursor.execute("SET NAMES utf8mb4;")
-            cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
-            # db.commit()
-            # create table
-            sql = """
-                    CREATE TABLE 
-                        `%s`.`%s` (
-                        `classify` VARCHAR(20) NOT NULL COMMENT '新闻类型',
-                        `title` TEXT NULL COMMENT '标题',
-                        `date` VARCHAR(45) NULL COMMENT '日期',
-                        `url` TEXT NULL COMMENT '链接',
-                        PRIMARY KEY ( `title`, `date`)
-                        ) DEFAULT CHARSET=utf8mb4;  
-                    """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;  
-            cursor.execute(sql)
-            print ('table %s created' % tableName)
+            if drop:
+                cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
+                # db.commit()
+                # create table
+                sql = """
+                        CREATE TABLE 
+                            `%s`.`%s` (
+                            `classify` VARCHAR(20) NOT NULL COMMENT '新闻类型',
+                            `title` TEXT NULL COMMENT '标题',
+                            `date` VARCHAR(45) NULL COMMENT '日期',
+                            `url` TEXT NULL COMMENT '链接',
+                            PRIMARY KEY ( `title`, `date`)
+                            ) DEFAULT CHARSET=utf8mb4;  
+                        """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;  
+                cursor.execute(sql)
+                print ('table %s created' % tableName)
             # fetch and insert data
             res = ts.get_latest_news()
             sql = 'INSERT IGNORE INTO `' + tableName + \
@@ -495,31 +496,32 @@ class TradeFetcher(IDataFetcher):
             return False
         return True
 
-    def fetchBlockTradeByCode(self, code, date, vol=500):
+    def fetchBlockTradeByCode(self, code, date, vol=500, drop = False):
         tableName = 'blockTradeRecords'
         param = []
         try:
             db, dbname = connectConfigDB('database')
             cursor = db.cursor()
             cursor.execute("SET NAMES utf8mb4;")
-            cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
-            # db.commit()
-            # create table
-            sql = """
-                    CREATE TABLE 
-                        `%s`.`%s` (
-                        `code` VARCHAR(20) NOT NULL COMMENT '股票代码',
-                        `name` VARCHAR(45) NOT NULL COMMENT '股票名称',
-                        `date` VARCHAR(20) NULL COMMENT '日期',
-                        `time` VARCHAR(20) NULL COMMENT '时间',
-                        `price` DOUBLE NULL COMMENT '当前价格',
-                        `volume` DOUBLE NULL COMMENT '成交手',
-                        `preprice` DOUBLE NULL COMMENT '上一笔价格',
-                        `type` VARCHAR(45) NULL COMMENT '买卖类型【买盘、卖盘、中性盘】'
-                        ) DEFAULT CHARSET=utf8mb4;  
-                    """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;  
-            cursor.execute(sql)
-            print ('table %s created' % tableName)
+            if drop:
+                cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
+                # db.commit()
+                # create table
+                sql = """
+                        CREATE TABLE 
+                            `%s`.`%s` (
+                            `code` VARCHAR(20) NOT NULL COMMENT '股票代码',
+                            `name` VARCHAR(45) NOT NULL COMMENT '股票名称',
+                            `date` VARCHAR(20) NULL COMMENT '日期',
+                            `time` VARCHAR(20) NULL COMMENT '时间',
+                            `price` DOUBLE NULL COMMENT '当前价格',
+                            `volume` DOUBLE NULL COMMENT '成交手',
+                            `preprice` DOUBLE NULL COMMENT '上一笔价格',
+                            `type` VARCHAR(45) NULL COMMENT '买卖类型【买盘、卖盘、中性盘】'
+                            ) DEFAULT CHARSET=utf8mb4;  
+                        """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;  
+                cursor.execute(sql)
+                print ('table %s created' % tableName)
             # fetch and insert data
             res = ts.get_latest_news()
             sql = 'INSERT IGNORE INTO `' + tableName + \
@@ -555,7 +557,7 @@ def main():
             print(code)
             stk.fetchCompanyInfoByCode(code)
             stk.fetchNewsByCode(code)
-            trd.fetchByCode(code)
+            trd.fetchByCode(code, '2017-05-02')
             trd.fetchRealtimeQuotes(code)
     except:
         print_exc()
