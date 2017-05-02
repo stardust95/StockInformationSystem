@@ -37,12 +37,20 @@ function getIndexRealtimeData() {
             index['downlimit'] = index['preclose'] * 0.9
             index['volume'] = Math.round(index['volume'] / 10000)
             index['amount'] = Math.round(index['amount'])
+
             for(var prop in index){
                 let element = document.getElementById(prop)
                 if( element )
                     element.innerText = formatNumber(index[prop])
             }
-
+            document.getElementById('change2').innerHTML = index['change']
+            if( index['change'] > 0 ){
+                $('#arrow-icon').addClass('fa fa-arrow-up')
+                $('#arrow-icon').css('color', 'green')
+            }else {
+                $('#arrow-icon').addClass('fa fa-arrow-down')
+                $('#arrow-icon').css('color', 'red')
+            }
         }else{
             console.log('status = ' + status)
         }

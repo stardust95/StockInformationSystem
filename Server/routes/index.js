@@ -4,8 +4,21 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    console.log(req.cookies);
-  res.render('home', { title: 'Express' });
+    // console.log(req.cookies);
+    var arr;
+    if( !req.cookies.visited ){
+        arr = []
+    }else{
+        arr = req.cookies.visited.split('|').slice(0, -1);
+    }
+    StockData.getMultipleStocks(arr, function (err, result) {
+        if( err ){
+            console.log(err)
+            res.json()
+        }else{
+            res.render('home', { title: 'Express', history: result });
+        }
+    })
 });
 
 
@@ -17,6 +30,12 @@ router.get('/index', function (req, res) {
 router.get('/stock/:stockid', function (req, res) {
     let stock = req.params.stockid;
     var cookiestr;
+    if( !isNumber(stock) ){
+        
+        res.render('error', {status: 404, message: "Page Not Found"})
+        return
+    }
+
     if( !req.cookies.visited ){
         cookiestr = ''
     }else{
@@ -26,9 +45,9 @@ router.get('/stock/:stockid', function (req, res) {
     if( arr.includes(stock) ){
         arr = arr.filter( item => item !== stock )
     }
-    cookiestr += stock + '|';
+    arr.push(stock)
     console.log(req.cookies.visited);
-    res.cookie('visited', cookiestr);
+    res.cookie('visited', arr.join('|'));
     StockData.getMultipleStocks(arr, function (err, result) {
         if( err ){
             console.log(err)
@@ -43,13 +62,20 @@ router.get('/stock/:stockid', function (req, res) {
 router.get('/index/:indexid', function (req, res) {
     let index = req.params.indexid;
     var cookiestr;
+
+    if( !isNumber(index) ){
+        res.render('error', {status: 404, message: "Page Not Found"})
+        return
+    }
+
     if( !req.cookies.visited ){
         cookiestr = ''
     }else{
         cookiestr = req.cookies.visited
     }
     var arr = cookiestr.split('|').slice(0, -1);
-    res.cookie('visited', cookiestr);
+    arr.push(index)
+    res.cookie('visited', arr.join('|'));
 
     StockData.getMultipleStocks(arr, function (err, result) {
         if( err ){
@@ -61,5 +87,13 @@ router.get('/index/:indexid', function (req, res) {
     });
 })
 
+function isNumber(str) {
+    let numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9' ]
+    for(var index in str){
+        if( !numbers.includes(str[index]) )
+            return false
+    }
+    return true
+}
 
 module.exports = router;

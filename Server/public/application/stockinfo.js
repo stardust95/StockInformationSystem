@@ -81,12 +81,21 @@ function getRealtimeData() {
         if( isSuccess(status) ){
             object["mktcap"] = Math.floor(object["mktcap"])
             object["nmc"] = Math.floor(object["nmc"])
+            object['date'] = object['date'].split('.')[0]
             for(var prop in object){
                 let element = document.getElementById(prop)
                 if( element )
                     element.innerHTML = object[prop]
             }
             document.getElementById('trade2').innerHTML = object['trade']
+            document.getElementById('change2').innerHTML = object['changepercent']
+            if( object['changepercent'] > 0 ){
+                $('#arrow-icon').addClass('fa fa-arrow-up')
+                $('#arrow-icon').css('color', 'green')
+            }else {
+                $('#arrow-icon').addClass('fa fa-arrow-down')
+                $('#arrow-icon').css('color', 'red')
+            }
         }else{
             console.log("status = " + status)
         }

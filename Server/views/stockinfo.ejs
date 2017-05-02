@@ -71,27 +71,26 @@
         <div class="row">
             <div class="col-md-12 col-xs-12">
                 <!-- small box -->
-                <div class="small-box bg-green-gradient">
+                <div class="small-box bg-gray-light">
                     <div class="inner">
                         <div class="row">
-                            <div class="col-md-3">
-                                <h3><span id="name"></span> (<span id="code"><%= code %></span>)</h3>
+                            <div class="col-md-3 text-black" >
+                                <h3><span id="name" style="font-weight: normal !important;"></span> (<span id="code"><%= code %></span>)</h3>
                             </div>
-                            <div class="col-md-1">
-                                <h3 class="text-black" >
+                            <div class="col-md-6">
+                                <h3 class="text-black margin-bottom" >
                                     <span id="trade2"></span>
                                     <i id="arrow-icon"></i>
+                                    <small class="text-red"> <span id="change2">--</span> %</small>
                                 </h3>
                             </div>
-                            <div class="col-md-1">
-                                <h3 class="text-black">
-
-                                </h3>
+                            <div class="col-md-3">
+                                <h4>
+                                    <span id="date" style="color: black"></span>
+                                </h4>
                             </div>
-
                         </div>
-
-                        <table class="table-responsive" id="basic-data-table">
+                        <table class="table-responsive" style="color: black" id="basic-data-table">
                             <tr>
                                 <td>
                                     现价：<span class="badge bg-yellow-active" id="trade">--</span>
