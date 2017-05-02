@@ -1,0 +1,18 @@
+<div class="panel box box-primary">
+    <div class="box-header with-border">
+        最近浏览
+    </div>
+    <div class="box-body text-muted text-sm no-padding">
+        <table class="table table-condensed no-header" id="browse-history-table">
+
+            <% for (var i = 0; i < history.length; i++) { %>
+            <tr>
+                <td><a href= "<%= history[i].code %>" ><%= history[i].name %></a></td>
+                <td><%= history[i].trade %></td>
+                <td><%= history[i].changepercent %></td>
+                <td><%= (history[i].trade - history[i].settlement).toFixed(2) %></td>
+            </tr>
+            <% } %>
+        </table>
+    </div>
+</div>

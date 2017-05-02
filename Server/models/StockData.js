@@ -5,6 +5,22 @@ var getConnection = require('./DbConnection')
 
 class StockData{
 
+    static getMultipleStocks(list, callback){
+        var conn = getConnection()
+        var sql = "SELECT code, name, trade, changepercent, settlement FROM stockList WHERE"
+        if( list.length > 0 ){
+            for(let index in list){
+                sql += " CODE = " + list[index]
+                if( index < list.length-1 ){
+                    sql += " OR"
+                }
+            }
+        }else{
+            sql += " FALSE"
+        }
+        conn.query(sql, callback)
+    }
+
     static getBasicInformation(code, callback){ // TODO: Optimize the schema of stockBasics
         var conn = getConnection()
         conn.query("SELECT A.* FROM stockBasics as A, stockList as B WHERE A.name = B.name AND code = " + code, callback)

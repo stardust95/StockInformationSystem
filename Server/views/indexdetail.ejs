@@ -44,22 +44,44 @@
                 <div class="transparent box box-solid bg-gray-light">
                     <div class="box-body">
 
-                        <div class="panel box box-primary">
-                            <div class="box-header with-border">
-                                最近浏览
-                            </div>
-                            <div class="box-body text-muted text-sm no-padding">
-                                <table class="table table-condensed no-header" id="stock-basic-table">
-                                </table>
-                            </div>
-                        </div>
+                        <% include history-table %>
 
                         <div class="panel box box-primary">
                             <div class="box-header with-border">
                                 操盘必读
                             </div>
-                            <div class="box-body text-muted text-sm" id="company-info-list">
-
+                            <div class="box-body text-muted text-sm">
+                                <table class="table table-bordered table-responsive" id="basic-stats">
+                                    <th>统计项</th>
+                                    <th>沪A</th>
+                                    <th>深A</th>
+                                    <tbody>
+                                    <tr><td class="td1" >股票只数</td><td class="td2" data-field="0" >1256</td><td class="td3" data-field="1" >1947</td></tr>
+                                    <tr><td class="td1 red" >上涨(只)</td><td class="td2 red" data-field="2" >518</td><td class="td3 red" data-field="3" >829</td></tr>
+                                    <tr><td class="td1" >平盘(只)</td><td class="td2" data-field="4" >130</td><td class="td3" data-field="5" >236</td></tr>
+                                    <tr><td class="td1 green" >下跌(只)</td><td class="td2 green" data-field="6" >608</td><td class="td3 green" data-field="7" >882</td></tr>
+                                    <tr>
+                                        <td class="td1" >总市值(亿)</td>
+                                        <td class="td2" data-field="8" >247855.36</td>
+                                        <td class="td3" data-field="9" >153388.12</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td1" >成交额(亿)</td>
+                                        <td class="td2" data-field="10" >1017.28</td>
+                                        <td class="td3" data-field="11" >576.58</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td1" >平均市盈率</td>
+                                        <td class="td2" data-field="12" >50.37</td>
+                                        <td class="td3" data-field="13" >135.2</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td1" >平均股价</td>
+                                        <td class="td2" data-field="14" >11.41</td>
+                                        <td class="td3" data-field="15" >13.26</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
@@ -70,7 +92,7 @@
                 <div class="row">
                     <div class="col-md-12 col-xs-12">
                         <!-- small box -->
-                        <div class="small-box bg-green">
+                        <div class="small-box bg-green-gradient">
                             <div class="inner">
                                 <h3><span id="name"></span> (<span id="code"><%= code %></span>)</h3>
 
@@ -89,7 +111,7 @@
                                             <!--量比：<span class="badge bg-yellow-active" id="high">--</span>-->
                                         <!--</td>-->
                                         <td>
-                                            总手：<span class="badge bg-yellow-active" id="volume">--</span>
+                                            总手：<span class="badge bg-yellow-active"><span id="volume">--</span> 万</span>
                                         </td>
                                         <td >
                                             最高：<span class="badge bg-yellow-active" id="high">--</span>
@@ -107,7 +129,7 @@
                                             <!--市盈：<span class="badge bg-yellow-active" id="turnoverratio">--</span>-->
                                         <!--</td>-->
                                         <td>
-                                            总金额：<span class="badge bg-yellow-active" id="amount">--</span>
+                                            总金额：<span class="badge bg-yellow-active"><span id="amount">--</span> 亿</span>
                                         </td>
                                         <td>
                                             最低：<span class="badge bg-yellow-active" id="low">--</span>
@@ -119,7 +141,7 @@
                                             今开：<span class="badge bg-yellow-active" id="open">--</span>
                                         </td>
                                         <td>
-                                            振幅：<span class="badge bg-yellow-active" id="change">--</span>
+                                            振幅：<span class="badge bg-yellow-active" ><span id="change">--</span> %</span>
                                         </td>
                                     </tr>
                                 </table>
@@ -197,15 +219,15 @@
                     <div class="col-md-6 col-xs-12">
                         <div class="box box-solid">
                             <ul class="nav nav-tabs bg-gray-light" id="news-tab" >
-                                <li><a data-toggle="tab" href="#stock-news-table-tab">个股新闻</a> </li>
-                                <li class="active"><a data-toggle="tab" href="#financial-news-table-tab">相关新闻</a> </li>
+                                <li><a data-toggle="tab" href="#rise-table-tab">领涨板块</a> </li>
+                                <li class="active"><a data-toggle="tab" href="#fall-table-tab">领跌板块</a> </li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane fade" id="stock-news-table-tab">
-                                    <table  id="stock-news-table" data-show-header="false"></table>
+                                <div class="tab-pane fade" id="rise-table-tab">
+                                    <table  id="rise-table" data-show-header="false"></table>
                                 </div>
-                                <div class="tab-pane fade in active" id="financial-news-table-tab">
-                                    <table id="financial-news-table" data-show-header="false"></table>
+                                <div class="tab-pane fade in active" id="fall-table-tab">
+                                    <table id="fall-table" data-show-header="false"></table>
                                 </div>
                             </div>
                         </div>
@@ -258,6 +280,77 @@
                             </div>
                         </div>
 
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">
+                                讨论区
+                            </h3>
+                            <div class="box-tools">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-footer box-comments">
+                            <div class="box-comment">
+                                <!-- User image -->
+                                <img class="img-circle img-sm" src="../dist/img/user3-128x128.jpg" alt="User Image">
+
+                                <div class="comment-text">
+                      <span class="username">
+                        东京的樱花掩盖巴黎的伤
+                        <span class="text-muted pull-right">8:03 PM 5月4日</span>
+                      </span><!-- /.username -->
+                                    <p>
+                                        快跌，跌到1000点我好抄底。
+                                    </p>
+                                </div>
+                                <ul class="list-inline">
+                                    <li class="pull-right">
+                                    <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i>回复</a></li>
+                                    <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i>赞</a>
+                                    </li>
+                                    </li>
+                                </ul>
+                                <!-- /.comment-text -->
+                            </div>
+                            <div class="box-comment">
+                                <!-- User image -->
+                                <img class="img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="User Image">
+
+                                <div class="comment-text ">
+
+                                  <span class="username" >
+                                    曙光
+                                    <span class="text-muted pull-right">8:03 PM 5月2日</span>
+                                  </span><!-- /.username -->
+                                    <p>
+                                        一边监管一边腐败，各行各业个个如此。
+                                    </p>
+                                </div>
+
+                                <ul class="list-inline">
+                                    <li class="pull-right">
+                                    <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i>回复</a></li>
+                                    <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i>赞</a>
+                                    </li>
+                                    </li>
+                                </ul>
+                                <!-- /.comment-text -->
+                            </div>
+                            <div class="box-footer">
+                                <form action="#" method="post">
+                                    <img class="img-responsive img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="Alt Text">
+                                    <!-- .img-push is used to add margin to elements next to floating images -->
+                                    <div class="img-push">
+                                        <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

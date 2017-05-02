@@ -112,7 +112,7 @@ class StockInfoFetcher(IDataFetcher):
             print ('table %s created' % tableName)
             # fetch and insert data
             res = ts.get_stock_basics()
-            sql = 'INSERT INTO `' + tableName + \
+            sql = 'INSERT IGNORE INTO `' + tableName + \
                 """` values
                         (%s, %s, %s, %s, %s, %s, 
                         %s, %s, %s, %s, %s, %s, 
@@ -184,7 +184,7 @@ class StockInfoFetcher(IDataFetcher):
             print ('table %s created' % tableName)
             # fetch and insert data
             res = ts.get_today_all()
-            sql = 'INSERT INTO `' + tableName + \
+            sql = 'INSERT IGNORE INTO `' + tableName + \
                     """` values(%s, %s, %s, %s, 
                                     %s, %s, %s, %s, 
                                     %s, %s, %s, %s, 
@@ -241,7 +241,7 @@ class StockInfoFetcher(IDataFetcher):
             print ('table %s created' % tableName)
             # fetch and insert data
             res = ts.get_hist_data(code, start=start, end=end, ktype=ktype)
-            sql = 'INSERT INTO `' + tableName + \
+            sql = 'INSERT IGNORE INTO `' + tableName + \
                     """` values(%s, %s, %s, %s, 
                                     %s, %s, %s, %s, 
                                     %s, %s, %s, %s, 
@@ -348,7 +348,7 @@ class StockInfoFetcher(IDataFetcher):
             df = pd.read_html('http://q.stock.sohu.com/cn/%s/gsjj.shtml' % code)[2]
             for row in df.values:
                 param += row[1::2].tolist()
-            sql = 'INSERT INTO `' + tableName + \
+            sql = 'INSERT IGNORE INTO `' + tableName + \
                     """` values('%s', '%s', '%s', '%s', '%s','%s', '%s', '%s', '%s', '%s','%s', '%s', '%s', '%s', '%s','%s', '%s', '%s', '%s','%s', '%s')
                     """ % tuple(param)
             cursor.execute(sql)
@@ -376,7 +376,7 @@ class StockInfoFetcher(IDataFetcher):
                     CREATE TABLE 
                         `%s`.`%s` (
                         `code` VARCHAR(10) NOT NULL COMMENT '股票代码',
-                        `title` TEXT NULL COMMENT '标题',
+                        `title` VARCHAR(45) NULL COMMENT '标题',
                         `type` VARCHAR(45) NULL COMMENT '类型',
                         `date` VARCHAR(45) NULL COMMENT '日期',
                         `url` TEXT NULL COMMENT '链接',
@@ -387,7 +387,7 @@ class StockInfoFetcher(IDataFetcher):
             print ('table %s created' % tableName)
             # fetch and insert data
             res = ts.get_notices(code)
-            sql = 'INSERT INTO `' + tableName + \
+            sql = 'INSERT IGNORE INTO `' + tableName + \
                     """` values(%s, %s, %s, %s, %s)
                     """
             for row in res.values:
@@ -419,14 +419,15 @@ class StockInfoFetcher(IDataFetcher):
                         `classify` VARCHAR(20) NOT NULL COMMENT '新闻类型',
                         `title` TEXT NULL COMMENT '标题',
                         `date` VARCHAR(45) NULL COMMENT '日期',
-                        `url` TEXT NULL COMMENT '链接'
+                        `url` TEXT NULL COMMENT '链接',
+                        PRIMARY KEY ( `title`, `date`)
                         ) DEFAULT CHARSET=utf8mb4;  
                     """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;  
             cursor.execute(sql)
             print ('table %s created' % tableName)
             # fetch and insert data
             res = ts.get_latest_news()
-            sql = 'INSERT INTO `' + tableName + \
+            sql = 'INSERT IGNORE INTO `' + tableName + \
                     """` values(%s, %s, %s, %s)
                     """
             for row in res.values:
@@ -456,7 +457,7 @@ class TradeFetcher(IDataFetcher):
         try:
             db, dbname = connectConfigDB('database')
             cursor = db.cursor()
-            sql = 'INSERT INTO `' + tableName + \
+            sql = 'INSERT IGNORE INTO `' + tableName + \
                     """` values(%s, %s, %s, %s, 
                                     %s, %s, %s, %s)
                     """
@@ -488,7 +489,7 @@ class TradeFetcher(IDataFetcher):
         try:
             engine = createDbEngine('database')
             df = ts.get_realtime_quotes(code)
-            df.to_sql(tableName, engine, if_exists='replace')
+            df.to_sql(tableName, engine, if_exists='append')
         except:
             print_exc()
             return False
@@ -521,7 +522,7 @@ class TradeFetcher(IDataFetcher):
             print ('table %s created' % tableName)
             # fetch and insert data
             res = ts.get_latest_news()
-            sql = 'INSERT INTO `' + tableName + \
+            sql = 'INSERT IGNORE INTO `' + tableName + \
                     """` values(%s, %s, %s, %s, %s, %s, %s, %s)
                     """
             for row in res.values:
@@ -543,17 +544,32 @@ class TradeFetcher(IDataFetcher):
 def main():
     stk = StockInfoFetcher()
     trd = TradeFetcher()
+    try:
+        db, dbname = connectConfigDB('database')
+        cursor = db.cursor()
+        sql = "SELECT code FROM stockList"
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        for row in results:
+            code = row[0]
+            print(code)
+            stk.fetchCompanyInfoByCode(code)
+            stk.fetchNewsByCode(code)
+            trd.fetchByCode(code)
+            trd.fetchRealtimeQuotes(code)
+    except:
+        print_exc()
+        db.rollback()
+        exit()
+    finally:
+        db.close()
+    
     # stk.fetchCompanyInfoByCode('000001')
-    years = [2015, 2016, 2017]
-    drop = True
-    for year in years:
-        for q in range(1, 5):
-            stk.fetchCompanyProfitByQuarter(year, q, drop)
-            drop = False
     # stk.fetchFinancialNews()
     # trd.fetchByCode('000001', '2016-12-19')
     # trd.fetchRealtimeQuotes('000001')
     # trd.fetchBlockTradeByCode('000001', '2017-04-20')
+
 if __name__ == '__main__':
     main()
 

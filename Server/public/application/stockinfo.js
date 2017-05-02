@@ -86,6 +86,7 @@ function getRealtimeData() {
                 if( element )
                     element.innerHTML = object[prop]
             }
+            document.getElementById('trade2').innerHTML = object['trade']
         }else{
             console.log("status = " + status)
         }
@@ -94,7 +95,6 @@ function getRealtimeData() {
 
 function buildTradeRecordTable() {
     var limit = 5
-    jQuery.fn.bootstrapTable
     $.get('/stocks/trades/' + code + '/' + limit, function (arr, status) {
         if( isSuccess(status) ){
             $('#trade-records-table').bootstrapTable({
@@ -473,13 +473,12 @@ function drawKCurve() {
     Plotly.plot('curve-day', data, layout);
 }
 
-
 function LinkFormatter(value, row) {
     // return value
     return "<a href='"+row.url+"'>"+value+"</a>";
 }
 
-
 function redFormatter(value) {
     return "<span style='color:red'>" + value + "</span>"
 }
+
