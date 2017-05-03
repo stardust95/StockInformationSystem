@@ -7,6 +7,11 @@ var getConnection = require('./DbConnection')
 
 class IndexData{
 
+    static getCodesList(callback){
+        var conn = getConnection()
+        conn.query("SELECT code FROM indexList", callback)
+    }
+
     static getIndexRealtimeData(code, callback) {
         var conn = getConnection()
         var sql = "SELECT * FROM indexList WHERE code = " + code
@@ -29,14 +34,26 @@ class IndexData{
         conn.query(sql, callback)
     }
 
-    static getIndexTradeRecords(code, date, callback, limit){
+    static getIndexTradeRecords(code, callback, date, limit){
         var conn= getConnection()
-        var sql = "SELECT * FROM indexTradeRecords WHERE code = " + code + " AND date = " + date + " ORDER BY TIME DESC"
+        var sql = "SELECT * FROM indexTradeRecords WHERE code = " + code
+        if( date ){
+            sql += " AND date = " + date
+        }
+        sql += " ORDER BY TIME DESC"
         if( !limit ){
             limit = 10
         }
         sql += " LIMIT " + limit
         conn.query(sql, callback)
+    }
+
+    static getHotStocks(code, callback, limit){
+        var conn = getConnection()
+        if( !limit ){
+            limit = 10
+        }
+        conn.query("SELECT * FROM indexContainStocks WHERE hot != 0 AND indexCode = " + code + " LIMIT " + limit, callback)
     }
 
 }

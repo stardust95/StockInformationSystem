@@ -1,6 +1,27 @@
 var express = require('express');
-var StockData = require('../models/StockData')
+var StockData = require('../models/StockData');
+var IndexData = require('../models/IndexData');
 var router = express.Router();
+var stockList = [];
+var indexList = [];
+
+StockData.getCodesList(function (err, result) {
+    if( err ){
+        console.log(err)
+    }else{
+        result.forEach(obj => stockList.push(obj.code));
+    }
+});
+
+IndexData.getCodesList(function (err, result) {
+    if( err ){
+        console.log(err)
+    }else{
+        result.forEach(obj => indexList.push(obj.code));
+    }
+});
+
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -9,14 +30,14 @@ router.get('/', function(req, res, next) {
     if( !req.cookies.visited ){
         arr = []
     }else{
-        arr = req.cookies.visited.split('|').slice(0, -1);
+        arr = req.cookies.visited.split('|');
     }
     StockData.getMultipleStocks(arr, function (err, result) {
         if( err ){
             console.log(err)
             res.json()
         }else{
-            res.render('home', { title: 'Express', history: result });
+            res.render('home', { code: '000001', history: result });
         }
     })
 });
@@ -30,8 +51,7 @@ router.get('/index', function (req, res) {
 router.get('/stock/:stockid', function (req, res) {
     let stock = req.params.stockid;
     var cookiestr;
-    if( !isNumber(stock) ){
-        
+    if( !isNumber(stock) || !stockList.includes(stock) ){
         res.render('error', {status: 404, message: "Page Not Found"})
         return
     }
@@ -41,7 +61,7 @@ router.get('/stock/:stockid', function (req, res) {
     }else{
         cookiestr = req.cookies.visited
     }
-    var arr = cookiestr.split('|').slice(0, -1);
+    var arr = cookiestr.split('|');
     if( arr.includes(stock) ){
         arr = arr.filter( item => item !== stock )
     }
@@ -63,7 +83,7 @@ router.get('/index/:indexid', function (req, res) {
     let index = req.params.indexid;
     var cookiestr;
 
-    if( !isNumber(index) ){
+    if( !isNumber(index) || !indexList.includes(index) ){
         res.render('error', {status: 404, message: "Page Not Found"})
         return
     }
@@ -73,7 +93,7 @@ router.get('/index/:indexid', function (req, res) {
     }else{
         cookiestr = req.cookies.visited
     }
-    var arr = cookiestr.split('|').slice(0, -1);
+    var arr = cookiestr.split('|');
     arr.push(index)
     res.cookie('visited', arr.join('|'));
 

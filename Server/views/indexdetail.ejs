@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Top Navigation</title>
+    <title> 指数详情 <% code %> </title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -99,7 +99,7 @@
                                     <div class="col-md-3 text-black" >
                                         <h3><span id="name" style="font-weight: normal !important;"></span> (<span id="code"><%= code %></span>)</h3>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-2">
                                         <h3 class="text-black margin-bottom" >
                                             <span id="trade2"></span>
                                             <i id="arrow-icon"></i>
@@ -107,58 +107,58 @@
                                         </h3>
                                     </div>
                                     <div class="col-md-3">
-                                        <h4>
-                                            <span id="date" style="color: black"></span>
-                                        </h4>
+                                        <h3>
+                                            <small id="date" class="text-muted" style="color: black"></small>
+                                        </h3>
                                     </div>
                                 </div>
 
                                 <table class="table-responsive" id="realtime-table">
                                     <tr>
                                         <!--<td>-->
-                                            <!--均价：<span class="badge bg-yellow-active" id="trade">&#45;&#45;</span>-->
+                                            <!--均价：<span class="badge bg-green-active" id="trade">&#45;&#45;</span>-->
                                         <!--</td>-->
                                         <!--<td>-->
-                                            <!--现手：<span class="badge bg-yellow-active" id="curvolume">--</span>-->
+                                            <!--现手：<span class="badge bg-green-active" id="curvolume">--</span>-->
                                         <!--</td>-->
                                         <!--<td>-->
-                                            <!--换手率：<span class="badge bg-yellow-active" id="turnoverratio">&#45;&#45;</span>-->
+                                            <!--换手率：<span class="badge bg-green-active" id="turnoverratio">&#45;&#45;</span>-->
                                         <!--</td>-->
                                         <!--<td>-->
-                                            <!--量比：<span class="badge bg-yellow-active" id="high">--</span>-->
+                                            <!--量比：<span class="badge bg-green-active" id="high">--</span>-->
                                         <!--</td>-->
                                         <td>
-                                            总手：<span class="badge bg-yellow-active"><span id="volume">--</span> 万</span>
+                                            总手：<span class="badge bg-green-active"><span id="volume">--</span> 万</span>
                                         </td>
                                         <td >
-                                            最高：<span class="badge bg-yellow-active" id="high">--</span>
+                                            最高：<span class="badge bg-green-active" id="high">--</span>
                                         </td>
                                         <td>
-                                            涨停：<span class="badge bg-yellow-active" id="uplimit">--</span>
+                                            涨停：<span class="badge bg-green-active" id="uplimit">--</span>
                                         </td>
                                         <td>
-                                            昨收：<span class="badge bg-yellow-active" id="preclose">--</span>
+                                            昨收：<span class="badge bg-green-active" id="preclose">--</span>
                                         </td>
                                         <!---->
                                     </tr>
                                     <tr>
                                         <!--<td>-->
-                                            <!--市盈：<span class="badge bg-yellow-active" id="turnoverratio">--</span>-->
+                                            <!--市盈：<span class="badge bg-green-active" id="turnoverratio">--</span>-->
                                         <!--</td>-->
                                         <td>
-                                            总金额：<span class="badge bg-yellow-active"><span id="amount">--</span> 亿</span>
+                                            总金额：<span class="badge bg-green-active"><span id="amount">--</span> 亿</span>
                                         </td>
                                         <td>
-                                            最低：<span class="badge bg-yellow-active" id="low">--</span>
+                                            最低：<span class="badge bg-green-active" id="low">--</span>
                                         </td>
                                         <td>
-                                            跌停：<span class="badge bg-yellow-active" id="downlimit">--</span>
+                                            跌停：<span class="badge bg-green-active" id="downlimit">--</span>
                                         </td>
                                         <td>
-                                            今开：<span class="badge bg-yellow-active" id="open">--</span>
+                                            今开：<span class="badge bg-green-active" id="open">--</span>
                                         </td>
                                         <td>
-                                            振幅：<span class="badge bg-yellow-active" ><span id="change">--</span> %</span>
+                                            振幅：<span class="badge bg-green-active" ><span id="change">--</span> %</span>
                                         </td>
                                     </tr>
                                 </table>
@@ -196,7 +196,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4 col-xs-6">
+                    <div class="col-md-3 col-xs-6">
                         <div class="box box-info">
                             <div class="box-header with-border bg-gray-light">
                                 <h3 class="box-title">明细</h3>
@@ -213,10 +213,10 @@
                         </div>
                     </div>
 
-                    <div class="col-md-2 col-xs-6">
+                    <div class="col-md-3 col-xs-6">
                         <div class="box box-info">
                             <div class="box-header with-border bg-gray-light">
-                                <h3 class="box-title">报价</h3>
+                                <h3 class="box-title">热门股票</h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse">
                                         <i class="fa fa-minus"></i>
@@ -224,7 +224,7 @@
                                 </div>
                             </div>
                             <div class="box-body">
-                                <table id="price-table" class="table table-hover table-bordered" data-show-header="false" data-striped="true">
+                                <table id="hot-table" class="table table-hover table-bordered" data-show-header="false" data-striped="true">
                                 </table>
                             </div>
                         </div>
@@ -236,8 +236,8 @@
                     <div class="col-md-6 col-xs-12">
                         <div class="box box-solid">
                             <ul class="nav nav-tabs bg-gray-light" id="news-tab" >
-                                <li><a data-toggle="tab" href="#rise-table-tab">领涨板块</a> </li>
-                                <li class="active"><a data-toggle="tab" href="#fall-table-tab">领跌板块</a> </li>
+                                <li><a data-toggle="tab" href="#rise-table-tab">领涨股</a> </li>
+                                <li class="active"><a data-toggle="tab" href="#fall-table-tab">领跌股</a> </li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade" id="rise-table-tab">
@@ -268,37 +268,37 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <!--<div class="row">-->
 
-                    <div class="col-md-6 col-xs-12">
-                        <div class="box box-solid">
-                            <ul class="nav nav-tabs bg-gray-light" id="rank-tab">
-                                <li><a data-toggle="tab" href="#industry-rank-table-tab">同行业个股</a> </li>
-                                <li class="active"><a data-toggle="tab" href="#area-rank-table-tab">同地区个股</a> </li>
-                                <span class="label label-default pull-right"><h5 id="rank-field">  </h5></span>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane fade" id="industry-rank-table-tab">
-                                    <table  id="industry-rank-table"></table>
-                                </div>
-                                <div class="tab-pane fade in active" id="area-rank-table-tab">
-                                    <table id="area-rank-table"></table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-xs-12">
-                        <div class="box box-info">
-                            <div class="box-header with-border bg-gray-light">
-                                <h3 class="box-title">净利润成长性</h3>
-                                <div class="box-body">
-                                    <div id="profit-chart"></div>
-                                </div>
-                            </div>
-                        </div>
+                    <!--<div class="col-md-6 col-xs-12">-->
+                        <!--<div class="box box-solid">-->
+                            <!--<ul class="nav nav-tabs bg-gray-light" id="rank-tab">-->
+                                <!--<li><a data-toggle="tab" href="#industry-rank-table-tab">同行业个股</a> </li>-->
+                                <!--<li class="active"><a data-toggle="tab" href="#area-rank-table-tab">同地区个股</a> </li>-->
+                                <!--<span class="label label-default pull-right"><h5 id="rank-field">  </h5></span>-->
+                            <!--</ul>-->
+                            <!--<div class="tab-content">-->
+                                <!--<div class="tab-pane fade" id="industry-rank-table-tab">-->
+                                    <!--<table  id="industry-rank-table"></table>-->
+                                <!--</div>-->
+                                <!--<div class="tab-pane fade in active" id="area-rank-table-tab">-->
+                                    <!--<table id="area-rank-table"></table>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-6 col-xs-12">-->
+                        <!--<div class="box box-info">-->
+                            <!--<div class="box-header with-border bg-gray-light">-->
+                                <!--<h3 class="box-title">净利润成长性</h3>-->
+                                <!--<div class="box-body">-->
+                                    <!--<div id="profit-chart"></div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
 
-                    </div>
-                </div>
+                    <!--</div>-->
+                <!--</div>-->
 
                 <div class="row">
                     <div class="box box-info">
@@ -378,13 +378,7 @@
 </div>
 <!-- /.content-wrapper -->
 
-<footer class="main-footer">
-    <div class="pull-right hidden-xs">
-        <b>Version</b> 1.0.0
-    </div>
-    <strong>Copyright © 2014-2016 <a href="#">Stock-Info-Publication</a>.</strong> All rights
-    reserved.
-</footer>
+<% include footer.ejs %>
 
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <!-- Bootstrap 3.3.6 -->

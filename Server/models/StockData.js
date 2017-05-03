@@ -5,6 +5,11 @@ var getConnection = require('./DbConnection')
 
 class StockData{
 
+    static getCodesList(callback){
+        var conn = getConnection()
+        conn.query("SELECT code FROM stockList",callback)
+    }
+
     static getMultipleStocks(list, callback){
         var conn = getConnection()
         var sql = "SELECT code, name, trade, changepercent, settlement FROM stockList WHERE"

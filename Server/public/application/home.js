@@ -10,7 +10,6 @@ function onload() {
     drawKCurve();
     getIndexListInfo();
     getNews();
-    getHistroyRecord();
     getPersonalStock();
 }
 
@@ -55,6 +54,7 @@ function getIndexInfo() {
     ]
     $.get('/indexs/info/'+code, function (result, status) {     // result is object instead of array
         if( isSuccess(status) ){
+
             $('#index-info-table').bootstrapTable({
                 columns: columns,
                 data: [result]
@@ -146,10 +146,6 @@ function getNews(){
             console.log('status = ' + status)
         }
     })
-}
-
-function getHistroyRecord(){
-
 }
 
 function getPersonalStock(){
