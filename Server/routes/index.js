@@ -37,7 +37,7 @@ router.get('/', function(req, res, next) {
             console.log(err)
             res.json()
         }else{
-            res.render('home', { code: '000001', history: result });
+            res.render('home', { code: '000001', history: result, host: req.get('Host'), protocol: req.protocol });
         }
     })
 });
@@ -63,7 +63,7 @@ router.get('/stock/:stockid', function (req, res) {
     }
     var arr = cookiestr.split('|');
     if( arr.includes(stock) ){
-        arr = arr.filter( item => item !== stock )
+        arr = arr.filter( item => item !== stock ).filter( item => stockList.includes(item) )
     }
     arr.push(stock)
     console.log(req.cookies.visited);
@@ -73,7 +73,7 @@ router.get('/stock/:stockid', function (req, res) {
             console.log(err)
             res.json()
         }else{
-            res.render('stockinfo', {code: stock, history: result } )
+            res.render('stockinfo', {code: stock, history: result, host: req.get('Host'), protocol: req.protocol } )
         }
     });
 
@@ -102,7 +102,7 @@ router.get('/index/:indexid', function (req, res) {
             console.log(err)
             res.json()
         }else{
-            res.render('indexdetail', {code: index, history: result } )
+            res.render('indexdetail', {code: index, history: result, host: req.get('Host'), protocol: req.protocol } )
         }
     });
 })

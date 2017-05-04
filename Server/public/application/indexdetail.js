@@ -239,10 +239,13 @@ function drawKCurve() {
 }
 
 function LinkFormatter(value, row) {
-    // return value
-    return "<a href='"+row.url+"'>"+value+"</a>";
+    if( row.url )
+        return "<a href='"+row.url+"'>"+value+"</a>";
+    else if( row.code )
+        return "<a href='"+row.code+"'>"+value+"</a>";
+    else
+        return value;
 }
-
 function redFormatter(value) {
     return "<span style='color:red'>" + value + "</span>"
 }

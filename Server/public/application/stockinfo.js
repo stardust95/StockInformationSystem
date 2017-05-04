@@ -86,8 +86,8 @@ function getRealtimeData() {
                 if( element )
                     element.innerHTML = object[prop]
             }
-            document.getElementById('trade2').innerHTML = object['trade']
-            document.getElementById('change2').innerHTML = object['changepercent']
+            document.getElementById('trade2').innerHTML = Number(object['trade']).toFixed(2)
+            document.getElementById('change2').innerHTML = Number(object['changepercent']).toFixed(2)
             if( object['changepercent'] > 0 ){
                 $('#arrow-icon').addClass('fa fa-arrow-up')
                 $('#arrow-icon').css('color', 'green')
@@ -529,9 +529,14 @@ function drawKCurve() {
     });
 }
 
+
 function LinkFormatter(value, row) {
-    // return value
-    return "<a href='"+row.url+"'>"+value+"</a>";
+    if( row.url )
+        return "<a href='"+row.url+"'>"+value+"</a>";
+    else if( row.code )
+        return "<a href='"+row.code+"'>"+value+"</a>";
+    else
+        return value;
 }
 
 function redFormatter(value) {

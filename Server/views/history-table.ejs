@@ -7,7 +7,7 @@
 
             <% for (var i = 0; i < history.length; i++) { %>
             <tr>
-                <td><a href= "<%= history[i].code %>" ><%= history[i].name %></a></td>
+                <td><a href= "<%= protocol %>://<%= host %>/stock/<%= history[i].code %>" ><%= history[i].name %></a></td>
                 <td><%= history[i].trade %></td>
                 <td><%= history[i].changepercent %></td>
                 <td><%= (history[i].trade - history[i].settlement).toFixed(2) %></td>
