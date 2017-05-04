@@ -30,7 +30,7 @@ router.get('/', function(req, res, next) {
     if( !req.cookies.visited ){
         arr = []
     }else{
-        arr = req.cookies.visited.split('|');
+        arr = req.cookies.visited.split('|').filter(item => stockList.includes(item));
     }
     StockData.getMultipleStocks(arr, function (err, result) {
         if( err ){
@@ -93,7 +93,7 @@ router.get('/index/:indexid', function (req, res) {
     }else{
         cookiestr = req.cookies.visited
     }
-    var arr = cookiestr.split('|');
+    var arr = cookiestr.split('|').filter(item => stockList.includes(item));
     arr.push(index)
     res.cookie('visited', arr.join('|'));
 
