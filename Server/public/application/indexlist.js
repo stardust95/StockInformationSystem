@@ -1,5 +1,11 @@
 
 function onload() {
+
+    var name = 'active';
+    $('#nav-home').removeClass(name);
+    $('#nav-index').removeClass(name).addClass(name);
+    $('#nav-stock').removeClass(name);
+
     getIndexListInfo();
 }
 
@@ -19,7 +25,8 @@ function getIndexListInfo() {
         },
         {
             field: 'name',
-            title: '股票名称'
+            title: '股票名称',
+            formatter: LinkFormatter
         },
         {
             field: 'change',
@@ -69,4 +76,9 @@ function getIndexListInfo() {
             console.log('status = ' + status)
         }
     })
+}
+
+function LinkFormatter(value, row) {
+    // return value
+    return "<a href='/index/"+row.code+"'>"+value+"</a>";
 }

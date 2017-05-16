@@ -3,7 +3,7 @@
  */
 
 var express = require('express');
-var StockData = require('../models/stockData')
+var StockData = require('../models/StockData')
 var router = express.Router();
 
 

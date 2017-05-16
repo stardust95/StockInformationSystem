@@ -1,5 +1,5 @@
 var express = require('express');
-var IndexListData = require('../models/indexListData');
+var IndexListData = require('../models/IndexListData');
 var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('indexlistinfo');

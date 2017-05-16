@@ -1,11 +1,15 @@
 var code = '000001'
 
 function onload() {
+    var name = 'active';
+    $('#nav-home').removeClass(name).addClass(name);
+    $('#nav-index').removeClass(name);
+    $('#nav-stock').removeClass(name);
+
     getIndexInfo();
     drawKCurve();
     getIndexListInfo();
     getNews();
-    getHistroyRecord();
     getPersonalStock();
 }
 
@@ -48,14 +52,12 @@ function getIndexInfo() {
             title: '成交金额'
         }
     ]
-    $.get('/index/info/'+code, function (result, status) {
+    $.get('/indexs/info/'+code, function (result, status) {     // result is object instead of array
         if( isSuccess(status) ){
-            for(let index in result){
-                result[index]['index'] = Number(index)+1
-            }
+
             $('#index-info-table').bootstrapTable({
                 columns: columns,
-                data: result,
+                data: [result]
             })
         }else{
             console.log('status = ' + status)
@@ -92,7 +94,8 @@ function getIndexListInfo() {
         },
         {
             field: 'name',
-            title: '股票名称'
+            title: '股票名称',
+            formatter: IndexLinkFormatter
         },
         {
             field: 'change',
@@ -127,7 +130,7 @@ function getNews(){
     var columns = [
         {
             field: 'title',
-            formatter: 'LinkFormatter'
+            formatter: 'IndexLinkFormatter'
         },
         {
             field: 'date'
@@ -145,15 +148,16 @@ function getNews(){
     })
 }
 
-function getHistroyRecord(){
-
-}
-
 function getPersonalStock(){
 
 }
 
-function LinkFormatter(value, row) {
+function IndexLinkFormatter(value, row) {
     // return value
-    return "<a href='"+row.url+"'>"+value+"</a>";
+    return "<a href='/index/"+row.code+"'>"+value+"</a>";
+}
+
+function StockLinkFormatter(value, row) {
+    // return value
+    return "<a href='/stock/"+row.code+"'>"+value+"</a>";
 }
