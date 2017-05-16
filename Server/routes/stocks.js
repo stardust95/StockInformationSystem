@@ -136,6 +136,39 @@ router.get('/profit/:stockid',function (req, res) {
     })
 })
 
+router.get('/comment/:stockid', function (req, res) {
+    StockData.getComment(req.params.stockid, function (err, result) {
+        if( err ){
+            console.log(err)
+            res.json()
+        }else{
+           res.json(result)
+        }
+    })
+})
+
+/* upload new commens
+* {
+*     user: ,
+ *     text:
+* }
+* */
+router.post('/comment/:stockid', function (req, res) {
+    if( req.body.user && req.body.text ){
+        StockData.postComment(req.params.stockid, req.body.user, req.body.text,
+            function (err, result) {
+                if( err ){
+                    console.log(err)
+                    res.status(500).json()
+                }else{
+                    res.status(201).json({ success: true })
+                }
+            })
+    }else{
+        res.status(200).json({ message: "Invalid user or content"})
+    }
+})
+
 
 
 module.exports = router;

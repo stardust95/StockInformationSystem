@@ -3,6 +3,13 @@
  */
 var getConnection = require('./DbConnection')
 
+// Todo: http://www.dengzhr.com/node-js/877
+
+function getCurrentTime() {
+    let date = new Date()
+    return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + " " + date.toLocaleTimeString();
+}
+
 class StockData{
 
     static getCodesList(callback){
@@ -109,6 +116,24 @@ class StockData{
         var conn = getConnection()
         var sql = "SELECT * FROM companyInfo WHERE `证券代码` = "+ code
         conn.query(sql, callback)
+    }
+
+    static getComment(code, callback){
+        var conn = getConnection();
+        var sql = "SELECT * FROM `stockUserComments` WHERE `stockCode` = ?"
+        conn.query(sql, [code], callback)
+    }
+
+    /* SQL Injection
+    * */
+    static postComment(code, user, content, callback){
+        var conn = getConnection();
+        var sql = "INSERT IGNORE `stockUserComments`(`stockCode`, \
+                `user`, \
+            `date`, \
+            `content`, \
+            `approval`) VALUES(?, ?, ?, ?, 0)"
+        conn.query(sql, [code, user, getCurrentTime(), content], callback)
     }
 
 }
