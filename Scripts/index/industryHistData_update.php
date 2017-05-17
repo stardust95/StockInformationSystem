@@ -13,7 +13,6 @@ $password="group5";
 $database="stockG5";
 $conn=new mysqli($host, $user, $password,$database);
 
-$table="indexHistData";
 $query0="select * from indexIndustry where industry= ";
 
 //$indus=array("专用机械","中成药","互联网","仓储物流","供气供热","元器件","乳制品","保险","全国地产","公路","其他商业","其他建材","农业综合","农药化肥","农用机械"
