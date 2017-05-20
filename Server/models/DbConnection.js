@@ -5,10 +5,10 @@
 var mysql = require('mysql')
 
 var config = {
-    host: "112.74.124.145",
+    host: "tdsql-219vguff.sh.cdb.myqcloud.com",
     user: "group5",
-    password: "group5",
-    port: "3306",
+    password: "group5..",
+    port: "23",
     database: "stockG5"
 };
 

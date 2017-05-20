@@ -55,7 +55,6 @@ router.get('/stock/:stockid', function (req, res) {
         res.render('error', {status: 404, message: "Page Not Found"})
         return
     }
-
     if( !req.cookies.visited ){
         cookiestr = ''
     }else{
