@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var stocks = require('./routes/stocks');
+var list = require('./routes/templatelist');
 var indexs = require('./routes/indexdetails');
 var indexlist = require('./routes/indexlist');
 var app = express();
@@ -28,6 +29,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/stocks', stocks);
 app.use('/indexs', indexs);
+app.use('/list', list);
 app.use('/indexlist', indexlist);
 
 

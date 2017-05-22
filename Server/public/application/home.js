@@ -1,5 +1,6 @@
-var code = '000001'
-
+var code = '000001';
+var index_name = '上证指数';
+var stock_name = '平安银行';
 function onload() {
     var name = 'active';
     $('#nav-home').removeClass(name).addClass(name);
@@ -7,10 +8,19 @@ function onload() {
     $('#nav-stock').removeClass(name);
 
     getIndexInfo();
-    drawKCurve();
+
     getIndexListInfo();
+    getStockListInfo();
+
+    drawIndexKCurve(code);
+    drawStockKCurve(code);
+
     getNews();
-    getPersonalStock();
+
+    getIndustryHistList();
+
+    getCompanyIncList();
+    getCompanyDecList();
 }
 
 function isSuccess(status) {
@@ -65,28 +75,96 @@ function getIndexInfo() {
     })
 }
 
-function drawKCurve() {
-    $.getJSON('//data.jianshukeji.com/jsonp?filename=json/aapl-c.json&callback=?', function (data) {
-        // Create the chart
-        $('#curve-day').highcharts('StockChart', {
-            rangeSelector : {
-                selected : 1
-            },
-            title : {
-                text : '上证指数'
-            },
-            series : [{
-                name : 'AAPL',
-                data : data,
-                tooltip: {
-                    valueDecimals: 2
-                }
-            }]
-        });
-    });
+function drawIndexKCurve(code) {
+    $.get('/list/curve/index/'+code, function (result, status) {
+        if( isSuccess(status) ){
+            var data = transformHistData(result);
+            $('#index-curve-day').highcharts('StockChart', {
+                rangeSelector : {
+                    selected : 1
+                },
+                title : {
+                    text : index_name
+                },
+                series : [{
+                    name : 'AAPL',
+                    data : data,
+                    tooltip: {
+                        valueDecimals: 2
+                    }
+                }]
+            });
+        }else{
+            console.log('status = ' + status)
+        }
+    })
+}
+
+function drawStockKCurve(code, name) {
+    $.get('/list/curve/stock/'+code, function (result, status) {
+        if( isSuccess(status) ){
+            var data = transformHistData(result);
+            $('#stock-curve-day').highcharts('StockChart', {
+                rangeSelector : {
+                    selected : 1
+                },
+                title : {
+                    text : stock_name
+                },
+                series : [{
+                    name : 'AAPL',
+                    data : data,
+                    tooltip: {
+                        valueDecimals: 2
+                    }
+                }]
+            });
+        }else{
+            console.log('status = ' + status)
+        }
+    })
 }
 
 function getIndexListInfo() {
+    let columns = [
+        {
+            field: 'code',
+            title: '指数代码'
+        },
+        {
+            field: 'name',
+            title: '指数名称',
+            formatter: IndexLinkFormatter
+        },
+        {
+            field: 'change',
+            title: '涨跌幅'
+        },
+        {
+            field: 'volume',
+            title: '成交量'
+        },
+        {
+            field: 'amount',
+            title: '成交金额'
+        }
+    ];
+    $.get('/list/data/index/10', function (result, status) {
+        if( isSuccess(status) ){
+            for(let index in result){
+                result[index]['index'] = Number(index)+1
+            }
+            $('#index-list-table').bootstrapTable({
+                columns: columns,
+                data: result.slice(0,8),
+                })
+        }else{
+            console.log('status = ' + status)
+        }
+    })
+}
+
+function getStockListInfo() {
     let columns = [
         {
             field: 'code',
@@ -109,16 +187,16 @@ function getIndexListInfo() {
             field: 'amount',
             title: '成交金额'
         }
-    ]
-    $.get('/indexlist/list', function (result, status) {
+    ];
+    $.get('/list/data/stock/10', function (result, status) {
         if( isSuccess(status) ){
             for(let index in result){
                 result[index]['index'] = Number(index)+1
             }
-            $('#index-list-table').bootstrapTable({
+            $('#stock-list-table').bootstrapTable({
                 columns: columns,
                 data: result.slice(0,8),
-                })
+            })
         }else{
             console.log('status = ' + status)
         }
@@ -135,8 +213,8 @@ function getNews(){
         {
             field: 'date'
         }
-    ]
-    $.get('/stocks/newslist/10', function (arr, status) {
+    ];
+    $.get('/list/data/news/10', function (arr, status) {
         if( isSuccess(status) ){
             $('#financial-news-table').bootstrapTable({
                 columns: [{ field: 'classify' }].concat(columns),
@@ -148,16 +226,155 @@ function getNews(){
     })
 }
 
-function getPersonalStock(){
+function getIndustryHistList(){
+    let columns = [
+        {
+            field: 'industry',
+            title: '行业名称'
+        },
+        {
+            field: 'companies',
+            title: '公司数'
+        },
+        {
+            field: 'avgprice',
+            title: '平均价格'
+        },
+        {
+            field: 'avgp_change',
+            title: '平均涨跌幅',
+            formatter: ChangeFormatter
+        }
+    ];
+    $.get('/list/data/industry/10', function (result, status) {
+        if( isSuccess(status) ){
+            $('#industry-hist-table').bootstrapTable({
+                columns: columns,
+                data: result,
+            })
+        }else{
+            console.log('status = ' + status)
+        }
 
+    })
 }
+
+function getCompanyIncList(){
+    let columns = [
+        {
+            field: 'code',
+            title: '股票代码'
+        },
+        {
+            field: 'name',
+            title: '公司名称',
+            formatter: StockLinkFormatter
+        },
+        {
+            field: 'esp',
+            title: '每股收益'
+        },
+        {
+            field: 'eps_yoy',
+            title: '净资产收益率',
+            formatter: ChangeFormatter
+        }
+    ];
+    $.get('/list/company/inc/10', function (result, status) {
+        if( isSuccess(status) ){
+            $('#company-inc-table').bootstrapTable({
+                columns: columns,
+                data: result,
+            })
+        }else{
+            console.log('status = ' + status)
+        }
+
+    })
+}
+
+function getCompanyDecList(){
+    let columns = [
+        {
+            field: 'code',
+            title: '股票代码'
+        },
+        {
+            field: 'name',
+            title: '公司名称',
+            formatter: StockLinkFormatter
+        },
+        {
+            field: 'esp',
+            title: '每股收益'
+        },
+        {
+            field: 'roe',
+            title: '净资产收益率',
+            formatter: ChangeFormatter
+        }
+    ];
+    $.get('/list/company/dec/10', function (result, status) {
+        if( isSuccess(status) ){
+            $('#company-dec-table').bootstrapTable({
+                columns: columns,
+                data: result,
+            })
+        }else{
+            console.log('status = ' + status)
+        }
+
+    })
+}
+
+//transform json data to 2-d array like below
+//[[time_1,volume_2],[time_2,volume_2],[,],...[time_n,volume_n]]
+function transformHistData(data) {
+    var resArray = [];
+    for (let index in data) {
+        var unixTime = data[index].date;
+        unixTime = new Date(Date.parse(unixTime.replace(/-/g, "/")));
+        unixTime = unixTime.getTime();
+        var temp = [unixTime, data[index].close];
+        resArray.push(temp);
+    }
+    return resArray;
+}
+
+$("#index-list-table").on("mouseover", 'tbody tr',
+    function() {
+        code = $(this).children('td').first().text();
+        index_name = $(this).children('td').eq(2).text();
+        if (code!="没有找到匹配的记录")
+            drawIndexKCurve(code);
+    }
+);
+
+$("#stock-list-table").on("mouseover", 'tbody tr',
+    function() {
+        code = $(this).children('td').first().text();
+        stock_name = $(this).children('td').eq(2).text();
+        if (code!="没有找到匹配的记录")
+            drawStockKCurve(code);
+    }
+);
 
 function IndexLinkFormatter(value, row) {
     // return value
-    return "<a href='/index/"+row.code+"'>"+value+"</a>";
+    if(row.url)
+        return "<a href='"+row.url+"'>"+value+"</a>";
+    if(row.code)
+        return "<a href='/index/"+row.code+"'>"+value+"</a>";
 }
 
 function StockLinkFormatter(value, row) {
     // return value
     return "<a href='/stock/"+row.code+"'>"+value+"</a>";
+}
+
+function ChangeFormatter(value, row) {
+    if(value > 0)
+        return "<span style='color:#ff0000'>+"+value+"</span>";
+    else if(value < 0)
+        return "<span style='color:#33ff33'>"+value+"</span>";
 }
