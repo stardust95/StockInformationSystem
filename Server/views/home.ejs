@@ -67,46 +67,47 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="row">
         <div class="col-lg-4 col-xs-12">
           <div class="box box-solid">
-            <div class="box-header with-border">
-              <h3 class="box-title">大陆市场</h3>
-            </div>
-            <div class="box-body" id="curve-day">
-            </div>
-            <table class="table table-no-bordered" id="index-list-table" data-classes="table table-no-bordered"></table>
-            <div class="small-box bg-aqua">
-              <a class="small-box-footer" href="indexlistinfo.html">查看所有指数 <i class="fa fa-arrow-circle-right"></i>
-              </a>
-            </div>
-
-
-          </div>
-        </div>
-        <div class="col-lg-5 col-xs-12">
-          <div class="box box-solid">
             <div class="box-header with-border bg-gray-light">
-              <h3 class="box-title">市场直击</h3>
+              <h3 class="box-title">大陆市场</h3>
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse">
                   <i class="fa fa-minus"></i>
                 </button>
               </div>
             </div>
-            <div class="box-body">
-              <table data-classes="table table-no-bordered"
-                     data-show-header="false"
-                     id="financial-news-table"></table>
+            <div class="box-body" id="index-curve-day">
             </div>
+            <table class="table table-hover table-no-bordered" id="index-list-table" data-classes="table table-no-bordered"></table>
             <div class="small-box bg-aqua">
-              <a class="small-box-footer" href="#">查看更多新闻 <i class="fa fa-arrow-circle-right"></i>
+              <a class="small-box-footer" href="/list/index">查看所有指数 <i class="fa fa-arrow-circle-right"></i>
               </a>
             </div>
           </div>
-
         </div>
-        <div class="col-lg-3 col-xs-12">
+        <div class="col-lg-4 col-xs-12">
           <div class="box box-solid">
             <div class="box-header with-border bg-gray-light">
-              <h3 class="box-title">股票</h3>
+              <h3 class="box-title">个股风云</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                  <i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="box-body" id="stock-curve-day">
+            </div>
+            <table class="table table-hover table-no-bordered" id="stock-list-table" data-classes="table table-no-bordered"></table>
+            <div class="small-box bg-aqua">
+              <a class="small-box-footer" href="/list/stock">查看所有股票 <i class="fa fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-xs-12">
+          <div class="box box-solid">
+            <div class="box-header with-border bg-gray-light">
+              <h3 class="box-title">个人中心</h3>
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse">
                   <i class="fa fa-minus"></i>
@@ -134,6 +135,87 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div><!-- /.box-body -->
           </div><!-- /.box -->
         </div>
+
+        <!--领涨板块-->
+        <div class="col-lg-4 col-xs-12">
+          <div class="box box-solid">
+            <div class="box-header with-border bg-gray-light">
+              <h3 class="box-title">领涨板块</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                  <i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="box-body">
+              <table data-classes="table table-hover table-no-bordered"
+                     data-show-header="true"
+                     id="industry-hist-table"></table>
+            </div>
+            <div class="small-box bg-aqua">
+              <a class="small-box-footer" href="/list/industry">查看所有板块 <i class="fa fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!--市场直击-->
+        <div class="col-lg-4 col-xs-12">
+          <div class="box box-solid">
+            <div class="box-header with-border bg-gray-light">
+              <h3 class="box-title">市场直击</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                  <i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="box-body">
+              <table data-classes="table table-hover table-no-bordered"
+                     data-show-header="false"
+                     id="financial-news-table"></table>
+            </div>
+            <div class="small-box bg-aqua">
+              <a class="small-box-footer" href="/list/news">查看更多新闻 <i class="fa fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!--剑指公司-->
+        <div class="col-lg-4 col-xs-12">
+          <div class="box box-solid">
+            <div class="box-header with-border bg-gray-light">
+              <h3 class="box-title">剑指公司</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                  <i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="box-body">
+              <ul class="nav nav-tabs bg-gray-light nav-justified" id="personal-stock-tab">
+                <li><a data-toggle="tab" href="#company-inc-tab">利好公司</a> </li>
+                <li class="active"><a data-toggle="tab" href="#company-dec-tab">利差公司</a> </li>
+              </ul>
+
+              <div class="tab-content">
+                <div class="tab-pane fade" id="company-inc-tab">
+                  <table data-classes="table table-hover table-no-bordered"
+                         data-show-header="true"
+                         id="company-inc-table"></table>
+                </div>
+                <div class="tab-pane fade in active" id="company-dec-tab">
+                  <table data-classes="table table-hover table-no-bordered"
+                         data-show-header="true"
+                         id="company-dec-table"></table>
+
+                </div>
+              </div>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+        </div>
+
       </div>
     </section>
     <!-- /.content -->
