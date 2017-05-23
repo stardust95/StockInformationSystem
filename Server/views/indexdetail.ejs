@@ -40,18 +40,18 @@
     <!-- Main content -->
     <section class="content">
         <div class="row ">
-            <div class="col-md-2 col-xs-6" style="padding-right: 0px; padding-left: 0px">
+            <div class="col-md-2 col-xs-12" style="padding-right: 0px; padding-left: 0px">
                 <div class="transparent box box-solid bg-gray-light">
                     <div class="box-body">
 
                         <% include history-table %>
 
-                        <div class="panel box box-primary">
+                        <div class="panel box box-primary visible-md visible-lg">
                             <div class="box-header with-border">
                                 操盘必读
                             </div>
                             <div class="box-body text-muted text-sm">
-                                <table class="table table-bordered table-responsive" id="basic-stats">
+                                <table class="table table-responsive" id="basic-stats">
                                     <th>统计项</th>
                                     <th>沪A</th>
                                     <th>深A</th>
@@ -96,24 +96,24 @@
                             <div class="inner">
                                 <div class="row">
 
-                                    <div class="col-md-3 text-black" >
+                                    <div class="col-md-4 col-xs-8 text-black text-left" >
                                         <h3><span id="name" style="font-weight: normal !important;"></span> (<span id="code"><%= code %></span>)</h3>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 col-xs-4">
                                         <h3 class="text-black margin-bottom" >
                                             <span id="trade2"></span>
                                             <i id="arrow-icon"></i>
                                             <small class="text-red"> <span id="change2">--</span> %</small>
                                         </h3>
                                     </div>
-                                    <div class="col-md-3 pull-right">
+                                    <div class="col-md-3 pull-right visible-lg">
                                         <h3>
                                             <small id="date" class="text-muted" style="color: black"></small>
                                         </h3>
                                     </div>
                                 </div>
 
-                                <table class="table-responsive" id="realtime-table">
+                                <table class="table table-responsive" id="realtime-table" style="max-width: 60%">
                                     <tr>
                                         <!--<td>-->
                                             <!--均价：<span class="badge bg-green-active" id="trade">&#45;&#45;</span>-->
@@ -300,76 +300,7 @@
                     <!--</div>-->
                 <!--</div>-->
 
-                <div class="row">
-                    <div class="box box-info">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">
-                                讨论区
-                            </h3>
-                            <div class="box-tools">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="box-footer box-comments">
-                            <div class="box-comment">
-                                <!-- User image -->
-                                <img class="img-circle img-sm" src="../dist/img/user3-128x128.jpg" alt="User Image">
-
-                                <div class="comment-text">
-                      <span class="username">
-                        东京的樱花掩盖巴黎的伤
-                        <span class="text-muted pull-right">8:03 PM 5月4日</span>
-                      </span><!-- /.username -->
-                                    <p>
-                                        快跌，跌到1000点我好抄底。
-                                    </p>
-                                </div>
-                                <ul class="list-inline">
-                                    <li class="pull-right">
-                                    <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i>回复</a></li>
-                                    <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i>赞</a>
-                                    </li>
-                                    </li>
-                                </ul>
-                                <!-- /.comment-text -->
-                            </div>
-                            <div class="box-comment">
-                                <!-- User image -->
-                                <img class="img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="User Image">
-
-                                <div class="comment-text ">
-
-                                  <span class="username" >
-                                    曙光
-                                    <span class="text-muted pull-right">8:03 PM 5月2日</span>
-                                  </span><!-- /.username -->
-                                    <p>
-                                        一边监管一边腐败，各行各业个个如此。
-                                    </p>
-                                </div>
-
-                                <ul class="list-inline">
-                                    <li class="pull-right">
-                                    <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i>回复</a></li>
-                                    <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i>赞</a>
-                                    </li>
-                                    </li>
-                                </ul>
-                                <!-- /.comment-text -->
-                            </div>
-                            <div class="box-footer">
-                                <form action="#" method="post">
-                                    <img class="img-responsive img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="Alt Text">
-                                    <!-- .img-push is used to add margin to elements next to floating images -->
-                                    <div class="img-push">
-                                        <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <% include comment.ejs %>
 
             </div>
         </div>

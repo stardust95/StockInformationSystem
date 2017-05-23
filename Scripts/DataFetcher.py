@@ -36,7 +36,14 @@ def createDbEngine(section, configName = 'config.ini'):
     dbname = config.get(section, 'db_name')
     return create_engine('mysql+pymysql://%s:%s@%s/%s?charset=utf8mb4' % (dbuser, dbpass, host, dbname), convert_unicode=True)
     
-class IDataFetcher():
+class Singleton(object):
+    _instance = None
+    def __new__(cls, *args, **kwargs):
+        if not isinstance(cls._instance, cls):
+            cls._instance = object.__new__(cls, *args, **kwargs)
+        return cls._instance
+
+class IDataFetcher(object):
 
     __metaclass__ = ABCMeta
 
@@ -206,39 +213,40 @@ class StockInfoFetcher(IDataFetcher):
             db.close()
         return True
 
-    def fetchKCurve(self, code, ktype = 'D', start = None, end = None):
-        tableName = 'histData'
+    def fetchKCurve(self, code, ktype = 'D', start = None, end = None, drop=False):
+        tableName = 'stockHistData'
         param = []
         try:
             db, dbname = connectConfigDB('database')
             cursor = db.cursor()
             cursor.execute("SET NAMES utf8mb4;")
-            cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
-            # db.commit()
-            # create table
-            sql = """
-                    CREATE TABLE 
-                        `%s`.`%s` (
-                        `code` VARCHAR(10) NOT NULL COMMENT '股票代码',
-                        `date` VARCHAR(45) NULL COMMENT '日期',
-                        `open` DOUBLE NULL COMMENT '开盘价',
-                        `high` DOUBLE NULL COMMENT '最高价',
-                        `close` DOUBLE NULL COMMENT '收盘价',
-                        `low` DOUBLE NULL COMMENT '最低价',
-                        `volume` DOUBLE NULL COMMENT '成交量',
-                        `price_change` DOUBLE NULL COMMENT '价格变动',
-                        `p_change` DOUBLE NULL COMMENT '涨跌幅',
-                        `ma5` DOUBLE NULL COMMENT '5日均价',
-                        `ma10` DOUBLE NULL COMMENT '10日均价',
-                        `ma20` DOUBLE NULL COMMENT '20日均价',
-                        `v_ma5` DOUBLE NULL COMMENT '5日均量',
-                        `v_ma10` DOUBLE NULL COMMENT '10日均量',
-                        `v_ma20` DOUBLE NULL COMMENT '20日均量',
-                        PRIMARY KEY (`code`, `date`)
-                        ) DEFAULT CHARSET=utf8mb4;  
-                    """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;  
-            cursor.execute(sql)
-            print ('table %s created' % tableName)
+            if drop:
+                cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
+                # db.commit()
+                # create table
+                sql = """
+                        CREATE TABLE 
+                            `%s`.`%s` (
+                            `code` VARCHAR(10) NOT NULL COMMENT '股票代码',
+                            `date` VARCHAR(45) NULL COMMENT '日期',
+                            `open` DOUBLE NULL COMMENT '开盘价',
+                            `high` DOUBLE NULL COMMENT '最高价',
+                            `close` DOUBLE NULL COMMENT '收盘价',
+                            `low` DOUBLE NULL COMMENT '最低价',
+                            `volume` DOUBLE NULL COMMENT '成交量',
+                            `price_change` DOUBLE NULL COMMENT '价格变动',
+                            `p_change` DOUBLE NULL COMMENT '涨跌幅',
+                            `ma5` DOUBLE NULL COMMENT '5日均价',
+                            `ma10` DOUBLE NULL COMMENT '10日均价',
+                            `ma20` DOUBLE NULL COMMENT '20日均价',
+                            `v_ma5` DOUBLE NULL COMMENT '5日均量',
+                            `v_ma10` DOUBLE NULL COMMENT '10日均量',
+                            `v_ma20` DOUBLE NULL COMMENT '20日均量',
+                            PRIMARY KEY (`code`, `date`)
+                            ) DEFAULT CHARSET=utf8mb4;  
+                        """ % (dbname, tableName)       # !IMPORTANT: DEFAULT CHARSET=utf8mb4;  
+                cursor.execute(sql)
+                print ('table %s created' % tableName)
             # fetch and insert data
             res = ts.get_hist_data(code, start=start, end=end, ktype=ktype)
             sql = 'INSERT IGNORE INTO `' + tableName + \
@@ -445,7 +453,7 @@ class StockInfoFetcher(IDataFetcher):
         return True
     
 
-class TradeFetcher(IDataFetcher):
+class TradeFetcher(Singleton, IDataFetcher):
     def __init__(self):
         pass
 
@@ -555,10 +563,7 @@ def main():
         for row in results:
             code = row[0]
             print(code)
-            stk.fetchCompanyInfoByCode(code)
-            stk.fetchNewsByCode(code)
-            trd.fetchByCode(code, '2017-05-02')
-            trd.fetchRealtimeQuotes(code)
+            stk.fetchKCurve(code=code, ktype='D', start='2017-01-01', end='2017-05-16')
     except:
         print_exc()
         db.rollback()

@@ -1,0 +1,107 @@
+<div class="row">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                讨论区
+            </h3>
+            <div class="box-tools">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-footer box-comments">
+            <div class="box-comment">
+                <!-- User image -->
+                <img class="img-circle img-sm" src="../dist/img/user3-128x128.jpg" alt="User Image">
+
+                <div class="comment-text">
+                      <span class="username">
+                        东京的樱花掩盖巴黎的伤
+                        <span class="text-muted pull-right">8:03 PM 5月4日</span>
+                      </span><!-- /.username -->
+                    <p>
+                        快跌，跌到1000点我好抄底。
+                    </p>
+                </div>
+                <ul class="list-inline">
+                    <li class="pull-right">
+                    <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i>回复</a></li>
+                    <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i>赞</a>
+                    </li>
+                    </li>
+                </ul>
+                <!-- /.comment-text -->
+            </div>
+            <div class="box-comment">
+                <!-- User image -->
+                <img class="img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="User Image">
+
+                <div class="comment-text ">
+
+                                  <span class="username" >
+                                    曙光
+                                    <span class="text-muted pull-right">8:03 PM 5月2日</span>
+                                  </span><!-- /.username -->
+                    <p>
+                        一边监管一边腐败，各行各业个个如此。
+                    </p>
+                </div>
+
+                <ul class="list-inline">
+                    <li class="pull-right">
+                    <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i>回复</a></li>
+                    <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i>赞</a>
+                    </li>
+                    </li>
+                </ul>
+                <!-- /.comment-text -->
+            </div>
+            <div class="box-footer">
+                <form onsubmit="return postComment();">
+                    <img class="img-responsive img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="Alt Text">
+                    <!-- .img-push is used to add margin to elements next to floating images -->
+                    <div class="img-push">
+                        <input id="inputComment" type="text" class="form-control input-sm" placeholder="Press enter to post comment">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function isSuccess(status) {
+        return status === 'success';
+    }
+
+    function getComments() {
+        $.post('/stocks/comment/' + code, (data, status) => {
+            if( isSuccess(status) ){
+
+            }else{
+                console.log("status = " + status)
+            }
+        })
+    }
+
+    function postComment() {
+        let content = document.getElementById('inputComment').value;
+        let user = 'tester'
+        $.post('/stocks/comment/' + code, {
+            user: user,
+            text: content
+        }, (data, status) => {
+            if( isSuccess(status) ){
+                if( data.success ){       // post comment successfully
+                    console.log("post success")
+                }else{
+                    console.log(data)
+                }
+            }else{
+                console.log("status = " + status)
+            }
+        });
+        return false;
+    }
+</script>

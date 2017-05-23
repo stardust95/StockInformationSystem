@@ -1,5 +1,6 @@
 #realtime-table td{
-    padding: 5px;
+    padding: 1px;
+    text-align: left;
 }
 
 .table td {

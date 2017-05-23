@@ -35,12 +35,12 @@ router.get('/trades/:indexid', function(req, res, next) {
 router.get('/hot/:indexid/:limit', function (req, res) {
     IndexData.getHotStocks(req.params.indexid, function (err, result) {
         if( err ){
-            console.log(err)
+            console.log(err);
             res.json()
         }else{
-            res.json(result)
+            res.json(result);
         }
-    }, req.params.limit)
+    }, req.params.limit);
 })
 
 
