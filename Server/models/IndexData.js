@@ -56,6 +56,21 @@ class IndexData{
         conn.query("SELECT * FROM indexContainStocks WHERE hot != 0 AND indexCode = " + code + " LIMIT " + limit, callback)
     }
 
+    static getComment(code, callback){
+        var conn = getConnection();
+        var sql = "SELECT * FROM `indexUserComments` WHERE `indexCode` = ?"
+        conn.query(sql, [code], callback)
+    }
+
+    static postComment(code, user, content, callback){
+        var conn = getConnection();
+        var sql = "INSERT IGNORE `indexUserComments`(`indexCode`, \
+                `user`, \
+            `date`, \
+            `content`, \
+            `approval`) VALUES(?, ?, ?, ?, 0)"
+        conn.query(sql, [code, user, getCurrentTime(), content], callback)
+    }
 }
 
 module.exports = IndexData

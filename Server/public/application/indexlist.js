@@ -70,7 +70,6 @@ function getIndexListInfo() {
                 columns: columns,
                 data: result,
                 pagination: true,
-                
             })
         }else{
             console.log('status = ' + status)

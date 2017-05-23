@@ -1,20 +1,20 @@
 <div class="box-comment">
     <!-- User image -->
-    <img class="img-circle img-sm" src="../dist/img/user3-128x128.jpg" alt="User Image">
+    <img class="img-circle img-sm" src="http://www.iconninja.com/files/111/870/406/user-people-profile-human-account-avatar-icon.png" alt="User Image">
 
     <div class="comment-text">
                       <span class="username">
-                        <%= name %>
-                        <span class="text-muted pull-right"><%= time %></span>
+                        <%= comment.user %>
+                        <span class="text-muted pull-right"><%= comment.date %></span>
                       </span><!-- /.username -->
         <p>
-            <%= content %>
+            <%= comment.content %>
         </p>
     </div>
     <ul class="list-inline">
         <li class="pull-right">
         <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i>回复</a></li>
-        <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i>赞(<%= approval %>)</a>
+        <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i>赞(<%= comment.approval %>)</a>
         </li>
         </li>
     </ul>

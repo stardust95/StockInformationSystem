@@ -136,6 +136,13 @@ class StockData{
         conn.query(sql, [code, user, getCurrentTime(), content], callback)
     }
 
+    static search(keyword, callback){
+        var conn = getConnection();
+        var sql = "SELECT * FROM stockg5.stocklist WHERE code like ? or name like ?;"
+        keyword = '%' + keyword + '%'
+        conn.query(sql, [keyword, keyword], callback)
+    }
+
 }
 
 module.exports = StockData

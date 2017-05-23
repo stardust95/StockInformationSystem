@@ -4,7 +4,7 @@
     <nav class="navbar navbar-static-top">
         <div class="container">
             <div class="navbar-header">
-                <a href="index2.html" class="navbar-brand"><b>Stock</b>LTE</a>
+                <a href="/" class="navbar-brand"><b>Stock</b>LTE</a>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                     <i class="fa fa-bars"></i>
                 </button>
@@ -32,9 +32,23 @@
                 </ul>
                 <form class="navbar-form navbar-left" role="search">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="navbar-search-input" placeholder="Search">
+                        <input type="text" class="form-control" id="navbar-search-input" placeholder="股票代码或名称">
                     </div>
-                    <button class="btn bg-maroon" type="button">Go!</button>
+                    <button class="btn bg-maroon" type="button" onclick="onSearchClick()">Go!</button>
+                    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+                    <script>
+                        $('.navbar-form').submit(false)
+                        function onSearchClick() {
+                            let str =  $('#navbar-search-input').val();
+                            console.log(str)
+                            if( str.length > 0 ){
+                                let query = $.param({
+                                    keyword: str
+                                })
+                                window.location.href = '/stocks/search?' + query
+                            }
+                        }
+                    </script>
 
                 </form>
 
