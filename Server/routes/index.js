@@ -51,6 +51,7 @@ router.get('/index', function (req, res) {
 router.get('/stock/:stockid', function (req, res) {
     let stock = req.params.stockid;
     var cookiestr;
+
     if( !isNumber(stock) || !stockList.includes(stock) ){
         res.render('error', {status: 404, message: "Page Not Found"})
         return

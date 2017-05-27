@@ -48,8 +48,17 @@ class IndexData{
         conn.query(sql, callback)
     }
 
-    static getHotStocks(code, callback, limit){
+    static getRiseAndFallStocks(code, type, callback, limit){
         var conn = getConnection()
+        var sql = "SELECT * FROM indexstocksprice WHERE indexCode = ? ORDER BY changepercent TYPE LIMIT ?"
+        if( !limit )
+            limit = 10
+        var order = (type ? "ASC" : "DESC" );
+        conn.query(sql.replace("TYPE", order), [code, limit], callback)
+    }
+
+    static getHotStocks(code, callback, limit){
+        var conn = getConnection();
         if( !limit ){
             limit = 10
         }

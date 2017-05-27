@@ -436,15 +436,6 @@ function drawProfitChart() {
 
 }
 
-function buildCommentTable() {
-    $.get('/stocks/comment/' + code, function (data, status) {
-        if( isSuccess(status) ){
-            $(data).insertBefore('.box-comments .box-footer')
-        }else {
-            console.log("status = " + status)
-        }
-    })
-}
 
 function drawKCurve() {
     $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-ohlcv.json&callback=?', function (data) {

@@ -16,6 +16,7 @@ function onload() {
     buildTradeRecordsTable()
     buildHotStocksTable()
     drawKCurve()
+    buildCommentTable()
 }
 
 function isSuccess(status) {
@@ -62,29 +63,52 @@ function getIndexRealtimeData() {
 function buildRiseAndFallTable() {
     var columns = [
         {
-            field: 'stock'
+            field: 'stockCode',
+            title: '股票代码'
         },
         {
-            field: 'change'
+            field: 'stockName',
+            title: '股票名称',
+            formatter: LinkFormatter
+        },
+        {
+            field: 'changepercent',
+            title: '涨跌幅'
         }
     ]
-    var data = []
-    var stocks_demo = [ '中国神华', '青岛海尔', '中国石油', '农业银行', '河钢股份', '世荣兆业', '中化岩土', '贵州茅台', '中国石化' ]
-    for(var index in stocks_demo){
-        data.push({ stock: stocks_demo[index], change: (Math.random() * 10).toFixed(2) })
-    }
-    $('#rise-table').bootstrapTable({
-        columns: columns,
-        data: data
+    $.get('/indexs/stocks/'+code, function (data, status) {
+        if( isSuccess(status) ){
+            $('#rise-table').bootstrapTable({
+                columns: columns,
+                data: data
+            })
+        }
     })
-    data = []
-    for(var index in stocks_demo){
-        data.push({ stock: stocks_demo[stocks_demo.length - index - 1], change: -(Math.random() * 10).toFixed(2) })
-    }
-    $('#fall-table').bootstrapTable({
-        columns: columns,
-        data: data
+    $.get('/indexs/stocks/'+code + '/DESC', function (data, status) {
+        if( isSuccess(status) ){
+            $('#fall-table').bootstrapTable({
+                columns: columns,
+                data: data
+            })
+        }
     })
+    // var data = []
+    // var stocks_demo = [ '中国神华', '青岛海尔', '中国石油', '农业银行', '河钢股份', '世荣兆业', '中化岩土', '贵州茅台', '中国石化' ]
+    // for(var index in stocks_demo){
+    //     data.push({ stock: stocks_demo[index], change: (Math.random() * 10).toFixed(2) })
+    // }
+    // $('#rise-table').bootstrapTable({
+    //     columns: columns,
+    //     data: data
+    // })
+    // data = []
+    // for(var index in stocks_demo){
+    //     data.push({ stock: stocks_demo[stocks_demo.length - index - 1], change: -(Math.random() * 10).toFixed(2) })
+    // }
+    // $('#fall-table').bootstrapTable({
+    //     columns: columns,
+    //     data: data
+    // })
 }
 
 function buildHotStocksTable() {
@@ -100,7 +124,7 @@ function buildHotStocksTable() {
         }
     ]
 
-    $.get('/indexs/hot/' + '000000' + '/10', function (data, status) {      // TODO
+    $.get('/indexs/hot/' + code + '/10', function (data, status) {      // TODO
         if( isSuccess(status) ){
             $('#hot-table').bootstrapTable({
                 columns: columns,

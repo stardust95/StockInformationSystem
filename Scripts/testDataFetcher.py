@@ -1,11 +1,12 @@
 import unittest
 from DataFetcher import *
 
+
 class TestStockFetcher(unittest.TestCase):
-    
+
     def test_fetchKCurve(self):
         pass
-    
+
     def test_fetchCompanyProfitByQuarter(self):
         pass
 
@@ -13,7 +14,10 @@ class TestStockFetcher(unittest.TestCase):
         pass
     
     def test_fetchNewsByCode(self):
-        pass
+        instance = StockInfoFetcher()
+        instance.fetchNewsByCode('000001')
+        instance.fetchNewsByCode('asdasd')
+        instance.fetchNewsByCode('654321')
 
     def test_fetchFinancialNews(self):
         pass

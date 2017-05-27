@@ -11,15 +11,16 @@
         </div>
         <div class="box-footer box-comments">
 
-            <div class="box-footer">
-                <form onsubmit="return postComment();">
-                    <img class="img-responsive img-circle img-sm" src="http://www.iconninja.com/files/111/870/406/user-people-profile-human-account-avatar-icon.png" alt="Alt Text">
-                    <!-- .img-push is used to add margin to elements next to floating images -->
-                    <div class="img-push">
-                        <input id="inputComment" type="text" class="form-control input-sm" placeholder="Press enter to post comment">
-                    </div>
-                </form>
-            </div>
+        </div>
+
+        <div class="box-footer">
+            <form onsubmit="return postComment();">
+                <img class="img-responsive img-circle img-sm" src="http://www.iconninja.com/files/111/870/406/user-people-profile-human-account-avatar-icon.png" alt="Alt Text">
+                <!-- .img-push is used to add margin to elements next to floating images -->
+                <div class="img-push">
+                    <input id="inputComment" type="text" class="form-control input-sm" placeholder="Press enter to post comment">
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -31,15 +32,16 @@
     }
     
     function clearComments() {
-        $('.box-comments').remove('.box-comment')
+        $('.box-comments').empty()
         $('#inputComment').val('')
     }
 
-    function getComments() {
-        $.post('/stocks/comment/' + code, (data, status) => {
+    function buildCommentTable() {
+        $.get('/stocks/comment/' + code, function (data, status) {
             if( isSuccess(status) ){
-
-            }else{
+                $('.box-comments').append(data)
+//                $(data).insertBefore('.box-comments .box-footer')
+            }else {
                 console.log("status = " + status)
             }
         })
