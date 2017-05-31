@@ -1,9 +1,11 @@
 var express = require('express');
 var StockData = require('../models/StockData');
 var IndexData = require('../models/IndexData');
+var redisClient = require('../models/Redisdb').client
 var router = express.Router();
 var stockList = [];
 var indexList = [];
+
 
 StockData.getCodesList(function (err, result) {
     if( err ){
@@ -51,7 +53,7 @@ router.get('/index', function (req, res) {
 router.get('/stock/:stockid', function (req, res) {
     let stock = req.params.stockid;
     var cookiestr;
-
+    // console.log(res.locals.session.user)
     if( !isNumber(stock) || !stockList.includes(stock) ){
         res.render('error', {status: 404, message: "Page Not Found"})
         return
