@@ -21,6 +21,7 @@ function onload() {
     buildNewsTable();
     buildCompanyInfoView();
     drawProfitChart();
+    buildCommentTable();
 }
 
 
@@ -320,7 +321,6 @@ function buildNewsTable() {
         }
     })
 
-
 }
 
 function drawProfitChart() {
@@ -436,6 +436,7 @@ function drawProfitChart() {
 
 }
 
+
 function drawKCurve() {
     $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-ohlcv.json&callback=?', function (data) {
 
@@ -528,7 +529,6 @@ function drawKCurve() {
         });
     });
 }
-
 
 function LinkFormatter(value, row) {
     if( row.url )

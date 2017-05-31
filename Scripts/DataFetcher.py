@@ -1,5 +1,6 @@
 #coding=utf-8
 import pymysql, configparser
+
 import datetime
 import tushare as ts
 import pandas as pd
@@ -22,10 +23,11 @@ def connectConfigDB(section, configName = 'config.ini'):
     config = configparser.RawConfigParser()
     config.read(configName)
     host = config.get(section, 'db_host')
+    port = int(config.get(section, 'db_port'))
     dbuser = config.get(section, 'db_user')
     dbpass = config.get(section, 'db_pass')
     dbname = config.get(section, 'db_name')
-    return pymysql.connect(host=host, user=dbuser, passwd=dbpass, db=dbname, charset="utf8mb4"), dbname
+    return pymysql.connect(host=host, port=port, user=dbuser, passwd=dbpass, db=dbname, charset="utf8mb4"), dbname
 
 def createDbEngine(section, configName = 'config.ini'):
     config = configparser.RawConfigParser()
@@ -570,6 +572,12 @@ def main():
         exit()
     finally:
         db.close()
+
+def main2():
+    stk = StockInfoFetcher()
+    trd = TradeFetcher()
+    stk.fetchCompanyProfitByQuarter(2017, 2)
+    
     
     # stk.fetchCompanyInfoByCode('000001')
     # stk.fetchFinancialNews()
@@ -578,7 +586,7 @@ def main():
     # trd.fetchBlockTradeByCode('000001', '2017-04-20')
 
 if __name__ == '__main__':
-    main()
+    main2()
 
 
 '''

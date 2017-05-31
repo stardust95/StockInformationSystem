@@ -48,14 +48,38 @@ class IndexData{
         conn.query(sql, callback)
     }
 
-    static getHotStocks(code, callback, limit){
+    static getRiseAndFallStocks(code, type, callback, limit){
         var conn = getConnection()
+        var sql = "SELECT * FROM indexstocksprice WHERE indexCode = ? ORDER BY changepercent TYPE LIMIT ?"
+        if( !limit )
+            limit = 10
+        var order = (type ? "ASC" : "DESC" );
+        conn.query(sql.replace("TYPE", order), [code, limit], callback)
+    }
+
+    static getHotStocks(code, callback, limit){
+        var conn = getConnection();
         if( !limit ){
             limit = 10
         }
         conn.query("SELECT * FROM indexContainStocks WHERE hot != 0 AND indexCode = " + code + " LIMIT " + limit, callback)
     }
 
+    static getComment(code, callback){
+        var conn = getConnection();
+        var sql = "SELECT * FROM `indexUserComments` WHERE `indexCode` = ?"
+        conn.query(sql, [code], callback)
+    }
+
+    static postComment(code, user, content, callback){
+        var conn = getConnection();
+        var sql = "INSERT IGNORE `indexUserComments`(`indexCode`, \
+                `user`, \
+            `date`, \
+            `content`, \
+            `approval`) VALUES(?, ?, ?, ?, 0)"
+        conn.query(sql, [code, user, getCurrentTime(), content], callback)
+    }
 }
 
 module.exports = IndexData

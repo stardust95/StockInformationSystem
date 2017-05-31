@@ -4,18 +4,23 @@
 
 var express = require('express');
 var StockData = require('../models/StockData')
+var ejs = require('ejs')
 var router = express.Router();
+var fs = require('fs')
 
-
+let commentTemplate = ejs.compile(fs.readFileSync('views/commentitem.ejs', 'utf-8'))
 
 /* GET stock basic info. */
 router.get('/info/:stockid', function(req, res, next) {
     StockData.getBasicInformation(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
-            res.json()
+            res.json({message: "Invalid parameters"})
         }else{
-            res.json(result[0])
+            if(result.length > 0)
+                res.json(result[0])
+            else 
+                res.json(result)
         }
     })
 });
@@ -26,9 +31,12 @@ router.get('/realtime/:stockid', function(req, res, next) {
     StockData.getRealtimePrice(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
-            res.json()
+            res.json({message: "Invalid parameters"})
         }else{
-            res.json(result[0])
+            if(result.length > 0)
+                res.json(result[0])
+            else 
+                res.json(result)
         }
     }, req.limit)
 });
@@ -38,7 +46,7 @@ router.get('/trades/:stockid/:limit?',function (req, res) {
     StockData.getLatestTradeRecords(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
-            res.json()
+            res.json({message: "Invalid parameters"})
         }else{
             res.json(result)
         }
@@ -51,7 +59,7 @@ router.get('/blocks/:stockid/:limit?',function (req, res) {
     StockData.getBlockTradeRecords(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
-            res.json()
+            res.json({message: "Invalid parameters"})
         }else{
             res.json(result)
         }
@@ -64,14 +72,15 @@ router.get('/quotes/:stockid',function (req, res) {
     StockData.getRealtimeQuotes(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
-            res.json()
+            res.json({message: "Invalid parameters"})
         }else{
-            res.json(result[0])
+            if(result.length > 0)
+                res.json(result[0])
+            else 
+                res.json(result)
         }
     })
 })
-
-
 
 /* GET stocks of the same industry or area.
 *  domain should be `industry` or `area`
@@ -79,13 +88,13 @@ router.get('/quotes/:stockid',function (req, res) {
 router.get('/rank/:domain/:field/:limit?',function (req, res) {
     StockData.getStocksByDomain(req.params.domain, req.params.field, function (err, result) {
         if( err ){
-            console.log(err)
-            res.json()
+            console.log(err);
+            res.json({message: "Invalid parameters"})
         }else{
             res.json(result)
         }
     }, req.params.limit)
-})
+});
 
 
 /* GET news of a stock. */
@@ -93,7 +102,7 @@ router.get('/news/:stockid/:limit?',function (req, res) {
     StockData.getStockNews(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
-            res.json()
+            res.json({message: "Invalid parameters"})
         }else{
             res.json(result)
         }
@@ -105,7 +114,7 @@ router.get('/newsList/:limit?',function (req, res) {
     StockData.getFinancialNews(function (err, result) {
         if( err ){
             console.log(err)
-            res.json()
+            res.json({message: "Invalid parameters"})
         }else{
             res.json(result)
         }
@@ -117,9 +126,13 @@ router.get('/comp/:stockid',function (req, res) {
     StockData.getCompanyInfo(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
-            res.json()
+            res.json({message: "Invalid parameters"})
         }else{
-            res.json(result[0])
+            
+            if(result.length > 0)
+                res.json(result[0])
+            else 
+                res.json(result)
         }
     })
 })
@@ -129,7 +142,7 @@ router.get('/profit/:stockid',function (req, res) {
     StockData.getCompanyProfit(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
-            res.json()
+            res.json({message: "Invalid parameters"})
         }else{
             res.json(result)
         }
@@ -140,9 +153,13 @@ router.get('/comment/:stockid', function (req, res) {
     StockData.getComment(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
-            res.json()
+            res.json({message: "Invalid parameters"})
         }else{
-           res.json(result)
+            var ret = ''
+            for(let index in result){
+                ret += commentTemplate({ comment: result[index] }) + "\n"
+            }
+           res.send(ret)
         }
     })
 })
@@ -169,6 +186,30 @@ router.post('/comment/:stockid', function (req, res) {
     }
 })
 
+router.get('/search', function (req, res) {
+    let keyword = req.query.keyword
+    if( keyword ){
+        StockData.search(keyword, function (err, result) {
+            if( err ){
+                console.log(err)
+                res.status(500).render('error', {
+                    status: 500,
+                    message: "Internal Error"
+                })
+            }else {
+                res.render('stocksearch', {
+                    keyword: keyword,
+                    stocks: result
+                })
+            }
+        })
+    }else{
+        res.render('error', {
+            status: 404,
+            message: "Invalid search"
+        })
+    }
+})
 
 
 module.exports = router;
