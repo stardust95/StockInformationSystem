@@ -103,7 +103,7 @@ function getStockListInfo() {
             formatter: StockLinkFormatter
         },
         {
-            field: 'change',
+            field: 'changepercent',
             title: '涨跌幅',
             formatter: ChangeFormatter
         },
@@ -311,6 +311,8 @@ function ChangeFormatter(value, row) {
         return "<span style='color:#ff0000'>+"+value+"</span>";
     else if(value < 0)
         return "<span style='color:#33ff33'>"+value+"</span>";
+    else
+        return value;
 }
 
 function NewsLinkFormatter(value, row) {
