@@ -22,7 +22,7 @@ exports.cache = function(key, value, notExpire, time) {
     else
         return client.set(key, value, "EX", time ? time : option.expireTime)
 }
-exports.get = function (key, callback) {
+exports.load = function (key, callback) {
     return client.get(key, callback);
 }
 

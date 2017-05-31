@@ -66,6 +66,16 @@ router.get('/blocks/:stockid/:limit?',function (req, res) {
     }, req.params.limit)
 })
 
+router.get('/hist/:stockid', function (req, res) {
+    StockData.getStockHistData(req.params.stockid, function (err, result) {
+        if( err ){
+            console.log(err)
+            res.json({ message: "Invalid parameters" });
+        }else{
+            res.json(result);
+        }
+    })
+});
 
 /* GET stock realtime quotes. */
 router.get('/quotes/:stockid',function (req, res) {

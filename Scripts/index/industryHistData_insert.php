@@ -87,13 +87,9 @@ for($i=0;$i<count($indus);$i++) {
         exit;
     }
     $avgprice=$sumprice/$companies;
-    $avgchange=$sumchange/$companies;
-    if($avgchange>=0) {
-        $insert = "insert ignore into industryHistData values('$indus[$i]','$date',$companies,$avgprice,$avgchange,0,$volume,$amount)";
-    }
-    else{
-        $insert = "insert ignore into industryHistData values('$indus[$i]','$date',$companies,$avgprice,0,$avgchange,$volume,$amount)";
-    }
+    $avgchange=$sumchange;
+    $avg_change=$sumchange/$companies;
+    $insert = "insert ignore into industryHistData values('$indus[$i]','$date',$companies,$avgprice,$avgchange,$avg_change,$volume,$amount)";
     $result_insert = $conn->query($insert);
     if($result_insert!=TRUE){
         echo "Error: " . $insert . "<br>" . $conn->error;

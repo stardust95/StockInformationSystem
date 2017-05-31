@@ -297,6 +297,75 @@ function getCompanyIncList(){
 
     })
 }
+/**
+ * Created by stardust on 2017/5/31.
+ */
+
+
+//transform json data to 2-d array like below
+//[[time_1,volume_2],[time_2,volume_2],[,],...[time_n,volume_n]]
+function transformHistData(data) {
+    var resArray = [];
+    for (let index in data) {
+        var unixTime = data[index].date;
+        unixTime = new Date(Date.parse(unixTime.replace(/-/g, "/")));
+        unixTime = unixTime.getTime();
+        var temp = [unixTime, data[index].close];
+        resArray.push(temp);
+    }
+    return resArray;
+}
+
+
+function drawIndexKCurve(code) {
+    $.get('/list/curve/index/'+code, function (result, status) {
+        if( isSuccess(status) ){
+            var data = transformHistData(result);
+            $('#index-curve-day').highcharts('StockChart', {
+                rangeSelector : {
+                    selected : 1
+                },
+                title : {
+                    text : index_name
+                },
+                series : [{
+                    name : 'AAPL',
+                    data : data,
+                    tooltip: {
+                        valueDecimals: 2
+                    }
+                }]
+            });
+        }else{
+            console.log('status = ' + status)
+        }
+    })
+}
+
+function drawStockKCurve(code, name) {
+    $.get('/list/curve/stock/'+code, function (result, status) {
+        if( isSuccess(status) ){
+            var data = transformHistData(result);
+            $('#stock-curve-day').highcharts('StockChart', {
+                rangeSelector : {
+                    selected : 1
+                },
+                title : {
+                    text : stock_name
+                },
+                series : [{
+                    name : 'AAPL',
+                    data : data,
+                    tooltip: {
+                        valueDecimals: 2
+                    }
+                }]
+            });
+        }else{
+            console.log('status = ' + status)
+        }
+    })
+}
 
 function getCompanyDecList(){
     let columns = [
@@ -333,19 +402,6 @@ function getCompanyDecList(){
     })
 }
 
-//transform json data to 2-d array like below
-//[[time_1,volume_2],[time_2,volume_2],[,],...[time_n,volume_n]]
-function transformHistData(data) {
-    var resArray = [];
-    for (let index in data) {
-        var unixTime = data[index].date;
-        unixTime = new Date(Date.parse(unixTime.replace(/-/g, "/")));
-        unixTime = unixTime.getTime();
-        var temp = [unixTime, data[index].close];
-        resArray.push(temp);
-    }
-    return resArray;
-}
 
 $("#index-list-table").on("mouseover", 'tbody>tr',
     function() {

@@ -11,20 +11,19 @@ function getCurrentTime() {
 }
 
 class StockData{
-
     static getCodesList(callback){
-        var conn = getConnection()
+        var conn = getConnection();
         conn.query("SELECT code FROM stockList",callback)
     }
 
     static getMultipleStocks(list, callback){
-        var conn = getConnection()
+        var conn = getConnection();
         var sql = "SELECT code, name, trade, changepercent, settlement FROM stockList WHERE"
-        var params = []
+        var params = [];
         if( list.length > 0 ){
             for(let index in list){
-                sql += " CODE = ?"
-                params.push(list[index])
+                sql += " CODE = ?";
+                params.push(list[index]);
                 if( index < list.length-1 ){
                     sql += " OR"
                 }
@@ -53,6 +52,12 @@ class StockData{
         }
         sql += " LIMIT " + limit
         conn.query(sql, [code], callback)
+    }
+
+    static getStockHistData(code, callback) {
+        var conn = getConnection();
+        var sql = "SELECT `date`,`high`,`low`,`close`,`open`,`volume` FROM stockHistData where code = " + code + " ORDER BY date LIMIT 500";
+        conn.query(sql, callback);
     }
 
     static getBlockTradeRecords(code, callback, limit){

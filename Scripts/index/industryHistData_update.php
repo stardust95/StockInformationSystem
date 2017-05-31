@@ -84,17 +84,11 @@ for($i=0;$i<count($indus);$i++) {
         exit;
     }
     $avgprice=$sumprice/$companies;
-    $avgchange=$sumchange/$companies;
-    if($avgchange>=0) {
-        $update = "update industryHistData set date= '".$date."',companies=".$companies.",avgprice=".$avgprice."
-        ,avgchange=".$avgchange.",avgp_change=0,volume=".$volume.",amount=".$amount."
+    $avgchange=$sumchange;
+    $avg_change=$sumchange/$companies;
+    $update = "update industryHistData set date= '".$date."',companies=".$companies.",avgprice=".$avgprice."
+        ,avgchange=".$avgchange.",avgp_change=".$avg_change.",volume=".$volume.",amount=".$amount."
         where industry='".$indus[$i]."' ";
-    }
-    else{
-        $update = "update industryHistData set date= ".$date.",companies=".$companies.",avgprice=".$avgprice."
-        ,avgchange=0,avgp_change=".$avgchange.",volume=".$volume.",amount=".$amount."
-        where industry='".$indus[$i]."' ";
-    }
     $result_update = $conn->query($update);
     if($result_update!=TRUE){
         echo "Error: " . $update . "<br>" . $conn->error;

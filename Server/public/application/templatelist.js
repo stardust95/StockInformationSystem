@@ -7,13 +7,13 @@ function onload() {
     $('#nav-index').removeClass(name).addClass(name);
     $('#nav-stock').removeClass(name);
     list_kind = $('title').text();
-    if (list_kind == "指数列表")
+    if (list_kind === "指数列表")
         getIndexListInfo();
-    else if (list_kind == "股票列表")
+    else if (list_kind === "股票列表")
         getStockListInfo();
-    else if (list_kind == "新闻列表")
+    else if (list_kind === "新闻列表")
         getFinaNewsList();
-    else if(list_kind == "板块列表")
+    else if(list_kind === "板块列表")
         getIndustryListInfo();
 }
 
@@ -199,39 +199,6 @@ function getFinaNewsList(){
         }
     })
 }
-/*
-function getStockNewsList(){
-    var columns = [
-        {
-            field: 'code',
-            title: '代码',
-            formatter: 'IndexLinkFormatter'
-        },
-        {
-            field: 'title',
-            title: '标题',
-            formatter: 'IndexLinkFormatter'
-        },
-        {
-            field: 'date',
-            title: '发布时间'
-        }
-    ]
-
-    $.get('/newslist/stock', function (result, status) {
-        if( isSuccess(status) ){
-            $('#stock-news-table').bootstrapTable({
-                columns: columns,
-                data: result,
-                pagination: true,
-                search: true,
-            })
-        }else{
-            console.log('status = ' + status)
-        }
-    })
-}
-*/
 
 function getIndustryListInfo() {
     let columns = [
@@ -288,13 +255,8 @@ function getIndustryListInfo() {
         }else{
             console.log('status = ' + status)
         }
-
     })
 }
-
-
-
-
 
 function IndexLinkFormatter(value, row) {
     // return value

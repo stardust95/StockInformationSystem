@@ -24,8 +24,6 @@ function onload() {
     buildCommentTable();
 }
 
-
-
 // gui generation functions
 function isSuccess(status) {
     return status === "success"
@@ -438,8 +436,7 @@ function drawProfitChart() {
 
 
 function drawKCurve() {
-    $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-ohlcv.json&callback=?', function (data) {
-
+    $.getJSON('/stocks/hist/' + code, function (data) {
         // split the data set into ohlc and volume
         var ohlc = [],
             volume = [],
@@ -457,22 +454,21 @@ function drawKCurve() {
 
         for (i; i < dataLength; i += 1) {
             ohlc.push([
-                data[i][0], // the date
-                data[i][1], // open
-                data[i][2], // high
-                data[i][3], // low
-                data[i][4] // close
+                Date.parse(data[i]["date"]), // the date
+                data[i]["open"], // open
+                data[i]["high"], // high
+                data[i]["low"], // low
+                data[i]["close"] // close
             ]);
 
             volume.push([
-                data[i][0], // the date
-                data[i][5] // the volume
+                Date.parse(data[i]["date"]), // the date
+                data[i]["volume"] // the volume
             ]);
         }
-
-
+        console.log(ohlc);
         // create the chart
-        Highcharts.stockChart('curve-day', {
+        Highcharts.stockChart('stock-curve-day', {
 
             rangeSelector: {
                 enabled: false
@@ -515,7 +511,7 @@ function drawKCurve() {
                 name: 'AAPL',
                 data: ohlc,
                 dataGrouping: {
-                    units: groupingUnits
+                    // units: groupingUnits
                 }
             }, {
                 type: 'column',
@@ -523,7 +519,7 @@ function drawKCurve() {
                 data: volume,
                 yAxis: 1,
                 dataGrouping: {
-                    units: groupingUnits
+                    // units: groupingUnits
                 }
             }]
         });
