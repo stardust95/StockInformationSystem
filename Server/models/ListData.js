@@ -65,7 +65,8 @@ class ListData{
 
     static getCompanyIncList(limit, callback) {
         var conn = getConnection();
-        var sql = "SELECT * FROM companyFinReport ORDER BY roe DESC";
+        var date = '2017-1';
+        var sql = "SELECT * FROM companyprofit where date ="+date+" ORDER BY net_profit_ratio DESC";
         if(limit>=0){
             sql += " LIMIT " + limit;
         }
@@ -74,7 +75,8 @@ class ListData{
 
     static getCompanyDecList(limit, callback) {
         var conn = getConnection();
-        var sql = "SELECT * FROM companyFinReport ORDER BY roe";
+        var date = '2017-1';
+        var sql = "SELECT * FROM companyprofit where date = "+date+" ORDER BY net_profit_ratio";
         if(limit>=0){
             sql += " LIMIT " + limit;
         }

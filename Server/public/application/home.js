@@ -1,6 +1,8 @@
 var code = '000001';
 var index_name = '上证指数';
+var index_num = 0;
 var stock_name = '平安银行';
+var stock_num = 0;
 function onload() {
     var name = 'active';
     $('#nav-home').removeClass(name).addClass(name);
@@ -138,7 +140,8 @@ function getIndexListInfo() {
         },
         {
             field: 'change',
-            title: '涨跌幅'
+            title: '涨跌幅',
+            formatter: ChangeFormatter
         },
         {
             field: 'volume',
@@ -176,8 +179,9 @@ function getStockListInfo() {
             formatter: IndexLinkFormatter
         },
         {
-            field: 'change',
-            title: '涨跌幅'
+            field: 'changepercent',
+            title: '涨跌幅',
+            formatter: ChangeFormatter
         },
         {
             field: 'volume',
@@ -267,16 +271,17 @@ function getCompanyIncList(){
         },
         {
             field: 'name',
-            title: '公司名称',
+            title: '净资产收益率',
             formatter: StockLinkFormatter
         },
         {
-            field: 'esp',
-            title: '每股收益'
+            field: 'roe',
+            title: '每股收益',
+            formatter: ChangeFormatter
         },
         {
-            field: 'eps_yoy',
-            title: '净资产收益率',
+            field: 'net_profit_ratio',
+            title: '净利润增长',
             formatter: ChangeFormatter
         }
     ];
@@ -305,12 +310,13 @@ function getCompanyDecList(){
             formatter: StockLinkFormatter
         },
         {
-            field: 'esp',
-            title: '每股收益'
-        },
-        {
             field: 'roe',
             title: '净资产收益率',
+            formatter: ChangeFormatter
+        },
+        {
+            field: 'net_profit_ratio',
+            title: '净利润增长',
             formatter: ChangeFormatter
         }
     ];
@@ -341,21 +347,33 @@ function transformHistData(data) {
     return resArray;
 }
 
-$("#index-list-table").on("mouseover", 'tbody tr',
+$("#index-list-table").on("mouseover", 'tbody>tr',
     function() {
+        var temp = index_name;
         code = $(this).children('td').first().text();
-        index_name = $(this).children('td').eq(2).text();
-        if (code!="没有找到匹配的记录")
+        index_name = $(this).children('td').eq(1).text();
+        if ((code!="没有找到匹配的记录")&&(index_name!=temp))
+        {
+            $("#index-list-table tbody tr").eq(index_num).removeClass('danger');
             drawIndexKCurve(code);
+            $(this).addClass('danger');
+            index_num = $(this).attr('data-index');
+        }
     }
 );
 
-$("#stock-list-table").on("mouseover", 'tbody tr',
+$("#stock-list-table").on("mouseover", 'tbody>tr',
     function() {
+        var temp = stock_name;
         code = $(this).children('td').first().text();
-        stock_name = $(this).children('td').eq(2).text();
-        if (code!="没有找到匹配的记录")
+        stock_name = $(this).children('td').eq(1).text();
+        if ((code!="没有找到匹配的记录")&&(stock_name!=temp))
+        {
+            $("#stock-list-table tbody tr").eq(stock_num).removeClass('danger');
             drawStockKCurve(code);
+            $(this).addClass('danger');
+            stock_num = $(this).attr('data-index');
+        }
     }
 );
 
@@ -377,4 +395,6 @@ function ChangeFormatter(value, row) {
         return "<span style='color:#ff0000'>+"+value+"</span>";
     else if(value < 0)
         return "<span style='color:#33ff33'>"+value+"</span>";
+    else
+        return value;
 }
