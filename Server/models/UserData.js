@@ -18,6 +18,13 @@ class UserData{
         conn.query(sql, params, callback)
     }
 
+    static findUser(user, callback){
+        var conn = getConnection()
+        var params = [user]
+        var sql = "SELECT * FROM userStocks WHERE account = ?"
+        conn.query(sql, params, callback)
+    }
+
     static getTradeRecords(user, callback, stock, limit){
         var conn = getConnection()
         var params = [user, user]
@@ -34,11 +41,18 @@ class UserData{
     }
 
     static purchase(user, stock, amount, callback){
-
+        var conn = getConnection()
+        var params = [amount, stock, user]
+        var sql = "UPDATE userStocks SET amount = amount + ? WHERE stockCode = ? AND account = ? "
+        conn.query(sql, params, callback)
     }
 
     static sell(user, stock, amount, callback){
 
+        var conn = getConnection()
+        var params = [amount, stock, user]
+        var sql = "UPDATE userStocks SET amount = amount - ? WHERE stockCode = ? AND account = ? "
+        conn.query(sql, params, callback)
     }
 
 }

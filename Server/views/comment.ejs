@@ -37,7 +37,7 @@
     }
 
     function buildCommentTable() {
-        $.get('/stocks/comment/' + code, function (data, status) {
+        $.get('/indexs/comment/' + code, function (data, status) {
             if( isSuccess(status) ){
                 $('.box-comments').append(data)
 //                $(data).insertBefore('.box-comments .box-footer')
@@ -50,7 +50,7 @@
     function postComment() {
         let content = document.getElementById('inputComment').value;
         let user = 'tester'
-        $.post('/stocks/comment/' + code, {
+        $.post('/indexs/comment/' + code, {
             user: user,
             text: content
         }, (data, status) => {

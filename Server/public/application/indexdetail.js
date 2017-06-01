@@ -73,7 +73,8 @@ function buildRiseAndFallTable() {
         },
         {
             field: 'changepercent',
-            title: '涨跌幅'
+            title: '涨跌幅',
+            formatter: colorFormatter
         }
     ]
     $.get('/indexs/stocks/'+code, function (data, status) {
@@ -274,5 +275,12 @@ function redFormatter(value) {
     return "<span style='color:red'>" + value + "</span>"
 }
 
+
+function colorFormatter(value) {
+    if( value < 0 )
+        return "<span style='color:red'>" + value + "</span>"
+    else
+        return "<span style='color:green'>+" + value + "</span>"
+}
 
 

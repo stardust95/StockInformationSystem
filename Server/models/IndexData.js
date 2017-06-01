@@ -5,6 +5,12 @@
 
 var getConnection = require('./DbConnection')
 
+function getCurrentTime() {
+    let date = new Date()
+    return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + " " + date.toLocaleTimeString();
+}
+
+
 class IndexData{
 
     static getCodesList(callback){

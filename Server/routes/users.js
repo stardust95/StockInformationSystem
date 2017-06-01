@@ -26,27 +26,53 @@ router.post('/trade', function (req, res) {
   let stock = req.body.stock;
   let account = req.body.account;
   let number = req.body.number;
-  if( !type || !stock || !account || !number ){
+  if( type === undefined || !stock || !account || !number ){
       res.json({
           success: false,
           message: "Incomplete fields"
       })
       return;
   }
-  if( type == 1 ){
-    UserData.purchase(account, stock, number, function (err, data) {
-
-    })
-  }else if( type == 0 ){    // TODO: ensure the holding amount of stocks enough
-    UserData.sell(account, stock, number, function (err, data) {
-
-    })
-  }else{
-      res.json({
-          success: false,
-          message: "Invalid type value"
-      })
+  // console.log("type = " + (type === 0));
+  var callback = function (err, data) {
+      if( err ){
+          console.log(err)
+          res.status(500).json({
+              success: false,
+              message: "Internal error"
+          })
+      }else{
+          res.json({
+              success: true,
+              data: data
+          })
+      }
   }
+  UserData.findUser(account, function (err, data) {
+      if( err ){
+          console.log(err)
+          res.status(500).json({
+              success: false,
+              message: "Internal error"
+          })
+      }else if( data.length === 0 ){
+          res.status(404).json({
+              success:false,
+              message: "Unknown user"
+          })
+      }else{
+          if( type === 1 ){
+              UserData.purchase(account, stock, number, callback)
+          }else if( type === 0 ){    // TODO: ensure the holding amount of stocks enough
+              UserData.sell(account, stock, number, callback)
+          }else{
+              res.json({
+                  success: false,
+                  message: "Invalid type field"
+              })
+          }
+      }
+  })
 
 })
 
