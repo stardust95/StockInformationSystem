@@ -103,7 +103,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             {
                 field: 'code',
                 title: '股票代码',
-                formatter: highlightFormatter
+                formatter: highlightFormatter,
+                sortable: true
             },
             {
                 field: 'name',
@@ -117,35 +118,43 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     let color = Number(value) < 0 ? "red" : "limegreen"
                     let sign = Number(value) > 0 ? "+" : ""
                     return "<span style='color: "+ color + "'>" + sign + value + "</span>"
-                }
+                },
+                sortable: true
             },
             {
                 field: 'trade',
-                title: '现价'
+                title: '现价',
+                sortable: true
             },
             {
                 field: 'open',
-                title: '开盘'
+                title: '开盘',
+                sortable: true
             },
             {
                 field: 'high',
-                title: '最高价'
+                title: '最高价',
+                sortable: true
             },
             {
                 field: 'low',
-                title: '最低价'
+                title: '最低价',
+                sortable: true
             },
             {
                 field: 'volume',
-                title: '总手数'
+                title: '总手数',
+                sortable: true
             },
             {
                 field: 'turnoverratio',
-                title: '换手率'
+                title: '换手率',
+                sortable: true
             },
             {
                 field: 'amount',
-                title: '总金额'
+                title: '总金额',
+                sortable: true
             },
             {
                 title: '操作',

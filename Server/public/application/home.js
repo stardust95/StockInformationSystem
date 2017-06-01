@@ -57,11 +57,11 @@ function getIndexInfo() {
         },
         {
             field: 'volume',
-            title: '成交量'
+            title: '成交量(手)'
         },
         {
             field: 'amount',
-            title: '成交金额'
+            title: '成交金额(元)'
         }
     ]
     $.get('/indexs/info/'+code, function (result, status) {     // result is object instead of array
@@ -145,11 +145,11 @@ function getIndexListInfo() {
         },
         {
             field: 'volume',
-            title: '成交量'
+            title: '成交量(手)'
         },
         {
             field: 'amount',
-            title: '成交金额'
+            title: '成交金额(元)'
         }
     ];
     $.get('/list/data/index/10', function (result, status) {
@@ -185,11 +185,11 @@ function getStockListInfo() {
         },
         {
             field: 'volume',
-            title: '成交量'
+            title: '成交量(手)'
         },
         {
             field: 'amount',
-            title: '成交金额'
+            title: '成交金额(元)'
         }
     ];
     $.get('/list/data/stock/10', function (result, status) {
@@ -242,12 +242,17 @@ function getIndustryHistList(){
         },
         {
             field: 'avgprice',
-            title: '平均价格'
+            title: '平均价格',
+            formatter: (value) => {
+                return Number(value).toFixed(2)
+            }
         },
         {
             field: 'avgp_change',
             title: '平均涨跌幅',
-            formatter: ChangeFormatter
+            formatter: (value) => {
+                return ChangeFormatter(Number(value).toFixed(3))
+            }
         }
     ];
     $.get('/list/data/industry/10', function (result, status) {
@@ -446,11 +451,9 @@ function StockLinkFormatter(value, row) {
     return "<a href='/stock/"+row.code+"'>"+value+"</a>";
 }
 
-function ChangeFormatter(value, row) {
-    if(value > 0)
-        return "<span style='color:#ff0000'>+"+value+"</span>";
-    else if(value < 0)
-        return "<span style='color:#33ff33'>"+value+"</span>";
+function ChangeFormatter(value) {
+    if( value < 0 )
+        return "<span style='color:red'>" + value + "</span>"
     else
-        return value;
+        return "<span style='color:green'>+" + value + "</span>"
 }

@@ -4,81 +4,142 @@
 
 var express = require('express');
 var StockData = require('../models/StockData')
-var ejs = require('ejs')
+var ejs = require('ejs');
 var router = express.Router();
-var fs = require('fs')
+var fs = require('fs');
+var session = require('../models/Redisdb');
+var cache = require('../models/Redisdb').cache;
+var load = require('../models/Redisdb').load;
 
-let commentTemplate = ejs.compile(fs.readFileSync('views/commentitem.ejs', 'utf-8'))
+let commentTemplate = ejs.compile(fs.readFileSync('views/commentitem.ejs', 'utf-8'));
+function redisWrapper(key, callback) {
+    load(key, function (err, reply) {
+        console.log("here");
+        if( err ){
+            console.log(err)
+            res.status(500).json({
+                message: "redis error"
+            })
+        }else if( reply ){
+            console.log("redis hit")
+            return res.send(reply)
+        }else{
+            return callback()
+        }
+    })
+}
 
 /* GET stock basic info. */
 router.get('/info/:stockid', function(req, res, next) {
-    StockData.getBasicInformation(req.params.stockid, function (err, result) {
-        if( err ){
-            console.log(err)
-            res.json({message: "Invalid parameters"})
-        }else{
-            if(result.length > 0)
-                res.json(result[0])
-            else 
-                res.json(result)
-        }
+    let key = JSON.stringify({
+        type: "info",
+        stock: req.params.stockid
+    })
+    redisWrapper(key, function () {
+        StockData.getBasicInformation(req.params.stockid, function (err, result) {
+            if( err ){
+                console.log(err)
+                res.json({message: "Invalid parameters"})
+            }else{
+                if(result.length > 0){
+                    cache(key, JSON.stringify(result[0]))
+                    res.json(result[0])
+                }
+                else{
+                    cache(key, JSON.stringify(result))
+                    res.json(result)
+                }
+            }
+        })
     })
 });
 
-
 /* GET stock realtime data. */
 router.get('/realtime/:stockid', function(req, res, next) {
-    StockData.getRealtimePrice(req.params.stockid, function (err, result) {
-        if( err ){
-            console.log(err)
-            res.json({message: "Invalid parameters"})
-        }else{
-            if(result.length > 0)
-                res.json(result[0])
-            else 
-                res.json(result)
-        }
-    }, req.limit)
+    let key = JSON.stringify({
+        type: "realtime",
+        stock: req.params.stockid
+    })
+    redisWrapper(key, function () {
+        StockData.getRealtimePrice(req.params.stockid, function (err, result) {
+            if( err ){
+                console.log(err);
+                res.json({message: "Invalid parameters"})
+            }else{
+                if(result.length > 0){
+                    cache(key, JSON.stringify(result[0]))
+                    res.json(result[0])
+                }else{
+                    cache(key, JSON.stringify(result))
+                    res.json(result)
+                }
+            }
+        })
+    })
+
 });
 
 /* GET stock trading records. */
 router.get('/trades/:stockid/:limit?',function (req, res) {
-    StockData.getLatestTradeRecords(req.params.stockid, function (err, result) {
-        if( err ){
-            console.log(err)
-            res.json({message: "Invalid parameters"})
-        }else{
-            res.json(result)
-        }
-    }, req.params.limit)
-})
+    let key = JSON.stringify({
+        type: "trades",
+        stock: req.params.stockid
+    })
+    redisWrapper(key, function () {
+        StockData.getLatestTradeRecords(req.params.stockid, function (err, result) {
+            if( err ){
+                console.log(err);
+                res.json({message: "Invalid parameters"})
+            }else{
+                res.json(result)
+            }
+        }, req.params.limit)
+    })
 
+})
 
 /* GET block trading records. */
 router.get('/blocks/:stockid/:limit?',function (req, res) {
-    StockData.getBlockTradeRecords(req.params.stockid, function (err, result) {
-        if( err ){
-            console.log(err)
-            res.json({message: "Invalid parameters"})
-        }else{
-            res.json(result)
-        }
-    }, req.params.limit)
+    let key = JSON.stringify({
+        type: "blocks",
+        stock: req.params.stockid
+    })
+    redisWrapper(key, function () {
+
+        StockData.getBlockTradeRecords(req.params.stockid, function (err, result) {
+            if( err ){
+                console.log(err)
+                res.json({message: "Invalid parameters"})
+            }else{
+                res.json(result)
+            }
+        }, req.params.limit)
+    })
 })
 
 router.get('/hist/:stockid', function (req, res) {
-    StockData.getStockHistData(req.params.stockid, function (err, result) {
-        if( err ){
-            console.log(err)
-            res.json({ message: "Invalid parameters" });
-        }else{
-            res.json(result);
-        }
+    let key = JSON.stringify({
+        type: "hist",
+        stock: req.params.stockid
+    })
+    redisWrapper(key, function () {
+        StockData.getStockHistData(req.params.stockid, function (err, result) {
+            if( err ){
+                console.log(err)
+                res.json({ message: "Invalid parameters" });
+            }else{
+                res.json(result);
+            }
+        })
     })
 });
 
 /* GET stock realtime quotes. */
 router.get('/quotes/:stockid',function (req, res) {
+    let key = JSON.stringify({
+        type: "realtime",
+        stock: req.params.stockid
+    })
     StockData.getRealtimeQuotes(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
@@ -86,7 +147,7 @@ router.get('/quotes/:stockid',function (req, res) {
         }else{
             if(result.length > 0)
                 res.json(result[0])
-            else 
+            else
                 res.json(result)
         }
     })
@@ -96,6 +157,10 @@ router.get('/quotes/:stockid',function (req, res) {
 *  domain should be `industry` or `area`
 * */
 router.get('/rank/:domain/:field/:limit?',function (req, res) {
+    let key = JSON.stringify({
+        type: "realtime",
+        stock: req.params.stockid
+    })
     StockData.getStocksByDomain(req.params.domain, req.params.field, function (err, result) {
         if( err ){
             console.log(err);
@@ -109,6 +174,10 @@ router.get('/rank/:domain/:field/:limit?',function (req, res) {
 
 /* GET news of a stock. */
 router.get('/news/:stockid/:limit?',function (req, res) {
+    let key = JSON.stringify({
+        type: "realtime",
+        stock: req.params.stockid
+    })
     StockData.getStockNews(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
@@ -121,6 +190,10 @@ router.get('/news/:stockid/:limit?',function (req, res) {
 
 /* GET finantial news . */
 router.get('/newsList/:limit?',function (req, res) {
+    let key = JSON.stringify({
+        type: "realtime",
+        stock: req.params.stockid
+    })
     StockData.getFinancialNews(function (err, result) {
         if( err ){
             console.log(err)
@@ -133,15 +206,19 @@ router.get('/newsList/:limit?',function (req, res) {
 
 /* GET information of a company. */
 router.get('/comp/:stockid',function (req, res) {
+    let key = JSON.stringify({
+        type: "realtime",
+        stock: req.params.stockid
+    })
     StockData.getCompanyInfo(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
             res.json({message: "Invalid parameters"})
         }else{
-            
+
             if(result.length > 0)
                 res.json(result[0])
-            else 
+            else
                 res.json(result)
         }
     })
@@ -149,6 +226,10 @@ router.get('/comp/:stockid',function (req, res) {
 
 /* GET profits of a company. */
 router.get('/profit/:stockid',function (req, res) {
+    let key = JSON.stringify({
+        type: "realtime",
+        stock: req.params.stockid
+    })
     StockData.getCompanyProfit(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
@@ -160,6 +241,10 @@ router.get('/profit/:stockid',function (req, res) {
 })
 
 router.get('/comment/:stockid', function (req, res) {
+    let key = JSON.stringify({
+        type: "realtime",
+        stock: req.params.stockid
+    })
     StockData.getComment(req.params.stockid, function (err, result) {
         if( err ){
             console.log(err)
@@ -181,6 +266,10 @@ router.get('/comment/:stockid', function (req, res) {
 * }
 * */
 router.post('/comment/:stockid', function (req, res) {
+    let key = JSON.stringify({
+        type: "realtime",
+        stock: req.params.stockid
+    })
     if( req.body.user && req.body.text ){
         StockData.postComment(req.params.stockid, req.body.user, req.body.text,
             function (err, result) {
@@ -197,6 +286,10 @@ router.post('/comment/:stockid', function (req, res) {
 })
 
 router.get('/search', function (req, res) {
+    let key = JSON.stringify({
+        type: "realtime",
+        stock: req.params.stockid
+    })
     let keyword = req.query.keyword
     if( keyword ){
         StockData.search(keyword, function (err, result) {

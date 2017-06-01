@@ -2,9 +2,12 @@
     <div class="box-header with-border">
         最近浏览
     </div>
-    <div class="box-body text-muted text-sm no-padding">
-        <table class="table table-condensed no-header" id="browse-history-table">
-
+    <div class="box-body text-muted text-sm no-padding table-responsive">
+        <table class="table table-condensed" id="browse-history-table">
+            <th>股票名称</th>
+            <th>现价</th>
+            <th>涨跌幅</th>
+            <th>昨收</th>
             <% for (var i = 0; i < history.length; i++) { %>
             <tr>
                 <td><a href= "<%= protocol %>://<%= host %>/stock/<%= history[i].code %>" ><%= history[i].name %></a></td>

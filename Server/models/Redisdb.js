@@ -22,11 +22,12 @@ exports.cache = function(key, value, notExpire, time) {
     else
         return client.set(key, value, "EX", time ? time : option.expireTime)
 }
-exports.load = function (key, callback) {
+
+exports.load = (key, callback) => {
     return client.get(key, callback);
 }
 
-module.exports = (req, res, next) => {
+exports.middleware = (req, res, next) => {
     if( req.query.session ){
         let sessionKey = prefix + req.query.session
         console.log("url = " + req.url)

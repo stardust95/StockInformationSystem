@@ -1,8 +1,8 @@
 var express = require('express');
 var StockData = require('../models/StockData');
 var IndexData = require('../models/IndexData');
-var cache = require('../models/Redisdb').cache
-var load = require('../models/Redisdb').get
+var cache = require('../models/Redisdb').cache;
+var load = require('../models/Redisdb').load;
 var router = express.Router();
 var stockList = [];
 var indexList = [];
@@ -68,19 +68,18 @@ router.get('/stock/:stockid', function (req, res) {
     if( arr.includes(stock) ){
         arr = arr.filter( item => item !== stock ).filter( item => stockList.includes(item) )
     }
-    arr.push(stock)
+    arr.push(stock);
     console.log(req.cookies.visited);
     res.cookie('visited', arr.join('|'));
     StockData.getMultipleStocks(arr, function (err, result) {
         if( err ){
-            console.log(err)
+            console.log(err);
             res.json()
         }else{
             res.render('stockinfo', {code: stock, history: result, host: req.get('Host'), protocol: req.protocol } )
         }
     });
-
-})
+});
 
 router.get('/index/:indexid', function (req, res) {
     let index = req.params.indexid;

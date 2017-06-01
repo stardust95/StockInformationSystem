@@ -15,7 +15,7 @@ var stocks = require('./routes/stocks');
 var list = require('./routes/templatelist');
 var indexs = require('./routes/indexdetails');
 var indexlist = require('./routes/indexlist');
-var redis = require('./models/Redisdb')
+var redis = require('./models/Redisdb').middleware;
 
 var app = express();
 

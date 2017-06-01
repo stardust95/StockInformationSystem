@@ -86,7 +86,7 @@ function getRealtimeData() {
                     element.innerHTML = object[prop]
             }
             document.getElementById('trade2').innerHTML = Number(object['trade']).toFixed(2)
-            document.getElementById('change2').innerHTML = Number(object['changepercent']).toFixed(2)
+            document.getElementById('change2').innerHTML = colorFormatter(Number(object['changepercent']).toFixed(2))
             if( object['changepercent'] > 0 ){
                 $('#arrow-icon').addClass('fa fa-arrow-up')
                 $('#arrow-icon').css('color', 'green')
@@ -233,7 +233,7 @@ function buildRankingTable() {
         {
             field: 'changepercent',
             title: '涨跌幅',
-            formatter: 'redFormatter'
+            formatter: 'colorFormatter'
         },
         {
             field: 'mktcap',
@@ -533,6 +533,13 @@ function LinkFormatter(value, row) {
         return "<a href='"+row.code+"'>"+value+"</a>";
     else
         return value;
+}
+
+function colorFormatter(value) {
+    if( value < 0 )
+        return "<span style='color:red'>" + value + "</span>"
+    else
+        return "<span style='color:green'>+" + value + "</span>"
 }
 
 function redFormatter(value) {

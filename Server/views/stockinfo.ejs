@@ -76,67 +76,75 @@
                     <div class="inner">
                         <div class="row">
                             <div class="col-md-4 col-xs-8 text-black text-left" >
-                                <h3><span id="name" style="font-weight: normal !important;"></span> (<span id="code"><%= code %></span>)</h3>
+                                <h3><span id="name" style="font-weight: normal !important;"></span> (<span   id="code"><%= code %></span>)</h3>
                             </div>
-                            <div class="col-md-2 col-xs-4">
+                            <div class="col-md-2 col-xs-4 visible-lg visible-md">
                                 <h3 class="text-black margin-bottom" >
                                     <span id="trade2"></span>
                                     <i id="arrow-icon"></i>
                                     <small class="text-red"> <span id="change2">--</span> %</small>
                                 </h3>
                             </div>
-                            <div class="col-md-3 visible-lg pull-right">
+                            <div class="col-md-3 visible-lg visible-md pull-right">
                                 <h3>
                                     <small id="date" class="text-muted" style="color: black"></small>
                                 </h3>
                             </div>
                         </div>
-                        <table class="table table-responsive" style="color: black; max-width: 80%" id="basic-data-table">
-                            <tr>
-                                <td>
-                                    现价：<span class="badge bg-green-active" id="trade">--</span>
-                                </td>
-                                <td>
-                                    涨跌幅：<span class="badge bg-green-active" id="changepercent">--</span>
-                                </td>
-                                <td>
-                                    开盘价：<span class="badge bg-green-active" id="open">--</span>
-                                </td>
-                                <td>
-                                    最高价：<span class="badge bg-green-active" id="high">--</span>
-                                </td>
-                                <td >
-                                    最低价：<span class="badge bg-green-active" id="low">--</span>
-                                </td>
-                                <td>
-                                    昨日收盘价：<span class="badge bg-green-active" id="settlement">--</span>
-                                </td>
-                                <td>
-                                    成交量：<span class="badge bg-green-active" id="volume">--</span>
-                                </td>
-                                <!---->
-                            </tr>
-                            <tr>
-                                <td>
-                                    换手率：<span class="badge bg-green-active" id="turnoverratio">--</span>
-                                </td>
-                                <td>
-                                    成交金额：<span class="badge bg-green-active" id="amount">--</span>
-                                </td>
-                                <td>
-                                    市盈率：<span class="badge bg-green-active" id="per">--</span>
-                                </td>
-                                <td>
-                                    市净率：<span class="badge bg-green-active" id="pb">--</span>
-                                </td>
-                                <td>
-                                    总市值：<span class="badge bg-green-active" id="mktcap">--</span>
-                                </td>
-                                <td>
-                                    流通市值：<span class="badge bg-green-active" id="nmc">--</span>
-                                </td>
-                            </tr>
-                        </table>
+                        <div class="row">
+                            <div class="col-lg-9 col-md-11 col-xs-12">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-bordered" style="color: black; " id="basic-data-table">
+                                        <tr>
+                                            <td>
+                                                现价：<span class="badge bg-green-active" id="trade">----------------</span>
+                                            </td>
+                                            <td>
+                                                涨跌幅：<span class="badge bg-green-active" id="changepercent">----------------</span>
+                                            </td>
+                                            <td>
+                                                开盘价：<span class="badge bg-green-active" id="open">----------------</span>
+                                            </td>
+                                            <td>
+                                                最高价：<span class="badge bg-green-active" id="high">----------------</span>
+                                            </td>
+                                            <td >
+                                                最低价：<span class="badge bg-green-active" id="low">----------------</span>
+                                            </td>
+                                            <td>
+                                                昨日收盘价：<span class="badge bg-green-active" id="settlement">----------------</span>
+                                            </td>
+                                            <td>
+                                                成交量：<span class="badge bg-green-active" id="volume">----------------</span>
+                                            </td>
+                                            <!---->
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                换手率：<span class="badge bg-green-active" id="turnoverratio">----------------</span>
+                                            </td>
+                                            <td>
+                                                成交金额：<span class="badge bg-green-active" id="amount">----------------</span>
+                                            </td>
+                                            <td>
+                                                市盈率：<span class="badge bg-green-active" id="per">----------------</span>
+                                            </td>
+                                            <td>
+                                                市净率：<span class="badge bg-green-active" id="pb">----------------</span>
+                                            </td>
+                                            <td>
+                                                总市值：<span class="badge bg-green-active" id="mktcap">----------------</span>
+                                            </td>
+                                            <td>
+                                                流通市值：<span class="badge bg-green-active" id="nmc">----------------</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
 
                         <p></p>
                     </div>
