@@ -2,7 +2,7 @@
  * Created by stardust on 2017/4/27.
  */
 
-var mysql = require('mysql')
+var mysql = require('mysql');
 
 var config = {
     host: "tdsql-219vguff.sh.cdb.myqcloud.com",
@@ -12,10 +12,10 @@ var config = {
     database: "stockG5"
 };
 
-var pool = mysql.createPool(config)
+var pool = mysql.createPool(config);
 
 function getConnection() {
     return pool
 }
 
-module.exports = getConnection
+module.exports = getConnection;

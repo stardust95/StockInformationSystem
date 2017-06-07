@@ -15,7 +15,7 @@ let client = redis.createClient(option.port, option.host)
 client.on("error", function (err) {
     console.log("Redis Error: " + err)
 })
-// exports.client = client
+exports.client = client
 exports.cache = function(key, value, notExpire, time) {
     if( notExpire )
         return client.set(key, value)
@@ -27,6 +27,8 @@ exports.load = (key, callback) => {
     return client.get(key, callback);
 }
 
+
+
 exports.middleware = (req, res, next) => {
     if( req.query.session ){
         let sessionKey = prefix + req.query.session
@@ -36,8 +38,9 @@ exports.middleware = (req, res, next) => {
             if( err ){
                 console.log(err)
             }else if( reply ){      // if user logged in
-                res.locals.session = JSON.parse(reply)
-                // console.log("session = " + JSON.stringify(res.locals.session))
+                res.locals.session = JSON.parse(reply);
+                req.session.username = res.locals.session.user;
+                console.log("username = " + req.session.username);
             }
             next()
         })

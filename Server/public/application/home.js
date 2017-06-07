@@ -176,7 +176,7 @@ function getStockListInfo() {
         {
             field: 'name',
             title: '股票名称',
-            formatter: IndexLinkFormatter
+            formatter: StockLinkFormatter
         },
         {
             field: 'changepercent',

@@ -6,8 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var randomstring = require('randomstring')
 var cors = require('cors');
-// var session = require('express-session')
-// var redisStore = require('connect-redis')(session)
+var session = require('express-session')
+var redisStore = require('connect-redis')(session)
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -15,7 +15,7 @@ var stocks = require('./routes/stocks');
 var list = require('./routes/templatelist');
 var indexs = require('./routes/indexdetails');
 var indexlist = require('./routes/indexlist');
-var redis = require('./models/Redisdb').middleware;
+var redis = require('./models/Redisdb');
 
 var app = express();
 
@@ -31,27 +31,27 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(session({
-//     store: new redisStore({
-//         client: redisClient
-//     }),
-//     secret: randomstring.generate({
-//         length: 128,
-//         charset: 'alphabetic'
-//     }),
-//     cookie: {
-//         maxAge: 6000*1000
-//     },
-//     resave: true,
-//     saveUninitialized: true
-// }))
+app.use(session({
+    store: new redisStore({
+        client: redis.client
+    }),
+    secret: randomstring.generate({
+        length: 128,
+        charset: 'alphabetic'
+    }),
+    cookie: {
+        maxAge: 60000*1000
+    },
+    resave: true,
+    saveUninitialized: true
+}));
 
 // app.use(function (req, res, next) {
 //     res.locals.user = req.session.user
 //     next()
 // })
 
-app.use(redis)
+app.use(redis.middleware);
 
 app.use('/', index);
 app.use('/users', users);

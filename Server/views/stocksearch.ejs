@@ -158,8 +158,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             },
             {
                 title: '操作',
-                formatter: (value) => {
-                    return "<a class='btn btn-info btn-sm' href='#'>购入股票</a>"
+                formatter: (value, row) => {
+                    var param = {
+                        session: "tTnfyoo1fYyysl3Tw8SR6eu-djP7yhhR",
+                        stockID: row.code
+                    }
+                    return "<a class='btn btn-info btn-sm' href='/trade?" + $.param(param) + "'>购入股票</a>"
                 }
             }
         ]

@@ -109,6 +109,31 @@ router.get('/index/:indexid', function (req, res) {
     });
 })
 
+router.get('/trade',  function (req, res, next) {
+    //req.session.username = res.locals.session.user;
+    // req.session.username = "3140";
+    // req.session.stockID =  "000001";
+    req.session.stockID = req.query.stockID;
+    console.log("req.query.stockID = " + req.query.stockID);
+
+    StockData.getRealtimePrice(req.session.stockID, (err, result) =>{
+        if( err ){
+            console.log(err);
+            return res.status(500).json();
+        }else{
+            console.log("result = " + JSON.stringify(result));
+            if( result.length > 0 ){
+                res.render('trade', {
+                    stockCode: req.session.stockID,
+                    stockName: result[0].name
+                });
+            }else{
+                return res.status(404).json();
+            }
+        }
+    })
+});
+
 function isNumber(str) {
     let numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9' ]
     for(var index in str){
@@ -117,5 +142,6 @@ function isNumber(str) {
     }
     return true
 }
+
 
 module.exports = router;

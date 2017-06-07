@@ -81,10 +81,14 @@ function getRealtimeData() {
             object["nmc"] = Math.floor(object["nmc"])
             object['date'] = object['date'].split('.')[0]
             for(var prop in object){
-                let element = document.getElementById(prop)
+                let element = document.getElementById(prop);
                 if( element )
-                    element.innerHTML = object[prop]
+                    element.innerHTML = object[prop];
             }
+            let query = $.param({
+                stockID: object["code"]
+            });
+            document.getElementById("name").innerHTML = "<a href='/trade?"+ query +"' data-toggle='tooltip' title='股票挂单'>" + object["name"] + "</a>";
             document.getElementById('trade2').innerHTML = Number(object['trade']).toFixed(2)
             document.getElementById('change2').innerHTML = colorFormatter(Number(object['changepercent']).toFixed(2))
             if( object['changepercent'] > 0 ){
