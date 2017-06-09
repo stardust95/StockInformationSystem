@@ -177,16 +177,15 @@
 
                 <div class="row">
                     <div class="col-md-6 col-xs-12">
-                        <div class="box box-solid">
-                            <ul class="nav nav-tabs bg-gray-light" id="curve-tab">
-                                <li><a href="#">分时</a> </li>
-                                <li class="active"><a href="#">日K</a> </li>
-                                <li><a href="#">月K</a> </li>
-                                <li><a href="#">5分钟K</a> </li>
-                                <li><a href="#">15分钟K</a> </li>
-                                <li><a href="#">30分钟K</a> </li>
-                                <li><a href="#">60分钟K</a> </li>
-                            </ul>
+                        <div class="box box-info">
+                            <div class="box-header with-border bg-gray-light">
+                                <h3 class="box-title">K线图</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="tab-content">
                                 <div id="curve-day">
 
@@ -224,7 +223,8 @@
                                 </div>
                             </div>
                             <div class="box-body">
-                                <table id="hot-table" class="table table-hover table-bordered" data-show-header="false" data-striped="true">
+                                <table id="hot-table" class="table table-hover table-bordered" data-show-header="true" data-striped="true">
+
                                 </table>
                             </div>
                         </div>
@@ -241,10 +241,10 @@
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade" id="rise-table-tab">
-                                    <table  id="rise-table" data-show-header="false"></table>
+                                    <table  id="rise-table" data-show-header="true"></table>
                                 </div>
                                 <div class="tab-pane fade in active" id="fall-table-tab">
-                                    <table id="fall-table" data-show-header="false"></table>
+                                    <table id="fall-table" data-show-header="true"></table>
                                 </div>
                             </div>
                         </div>
