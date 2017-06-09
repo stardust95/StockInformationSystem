@@ -85,61 +85,65 @@ class StockInfoFetcher(IDataFetcher):
         tableName = 'stockBasics'
         param = []
         try:
-            db, dbname = connectConfigDB('database')
-            cursor = db.cursor()
-            cursor.execute("SET NAMES utf8mb4;")
-            cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
-            sql = """
-                CREATE TABLE `%s`.`%s` (
-                    `code` VARCHAR(10) NOT NULL COMMENT '股票代码',
-                    `name` VARCHAR(45) NOT NULL COMMENT '名称',
-                    `industry` VARCHAR(45) NULL COMMENT '所属行业',
-                    `area` VARCHAR(45) NULL COMMENT '地区',
-                    `pe` DOUBLE NULL COMMENT '市盈率',
-                    `outstanding` DOUBLE NULL COMMENT '流通股本(亿)',
-                    `totals` DOUBLE NULL COMMENT '总股本(亿)',
-                    `totalAssets` DOUBLE NULL COMMENT '总资产(万)',
-                    `liquidAssets` DOUBLE NULL COMMENT '流动资产',
-                    `fixedAssets` DOUBLE NULL COMMENT '固定资产',
-                    `reserved` DOUBLE NULL COMMENT '公积金',
-                    `reservedPerShare` DOUBLE NULL COMMENT '每股公积金',
-                    `esp` DOUBLE NULL COMMENT '每股收益',
-                    `bvps` DOUBLE NULL COMMENT '每股净资',
-                    `pb` DOUBLE NULL COMMENT '市净率',
-                    `timeToMarket` VARCHAR(45) NULL COMMENT '上市日期',
-                    `undp` DOUBLE NULL COMMENT '未分利润',
-                    `perundp` DOUBLE NULL COMMENT '每股未分配',
-                    `rev` DOUBLE NULL COMMENT '收入同比(%)',
-                    `profit` DOUBLE NULL COMMENT '利润同比(%)',
-                    `gpr` DOUBLE NULL COMMENT '毛利率(%)',
-                    `npr` DOUBLE NULL COMMENT '净利润率(%)',
-                    `holders` INT NULL COMMENT '股东人数',
-                    PRIMARY KEY (`name`))
-                    DEFAULT CHARSET=utf8mb4;
-                    """ % (dbname, tableName)
-            cursor.execute(sql)
-            print ('table %s created' % tableName)
-            # fetch and insert data
+            # db, dbname = connectConfigDB('database')
+            engine = createDbEngine('database')
             res = ts.get_stock_basics()
-            sql = 'INSERT IGNORE INTO `' + tableName + \
-                """` values
-                        (%s, %s, %s, %s, %s, %s, 
-                        %s, %s, %s, %s, %s, %s, 
-                        %s, %s, %s, %s, %s, %s,
-                        %s, %s, %s, %s, %s)
-                    """
-            for row in res.values:
-                # print (row.tolist())
-                param.append(row.tolist())
-            cursor.executemany(sql, param)
-            db.commit()
-            print ('\ntable %s inserted %s records.' % (tableName, len(res.values)))
+            res.to_sql(tableName, engine, if_exists='replace')
+            
+            # cursor = db.cursor()
+            # cursor.execute("SET NAMES utf8mb4;")
+            # cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
+            # print(dbname, tableName)
+            # sql = """
+            #     CREATE TABLE `%s`.`%s` (
+            #         `code` VARCHAR(10) NOT NULL COMMENT '股票代码',
+            #         `name` VARCHAR(45) NOT NULL COMMENT '名称',
+            #         `industry` VARCHAR(45) NULL COMMENT '所属行业',
+            #         `area` VARCHAR(45) NULL COMMENT '地区',
+            #         `pe` DOUBLE NULL COMMENT '市盈率',
+            #         `outstanding` DOUBLE NULL COMMENT '流通股本(亿)',
+            #         `totals` DOUBLE NULL COMMENT '总股本(亿)',
+            #         `totalAssets` DOUBLE NULL COMMENT '总资产(万)',
+            #         `liquidAssets` DOUBLE NULL COMMENT '流动资产',
+            #         `fixedAssets` DOUBLE NULL COMMENT '固定资产',
+            #         `reserved` DOUBLE NULL COMMENT '公积金',
+            #         `reservedPerShare` DOUBLE NULL COMMENT '每股公积金',
+            #         `esp` DOUBLE NULL COMMENT '每股收益',
+            #         `bvps` DOUBLE NULL COMMENT '每股净资',
+            #         `pb` DOUBLE NULL COMMENT '市净率',
+            #         `timeToMarket` VARCHAR(45) NULL COMMENT '上市日期',
+            #         `undp` DOUBLE NULL COMMENT '未分利润',
+            #         `perundp` DOUBLE NULL COMMENT '每股未分配',
+            #         `rev` DOUBLE NULL COMMENT '收入同比(百分比)',
+            #         `profit` DOUBLE NULL COMMENT '利润同比(百分比)',
+            #         `gpr` DOUBLE NULL COMMENT '毛利率(百分比)',
+            #         `npr` DOUBLE NULL COMMENT '净利润率(百分比)',
+            #         `holders` INT NULL COMMENT '股东人数',
+            #         PRIMARY KEY (`name`))
+            #         DEFAULT CHARSET=utf8mb4;
+            #         """ % (dbname, tableName)
+            # cursor.execute(sql)
+            # print ('table %s created' % tableName)
+            # # fetch and insert data
+            # sql = 'INSERT IGNORE INTO `' + tableName + \
+            #     """` values
+            #             (%s, %s, %s, %s, %s, %s, 
+            #             %s, %s, %s, %s, %s, %s, 
+            #             %s, %s, %s, %s, %s, %s,
+            #             %s, %s, %s, %s, %s)
+            #         """
+            # for row in res.values:
+            #     # print (row.tolist())
+            #     param.append(row.tolist())
+            # cursor.executemany(sql, param)
+            # db.commit()
+            # print ('\ntable %s inserted %s records.' % (tableName, len(res.values)))
         except:
             print_exc()
-            db.rollback()
+            # db.rollback()
             return False
-        finally:
-            db.close()
+        # finally:
+            # db.close()
         return True
 
     def buildIndexList(self):

@@ -1,0 +1,18 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+.left{float: left;}
+
+
+.form-group{margin: 10px auto;overflow: hidden;}
+.form-name {width: 60px;margin-top: 8px;}
+.form-input {width: 180px;height: 20px; padding: 5px 2px;}
+.form-btn{margin-left: 60px;margin-top: 10px;}
+.warn{color: red;}
+
+.mgl20{margin-left: 20px;}

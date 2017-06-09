@@ -1,0 +1,486 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>股票在线交易系统</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="/AdminLTE-2.3.11/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/AdminLTE-2.3.11/dist/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/AdminLTE-2.3.11/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/AdminLTE-2.3.11/dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="/AdminLTE-2.3.11/dist/css/mycss.css">
+
+    <!-- jQuery 2.2.3 -->
+    <script src="/AdminLTE-2.3.11/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="/AdminLTE-2.3.11/dist/js/jquery.validate.min.js" ></script>
+    <script type="text/javascript" src="/AdminLTE-2.3.11/dist/js/jquery-form.js" ></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="/AdminLTE-2.3.11/bootstrap/js/bootstrap.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="/AdminLTE-2.3.11/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="/AdminLTE-2.3.11/plugins/fastclick/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/AdminLTE-2.3.11/dist/js/app.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="/AdminLTE-2.3.11/dist/js/demo.js"></script>
+
+    <script src="/AdminLTE-2.3.11/dist/js/modernizr-custom-v2.7.1.min.js" type="text/javascript"></script>
+    <script src="/AdminLTE-2.3.11/dist/js/jquery-finger-v0.1.0.min.js" type="text/javascript"></script>
+    <!--Include flickerplate-->
+    <link href="/AdminLTE-2.3.11/dist/css/flickerplate.css"  type="text/css" rel="stylesheet">
+    <script src="/AdminLTE-2.3.11/dist/js/flickerplate.min.js" type="text/javascript"></script>
+    <!--Execute flickerplate-->
+    <script>
+        $(document).ready(function(){
+            $('.flicker-example').flicker();
+        });
+
+        window.onresize = function()
+        {
+            var obj = document.getElementById("mainp");
+            var h = document.documentElement.clientHeight - 51;
+            obj.style.setProperty('height', h.toString() + 'px', 'important');
+            //alert(obj.style.height);
+        }
+
+        window.onload = function()
+        {
+            var obj = document.getElementById("mainp");
+            var h = document.documentElement.clientHeight - 51;
+            obj.style.setProperty('height', h.toString() + 'px', 'important');
+            //alert(obj.style.height);
+        }
+    </script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+</head>
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="hold-transition skin-blue layout-top-nav" style = "margin-bottom: 0px">
+
+<div class="wrapper" >
+
+    <header class="main-header">
+        <nav class="navbar navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="/" class="navbar-brand"><b>StockTrade</b></a>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="/">首页 </a></li>
+                        <li><a href="http://localhost:3002">股票市场 </a></li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account Menu -->
+                        <li class="dropdown user user-menu" id="user-menu">
+                            <div>
+
+                            </div>
+                            <!-- Menu Toggle Button -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <!-- The user image in the navbar-->
+                                <img src="/AdminLTE-2.3.11/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                                <span class="hidden-xs" id="user-menu-name">Alexander Pierce</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- The user image in the menu -->
+                                <li class="user-header">
+                                    <img src="/AdminLTE-2.3.11/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                    <div id="dropdown-user-name" class="input-lg" style="color: white">
+                                        <p>
+                                            Alexander Pierce - Web Developer
+                                        </p>
+                                    </div>
+                                </li>
+                                <!-- Menu Body -->
+                                <!--
+                                <li class="user-body">
+                                    <div class="row">
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Followers</a>
+                                        </div>
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Sales</a>
+                                        </div>
+                                        <div class="col-xs-4 text-center">
+                                            <a href="#">Friends</a>
+                                        </div>
+                                    </div>
+
+                                </li>-->
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="/mainpage" class="btn btn-default btn-flat">证券账户</a>
+                                    </div>
+                                    <div class="pull-left">
+                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                    </div>
+                                    <div class="pull-left">
+                                        <a href="http://localhost:3002/homepage" class="btn btn-default btn-flat">资金账户</a>
+                                    </div>
+
+
+                                    <div class="pull-right">
+                                        <a href="/logout" class="btn btn-default btn-flat">登出</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li data-toggle="modal" data-target="#login-modal" id="login-button"><a>登录</a></li>
+                        <li data-toggle="modal" data-target="#login-modal" id="register-button"><a>开户</a></li>
+                    </ul>
+                </div>
+                <!-- /.navbar-custom-menu -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </header>
+    <div id="login-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" id="close-modal" aria-label="Close">x</button>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li id="login-li"><a href="#login-tab" role="tab" data-toggle="tab">登录</a></li>
+                        <li id="register-li"><a href="#register-tab" role="tab" data-toggle="tab">开户</a></li>
+                    </ul>
+
+                    <div class="tab-content" id="signin-signup-tab">
+                        <br>
+                        <div class="tab-pane" id="register-tab">
+                            <form action="/regist" method="post" class="form col-md-12" id="register_form" novalidate="novalidate">
+                                <div><br></div>
+                                <div><br></div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="bond_id" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">用户名:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="bond_id" name="username" placeholder="请输入用户名(至少5个字符)">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12 no-padding">
+                                    <label class="warn col-md-9 col-md-offset-3" id="register_error" style="color: red"></label>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="user-type" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">账户类型:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div id="user-type" class="col-md-9">
+                                        <label class="radio-inline col-md-5 input-lg" style="color: rgba(153,153,153,1)" >
+                                            <input type="radio" id="user-type-1" name="type" value="0" checked="checked"> 自然人
+                                        </label>
+                                        <label class="radio-inline col-md-5 input-lg" style="color: rgba(153,153,153,1)">
+                                            <input type="radio" id="user-type-2" name="type" value="1"> 法人
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="password1" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">密码:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input id="password1" type="password" name="password" class="form-control input-lg" placeholder="请输入密码(至少6个字符，数字或字母)">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="password2" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">确认密码:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input id="password2" type="password"  name="repassword" class="form-control input-lg" placeholder="请再次输入密码" >
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="card-type" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">账户类型:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div id="card-type" class="col-md-9">
+                                        <label class="radio-inline col-md-5 input-lg" style="color: rgba(153,153,153,1)" >
+                                            <input type="radio" id="card-type-1" name="cardtype" value="0" checked="checked"> 身份证
+                                        </label>
+                                        <label class="radio-inline col-md-5 input-lg" style="color: rgba(153,153,153,1)">
+                                            <input type="radio" id="card-type-2" name="cardtype" value="1"> 护照
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12" id="id_card_div">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="id_card" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">证件号码:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="id_card" name="id_card" placeholder="请输入证件号码">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12" id="passport_div">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="passport" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">证件号码:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="passport" name="passport" placeholder="请输入证件号码">
+                                    </div>
+                                </div>                               
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="name" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">姓名:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="name" name="name" placeholder="请输入您的姓名">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="gender" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">性别:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div id="gender" class="col-md-9">
+                                        <label class="radio-inline col-md-5 input-lg" style="color: rgba(153,153,153,1)" >
+                                            <input type="radio" id="male" value="0" name="gender" checked> 男
+                                        </label>
+                                        <label class="radio-inline col-md-5 input-lg" style="color: rgba(153,153,153,1)">
+                                            <input type="radio" id="female" value="1" name="gender"> 女
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="phone" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">联系电话:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="number" class="form-control input-lg" id="phone" name="phone" placeholder="请输入手机号">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12" id="email_div">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="email" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">邮箱:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="email" name="email"  placeholder="请输入邮箱" title="邮箱正确格式：xxx@xxx.com">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12" id="address_div">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="address" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">地址:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="address" name="address" placeholder="请输入您的地址">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12" id="occupation_div">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="occupation" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">职业:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="occupation" name="occupation" placeholder="请输入您的职业">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12" id="education_div">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="education" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">教育水平:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <select required id="education" name="education" class="form-control input-lg" oninvalid="setCustomValidity('*请选择您的学历')" oninput="setCustomValidity('')" style="color: rgba(153,153,153,1)" >
+                                            <option value="小学">小学</option>
+                                            <option value="初中">初中</option>
+                                            <option value="高中">高中</option>
+                                            <option value="中专">中专</option>
+                                            <option value="专科">专科</option>
+                                            <option value="本科">本科</option>
+                                            <option value="硕士">硕士</option>
+                                            <option value="博士">博士</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12" id="workplace_div">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="workplace" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">工作地点:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="workplace" name="workplace" placeholder="请输入工作地点">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12" id="business_license_div">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="business_license" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">营业执照:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="business_license" name="business_license" placeholder="请输入营业执照">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12" id="manager_name_div">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="manager_name" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">经理姓名:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="manager_name" name="manager_name" placeholder="请输入公司经理姓名">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12" id="manager_id_card_div">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="manager_id_card" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">经理身份证:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="manager_id_card" name="manager_id_card" placeholder="请输入公司身份证号">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12" id="manager_phone_div">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="manager_phone" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">经理电话:</label>
+                                        <label for="bond_id" style="color: red;">*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="manager_phone" name="manager_phone" placeholder="请输入公司经理联系电话">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-lg btn-block">开户</button>
+                                </div>
+									<% if(locals.status=="success"){ %>
+										<script>
+											alert("注册成功，请点击登录");
+										</script>
+									<%} %>
+                            </form>
+                        </div>
+                    <div class="tab-pane" id="login-tab">
+                            <form class="form col-md-12" id="login_form" method="post">
+                                <div><br></div>
+                                <div><br></div>
+                                <div><br></div>
+                                <div><br></div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="login_bond_id" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">用户名:</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control input-lg" id="login_bond_id" name="username" placeholder="请输入用户名(至少5个字符)">
+                                    </div>
+                                </div>
+                                <div><br></div>
+                                <div><br></div>
+                                <div><br></div>
+                                <div><br></div>
+                                <div><br></div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="login_password" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">密码:</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input id="login_password" type="password" name="password" class="form-control input-lg" placeholder="请输入登陆密码(至少6个字符)">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12 no-padding">
+                                    <label class="warn col-md-9 col-md-offset-3" id="login_error" style="color: red"></label>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-3 no-padding text-right">
+                                        <label for="login-type" class="login-pwd input-lg" style="color: rgba(153,153,153,1)">登录类型:</label>
+                                    </div>
+                                    <div id="login-type" class="col-md-9">
+                                        <label class="radio-inline col-md-5 input-lg" style="color: rgba(153,153,153,1)" >
+                                            <input type="radio" id="login-type-1" name="loginType" value="user" checked="checked"> 证券账户
+                                        </label>
+                                        <label class="radio-inline col-md-5 input-lg" style="color: rgba(153,153,153,1)">
+                                            <input type="radio" id="login-type-2" name="loginType" value="admin"> 管理员
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-lg btn-block" id="login-btn">立刻登录</button>
+                                    <!--<span><a href="newforgot.html">忘记密码</a></span>-->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Full Width Column -->
+    
+    <div class="flicker-example" id = "mainp" data-block-text="false">
+        <ul style = "width:100%; height:100%">
+        <li data-background="/AdminLTE-2.3.11/dist/img/slide1.jpg" style = "background-size:100% 100%; background-repeat:no-repeat">
+            <div class="flick-title" style = "font-size:4.5rem">
+                这里，有最实时的股市行情资讯
+            </div>
+            <div class="flick-sub-text" style = "font-size:3rem">real-time stock information</div>
+        </li>
+        <li data-background="/AdminLTE-2.3.11/dist/img/slide2.jpg" style = "background-size:100% 100%; background-repeat:no-repeat">
+            <div class="flick-title" style = "font-size:4.5rem">这里，有最可靠的股票投资分析</div>
+            <div class="flick-sub-text"style = "font-size:3rem">reliable investment analysis</div>
+        </li>
+        <li data-background="/AdminLTE-2.3.11/dist/img/slide3.jpg" style = "background-size:100% 100%; background-repeat:no-repeat">
+            <div class="flick-title" style = "font-size:4.5rem">这里，有最便捷的交易管理系统</div>
+            <div class="flick-sub-text" style = "font-size:3rem">efficient trading management</div>
+        </li>
+        <li data-background="/AdminLTE-2.3.11/dist/img/slide4.jpg" style = "background-size:100% 100%; background-repeat:no-repeat">
+            <div class="flick-title" style = "font-size:4.5rem">在这里，做财富的主人</div>
+            <a href = "http://localhost:3005"> <button type="button" class="btn btn-block btn-primary btn-lg" style = "font-size:2.5rem; width:20%; margin-left:40%; margin-top:5%">Get Started</button> 
+            </a>
+        </li>
+        </ul>
+    </div>
+    
+</div>
+
+<style type="text/css">
+    #register_form label.error {
+        color: Red;
+    }
+</style>
+
+<style type="text/css">
+    #login_form label.error {
+        color: Red;
+    }
+</style>
+<!-- ./wrapper -->
+
+<script src="/AdminLTE-2.3.11/dist/js/register.js" charset="utf-8"></script>
+<script src="/AdminLTE-2.3.11/dist/js/login.js" charset="utf-8"></script>
+</body>
+</html>

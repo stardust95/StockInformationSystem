@@ -57,10 +57,9 @@ def DayLast():
         cursor.execute('select price, time from tradeRecords where code = %s and date = %s order by time desc', (code, date))
         price = cursor.fetchall()
         settlement = price[0][0]
-
-		cursor.execute('SET NAMES utf8mb4')
-        cursor.execute('insert into stockList values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', \
-                       (code, name, '', '', '', '', '', '', settlement, '', '', '', '', '', '', '', ''))
+        cursor.execute('SET NAMES utf8mb4')
+        cursor.execute('insertignore into stockList values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', \
+                            (code, name, '', '', '', '', '', '', settlement, '', '', '', '', '', '', '', ''))
         conn.commit()
 
         i = i + 1
@@ -197,8 +196,8 @@ def updateStockList():
         mktcap = totals * trade
         flow = buyAmount - sellAmount
 
-		cursor.execute('SET NAMES utf8mb4')
-        cursor.execute('insert into stockList values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', \
+        cursor.execute('SET NAMES utf8mb4')
+        cursor.execute('insertignore into stockList values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', \
                        (code, name, ddate, changepercent, trade, open, high, low, settlement, volume, turnoverratio, amount, \
                         per, pb, mktcap, nmc, flow))
         conn.commit()
@@ -209,7 +208,7 @@ def updateStockList():
 
 
 # 假设交易记录表中已保存至少20天的记录
-def updateStockHistData():
+def updateStockHistData(_today = datetime.datetime.now()):
     print('updateStockHistData()')
 
     host, port, dbuser, dbpass, dbname = dbConfig()
@@ -217,7 +216,7 @@ def updateStockHistData():
     conn = mysql.connect(host = host, port = port, user = dbuser, password = dbpass, database = dbname)
     cursor = conn.cursor()
 
-    today = datetime.datetime.now()
+    today = _today
     delta = datetime.timedelta(days = 1)
     date = today.strftime('%Y-%m-%d')
     yesterday = (today - delta).strftime('%Y-%m-%d')
@@ -283,7 +282,7 @@ def updateStockHistData():
         ma20 = ((ma20_l * v_ma20_l) * 0.95 + tradeXvolume) / v_ma20
 
         cursor.execute('SET NAMES utf8mb4')
-        cursor.execute('insert into stockHistData values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', \
+        cursor.execute('insertignore into stockHistData values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', \
                        (code, date, open, high, settlement, low, volume, price_change, p_change, ma5, ma10, ma20, v_ma5, v_ma10, v_ma20))
         conn.commit()
 
@@ -365,8 +364,8 @@ def updateIndexList():
         volume = volume / totalCon
         amount = amount / totalCon
 
-		cursor.execute('SET NAMES utf8mb4')
-        cursor.execute('insert into indexList values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', \
+        cursor.execute('SET NAMES utf8mb4')
+        cursor.execute('insertignore into indexList values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', \
                        (i, indexCode, indexName, date, change, open, preclose, '', high, low, volume, amount))
         conn.commit()
 
@@ -422,19 +421,22 @@ def updateIndexHistData():
             cursor.execute('select open, high, close, low, volume, price_change, p_change, ma5, ma10, ma20, v_ma5, \
                          v_ma10, v_ma20, date from stockHistData where code = %s order by date desc', (code,))
             temp = cursor.fetchall()
-            open_ = temp[0][0]
-            high_ = temp[0][1]
-            close_ = temp[0][2]
-            low_ = temp[0][3]
-            volume_ = temp[0][4]
-            price_change_ = temp[0][5]
-            p_change_ = temp[0][6]
-            ma5_ = temp[0][7]
-            ma10_ = temp[0][8]
-            ma20_ = temp[0][9]
-            v_ma5_ = temp[0][10]
-            v_ma10_ = temp[0][11]
-            v_ma20_ = temp[0][12]
+            try:
+                open_ = temp[0][0]
+                high_ = temp[0][1]
+                close_ = temp[0][2]
+                low_ = temp[0][3]
+                volume_ = temp[0][4]
+                price_change_ = temp[0][5]
+                p_change_ = temp[0][6]
+                ma5_ = temp[0][7]
+                ma10_ = temp[0][8]
+                ma20_ = temp[0][9]
+                v_ma5_ = temp[0][10]
+                v_ma10_ = temp[0][11]
+                v_ma20_ = temp[0][12]
+            except IndexError:
+                continue
 
             totalCon = totalCon + contribution
             open = open + open_ * contribution
@@ -467,8 +469,8 @@ def updateIndexHistData():
         v_ma10 = v_ma10 / totalCon
         v_ma20 = v_ma20 / totalCon
 
-		cursor.execute('SET NAMES utf8mb4')
-        cursor.execute('insert into indexHistData values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',\
+        cursor.execute('SET NAMES utf8mb4')
+        cursor.execute('insertignore into indexHistData values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',\
                        (indexCode, date, open, high, close, low, volume, price_change,p_change, ma5, ma10, ma20, v_ma5, v_ma10, v_ma20))
         conn.commit()
 
