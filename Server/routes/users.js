@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
 router.post('/trade', function (req, res) {
   let type = Number(req.body.type);
   let stock = req.body.id;
-  let account = req.body.account;
+  let account = req.body.username;
   let number = req.body.number;
   if( type === undefined || !stock || !account || !number ){
       res.json({
