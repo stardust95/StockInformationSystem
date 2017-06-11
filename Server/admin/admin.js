@@ -399,37 +399,30 @@ module.exports = {
                             if (!error && response.statusCode == 200) {
                                 console.log(body);
                                 if (body.success) {
-                                    connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
-                                        if (err) {
-                                            res.json({
-                                                status: '0',
-                                                info: '撤单失败'
-                                            });
-                                            return;
-                                        }
                                         res.json({
-                                            status: '1',
-                                            info: '撤单成功',
-                                            data: result
-                                        });
+                                            status:'1',
+                                            info:'撤单成功',
+                                            data:result
+
+                                        })
                                         connection.query(sql.deleteOrder, [param.orderID], function (err, result) {
                                             if (err) {
                                                 console.log('database connection error');
                                                 return;
                                             }
                                         });
-                                    });
+
                                 } else {
                                     res.json({
-                                        status: '0',
-                                        info: '撤单失败'
-                                    });
+                                        status:'0',
+                                        info:'撤单失败'
+                                    })
                                 }
 
                             } else {
                                 res.json({
                                     status: '0',
-                                    info: '撤单失败'
+                                    info: '后台出错'
                                 });
                             }
                         }
