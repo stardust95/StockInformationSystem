@@ -79,7 +79,7 @@ function createOrder(res, param) {
             var request = require('request');
 
             request.post(
-                '112.74.124.145:3002/users/trade',
+                'http://112.74.124.145:3002/users/trade',
                 { json: submitJSON},
                 function (error, response, body) {
                     if (!error && response.statusCode == 200) {
@@ -351,7 +351,7 @@ module.exports = {
 
                     request.post(
                         'http://112.74.124.145:3001/withdrawForBack',
-                        {json: submitJSON},
+                        { json:submitJSON},
                         function (error, response, body) {
                             if (!error && response.statusCode == 200) {
                                 console.log(body);
@@ -391,8 +391,8 @@ module.exports = {
                     var request = require('request');
 
                     request.post(
-                        '112.74.124.145:3002/users/trade',
-                        {json: submitJSON},
+                      'http://112.74.124.145:3002/users/trade',
+                        { json:submitJSON},
                         function (error, response, body) {
                             if (!error && response.statusCode == 200) {
                                 console.log(body);
