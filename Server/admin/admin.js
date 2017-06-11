@@ -80,9 +80,9 @@ function createOrder(res, param) {
                 data: submitJSON,
                 dataType: "json",
                 async: false,
-                success: function (data) {
+                success: function (data,status) {
                     var obj = data;
-                    if(obj == 'success'){
+                    if(status == 'success'){
                         connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
                             if (err) {
                                 res.json({
@@ -400,9 +400,9 @@ module.exports = {
                         data: submitJSON,
                         dataType: "json",
                         async: false,
-                        success: function (data) {
+                        success: function (data,status) {
                             var obj = data;
-                            if(obj == 'success'){
+                            if(status == 'success'){
                                 connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
                                     if (err) {
                                         res.json({
