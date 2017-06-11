@@ -135,7 +135,7 @@ router.get('/records', function (req, res) {
 // })
 
 router.get('/signout', function (req, res, next) {
-
+    req.session.username = null;
 })
 
 
