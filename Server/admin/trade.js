@@ -80,48 +80,51 @@ function match(param) {
                                     fund解冻操作
                                     err返回
                                     var submitJSON = {username:message.seller,money:message.orderNum*message.price*100};
-                                    $.ajax({
-                                        url: "112.74.124.145:3001/withdrawForBack",
-                                        type: "post",
-                                        data: submitJSON,
-                                        dataType: "json",
-                                        async: false,
-                                        success: function (data) {
-                                            var obj = data;
-                                            if(obj.success == 'yes'){
+                                    var request = require('request');
+
+                                    request.post(
+                                        '112.74.124.145:3001/withdrawForBack',
+                                        { json:submitJSON},
+                                        function (error, response, body) {
+                                            if (!error && response.statusCode == 200) {
+                                                console.log(body);
+                                               if(body.success == 'yes'){
                                     
                                                 console.log("资金操作成功");
-                                            }else{
-                                                console.log("资金操作出错");
+                                              }else{
+                                                  console.log("资金操作出错");
+                                              }
                                             }
-                                        },
-                                        error: function (req, stat, err) {
-                                            console.log("资金操作出错");
+                                            else{
+                                              console.log("股票操作失败");
+                                            }
                                         }
-                                    });
+                                    );
                                     
+                                  
                                     
                                     //stock增加操作
                                     //err返回
                                     var submitJSON = {type:1,username:message.buyer,id:message.stockID,number:message.orderNum};
-                                    $.ajax({
-                                        url: "112.74.124.145:3002/users/trade",
-                                        type: "post",
-                                        data: submitJSON,
-                                        dataType: "json",
-                                        async: false,
-                                        success: function (data, status) {
-                                            
-                                            if(status == 'success'){
-                                                console.log("股票操作成功");
+                                   
+
+                                    request.post(
+                                        '112.74.124.145:3002/users/trade',
+                                        { json: submitJSON},
+                                        function (error, response, body) {
+                                            if (!error && response.statusCode == 200) {
+                                                console.log(body)
+                                               if(body.success == 1){
+                                                  console.log("股票操作成功");
+                                                }else{
+                                                    console.log("股票操作失败");
+                                                }
                                             }else{
-                                                console.log("股票操作失败");
+                                               console.log("股票操作失败");
                                             }
-                                        },
-                                        error: function (req, stat, err) {
-                                            console.log("股票操作失败");
                                         }
-                                    });
+                                    );
+                                   
 
 
 
@@ -478,48 +481,46 @@ module.exports = {
                                                     //买家stock增加
                                                     //卖家stock减少
                                                     var submitJSON = {username:message.seller,money:message.orderNum*message.price*100};
-                                                    $.ajax({
-                                                        url: "112.74.124.145:3001/withdrawForBack",
-                                                        type: "post",
-                                                        data: submitJSON,
-                                                        dataType: "json",
-                                                        async: false,
-                                                        success: function (data) {
-                                                            var obj = data;
-                                                            if(obj.success == 'yes'){
-                                                    
+                                                    var request = require('request');
+                                                     request.post(
+                                                        '112.74.124.145:3001/withdrawForBack',
+                                                        { json:submitJSON},
+                                                        function (error, response, body) {
+                                                            if (!error && response.statusCode == 200) {
+                                                                console.log(body);
+                                                               if(body.success == 'yes'){
+
                                                                 console.log("资金操作成功");
-                                                            }else{
-                                                                console.log("资金操作出错");
+                                                              }else{
+                                                                  console.log("资金操作出错");
+                                                              }
                                                             }
-                                                        },
-                                                        error: function (req, stat, err) {
-                                                            console.log("资金操作出错");
+                                                            else{
+                                                              console.log("股票操作失败");
+                                                            }
                                                         }
-                                                    });
+                                                    );
                                                     
                                                     
                                                     //stock增加操作
                                                     //err返回
                                                     var submitJSON = {type:1,username:message.buyer,id:message.stockID,number:message.orderNum};
-                                                    $.ajax({
-                                                        url: "112.74.124.145:3002/users/trade",
-                                                        type: "post",
-                                                        data: submitJSON,
-                                                        dataType: "json",
-                                                        async: false,
-                                                        success: function (data,status) {
-                                                            var obj = data;
-                                                            if(status == 'success'){
-                                                                console.log("股票操作成功");
+                                                    request.post(
+                                                        '112.74.124.145:3002/users/trade',
+                                                        { json: submitJSON},
+                                                        function (error, response, body) {
+                                                            if (!error && response.statusCode == 200) {
+                                                                console.log(body)
+                                                               if(body.success == 1){
+                                                                  console.log("股票操作成功");
+                                                                }else{
+                                                                    console.log("股票操作失败");
+                                                                }
                                                             }else{
-                                                                console.log("股票操作失败");
+                                                               console.log("股票操作失败");
                                                             }
-                                                        },
-                                                        error: function (req, stat, err) {
-                                                            console.log("股票操作失败");
                                                         }
-                                                    });
+                                                    );
 
                                                     //交易数据库
                                                     group5.getConnection(function (err, connection5) {
