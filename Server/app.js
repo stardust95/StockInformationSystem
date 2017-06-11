@@ -45,7 +45,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
-
+//
 // app.use(function (req, res, next) {
 //     res.locals.user = req.session.user
 //     next()

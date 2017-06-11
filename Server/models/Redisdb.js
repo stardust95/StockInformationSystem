@@ -30,6 +30,12 @@ exports.load = (key, callback) => {
 
 
 exports.middleware = (req, res, next) => {
+    res.locals.username = null;
+    res.locals.session = {}
+    console.log("session = " + JSON.stringify(req.session));
+    if( req.session && req.session.username ){
+        res.locals.username = req.session.username;
+    }
     if( req.query.session ){
         let sessionKey = prefix + req.query.session
         console.log("url = " + req.url)
@@ -38,9 +44,13 @@ exports.middleware = (req, res, next) => {
             if( err ){
                 console.log(err)
             }else if( reply ){      // if user logged in
+                console.log("reply = " + reply);
                 res.locals.session = JSON.parse(reply);
-                req.session.username = res.locals.session.user;
-                console.log("username = " + req.session.username);
+                // var name = res.locals.session.user.username
+                var name = res.locals.session.username
+                req.session.username = name;
+                res.locals.username = name;
+                console.log("username = " + name);
             }
             next()
         })

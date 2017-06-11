@@ -329,18 +329,7 @@ module.exports = {
         var param = req.body;
         param.userID = req.session.username;
         param.stockID = req.session.stockID;
-        // var myDate = new Date();
-        // var day = myDate.getDay();
-        // var hour = myDate.getHours();
-        // var minute = myDate.getMinutes();
-        //
-        // if(day == 0 || day == 6 || hour <= 8 || (hour == 9 && minute < 15)|| (hour == 9 && minute >= 20 && minute < 25) || (hour == 11 && minute > 30)|| hour == 12 || hour >= 15){
-        //     res.json({
-        //         status: '0',
-        //         info: '现在不是撤单时间'
-        //     });
-        //     return;
-        // }
+
         backend.getConnection(function (err, connection) {
             connection.query(sql.queryOrder, [param.orderID], function (err, result) {
                 if (err) {
