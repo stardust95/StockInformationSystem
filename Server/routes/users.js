@@ -130,9 +130,9 @@ router.get('/records', function (req, res) {
     }
 })
 
-router.get('/profile', function (req, res, next) {
-
-})
+// router.get('/profile', function (req, res, next) {
+//
+// })
 
 router.get('/signout', function (req, res, next) {
 
