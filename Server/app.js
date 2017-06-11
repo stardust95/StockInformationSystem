@@ -8,6 +8,7 @@ var randomstring = require('randomstring')
 var cors = require('cors');
 var session = require('express-session')
 var redisStore = require('connect-redis')(session)
+var redis = require('./models/Redisdb');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -15,7 +16,6 @@ var stocks = require('./routes/stocks');
 var list = require('./routes/templatelist');
 var indexs = require('./routes/indexdetails');
 var indexlist = require('./routes/indexlist');
-var redis = require('./models/Redisdb');
 
 var app = express();
 
@@ -46,10 +46,6 @@ app.use(session({
     saveUninitialized: true
 }));
 //
-// app.use(function (req, res, next) {
-//     res.locals.user = req.session.user
-//     next()
-// })
 
 app.use(redis.middleware);
 
