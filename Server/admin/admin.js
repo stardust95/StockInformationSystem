@@ -23,119 +23,119 @@ function createOrder(res, param) {
             });
             return;
         }
-        // if (param.buyOrSell === '0') {
-        //     //fund冻结操作
-        //     //err返回
-        //     var submitJSON = {money: Number(param.price)*Number(param.orderNum)};
-        //     $.ajax({
-        //         url: "112.74.124.145:3001/withdrawForBack",
-        //         type: "post",
-        //         data: submitJSON,
-        //         dataType: "json",
-        //         async: false,
-        //         success: function (data) {
-        //             var obj = data;
-        //             if(obj.success == 'yes'){
-        //                 connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
-        //                     if (err) {
-        //                         res.json({
-        //                             status: '0',
-        //                             info: '后台挂单出错'
-        //                         });
-        //                         return;
-        //                     }
-        //                     res.json({
-        //                         status: '1',
-        //                         info: '挂单成功',
-        //                         data:{  orderNum: param.orderNum,
-        //                             price: param.price,
-        //                             orderID: result.insertId,
-        //                             buyOrSell: param.buyOrSell
-        //                         }
-        //                     });
-        //                 });
-        //             }else{
-        //                 res.json({
-        //                     status: '0',
-        //                     info:obj.error
-        //                 });
-        //             }
-        //         },
-        //         error: function (req, stat, err) {
-        //             res.json({
-        //                 status: '0',
-        //                 info:'挂单失败'
-        //             });
-        //
-        //         }
-        //     });
-        // }
-        // else {
-        //     //stock冻结操作
-        //     //err返回
-        //     var submitJSON = {type:0,id:param.stockID,number:Number(param.orderNum)};
-        //     $.ajax({
-        //         url: "112.74.124.145:3002/users/trade",
-        //         type: "post",
-        //         data: submitJSON,
-        //         dataType: "json",
-        //         async: false,
-        //         success: function (data) {
-        //             var obj = data;
-        //             if(obj == 'success'){
-        //                 connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
-        //                     if (err) {
-        //                         res.json({
-        //                             status: '0',
-        //                             info: '后台挂单出错'
-        //                         });
-        //                         return;
-        //                     }
-        //                     res.json({
-        //                         status: '1',
-        //                         info: '挂单成功',
-        //                         data:{  orderNum: param.orderNum,
-        //                             price: param.price,
-        //                             orderID: result.insertId,
-        //                             buyOrSell: param.buyOrSell
-        //                         }
-        //                     });
-        //                 });
-        //             }else{
-        //                 res.json({
-        //                     status: '0',
-        //                     info:'您的股票数量不足'
-        //                 });
-        //             }
-        //         },
-        //         error: function (req, stat, err) {
-        //             res.json({
-        //                 status: '0',
-        //                 info:'后台出错'
-        //             });
-        //
-        //         }
-        //     });
-        // }
-        connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
-            if (err) {
-
-                res.json({
-                    status: '0',
-                    info: '后台挂单出错'
-                });
-                return;
-            }
-            res.json({
-                status: '1',
-                info: '挂单成功',
-                data:{  orderNum: param.orderNum,
-                        price: param.price,
-                        orderID: result.insertId,
-                        buyOrSell: param.buyOrSell
+        if (param.buyOrSell === '0') {
+            //fund冻结操作
+            //err返回
+            var submitJSON = {money: Number(param.price)*Number(param.orderNum)*100,username:param.userID};
+            $.ajax({
+                url: "112.74.124.145:3001/withdrawForBack",
+                type: "post",
+                data: submitJSON,
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    var obj = data;
+                    if(obj.success == 'yes'){
+                        connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
+                            if (err) {
+                                res.json({
+                                    status: '0',
+                                    info: '后台挂单出错'
+                                });
+                                return;
+                            }
+                            res.json({
+                                status: '1',
+                                info: '挂单成功',
+                                data:{  orderNum: param.orderNum,
+                                    price: param.price,
+                                    orderID: result.insertId,
+                                    buyOrSell: param.buyOrSell
+                                }
+                            });
+                        });
+                    }else{
+                        res.json({
+                            status: '0',
+                            info:obj.error
+                        });
+                    }
+                },
+                error: function (req, stat, err) {
+                    res.json({
+                        status: '0',
+                        info:'挂单失败'
+                    });
+        
                 }
             });
-        });
+        }
+        else {
+            //stock冻结操作
+            //err返回
+            var submitJSON = {type:0,username:param.userID,id:param.stockID,number:Number(param.orderNum)};
+            $.ajax({
+                url: "112.74.124.145:3002/users/trade",
+                type: "post",
+                data: submitJSON,
+                dataType: "json",
+                async: false,
+                success: function (data,status) {
+                    var obj = data;
+                    if(status == 'success'){
+                        connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
+                            if (err) {
+                                res.json({
+                                    status: '0',
+                                    info: '后台挂单出错'
+                                });
+                                return;
+                            }
+                            res.json({
+                                status: '1',
+                                info: '挂单成功',
+                                data:{  orderNum: param.orderNum,
+                                    price: param.price,
+                                    orderID: result.insertId,
+                                    buyOrSell: param.buyOrSell
+                                }
+                            });
+                        });
+                    }else{
+                        res.json({
+                            status: '0',
+                            info:'您的股票数量不足'
+                        });
+                    }
+                },
+                error: function (req, stat, err) {
+                    res.json({
+                        status: '0',
+                        info:'后台出错'
+                    });
+        
+                }
+            });
+        }
+//         connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
+//             if (err) {
+
+//                 res.json({
+//                     status: '0',
+//                     info: '后台挂单出错'
+//                 });
+//                 return;
+//             }
+//             res.json({
+//                 status: '1',
+//                 info: '挂单成功',
+//                 data:{  orderNum: param.orderNum,
+//                         price: param.price,
+//                         orderID: result.insertId,
+//                         buyOrSell: param.buyOrSell
+//                 }
+//             });
+//         });
         connection.release();
     });
 }
@@ -350,109 +350,109 @@ module.exports = {
                     });
                     return;
                 }
-                // if (result[0].buyOrSell === '0') {
-                //     //fund解冻操作
-                //     //err返回
-                //     var submitJSON = {money:result[0].orderNum*result[0].price};
-                //     $.ajax({
-                //         url: "112.74.124.145:3001/withdrawForBack",
-                //         type: "post",
-                //         data: submitJSON,
-                //         dataType: "json",
-                //         async: false,
-                //         success: function (data) {
-                //             var obj = data;
-                //             if(obj.success == 'yes'){
-                //                 res.json({
-                //                     status: '1',
-                //                     info: '撤单成功',
-                //                     data:result
-                //                 });
-                //                 connection.query(sql.deleteOrder, [param.orderID], function (err, result) {
-                //                     if (err) {
-                //                         console.log('database connection error');
-                //                         return;
-                //                     }
-                //                 });
-                //
-                //             }else{
-                //                 res.json({
-                //                     status: '0',
-                //                     info: '撤单失败'
-                //                 });
-                //             }
-                //         },
-                //         error: function (req, stat, err) {
-                //             res.json({
-                //                 status: '0',
-                //                 info: '撤单失败'
-                //             });
-                //         }
-                //     });
-                // }
-                // else {
-                //     //stock返回操作
-                //     //err返回
-                //     var submitJSON = {type:1,id:param.stockID,number:result[0].orderNum};
-                //     $.ajax({
-                //         url: "112.74.124.145:3002/users/trade",
-                //         type: "post",
-                //         data: submitJSON,
-                //         dataType: "json",
-                //         async: false,
-                //         success: function (data) {
-                //             var obj = data;
-                //             if(obj == 'success'){
-                //                 connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
-                //                     if (err) {
-                //                         res.json({
-                //                             status: '0',
-                //                             info: '撤单失败'
-                //                         });
-                //                         return;
-                //                     }
-                //                     res.json({
-                //                         status: '1',
-                //                         info: '撤单成功',
-                //                         data:result
-                //                     });
-                //                     connection.query(sql.deleteOrder, [param.orderID], function (err, result) {
-                //                         if (err) {
-                //                             console.log('database connection error');
-                //                             return;
-                //                         }
-                //                     });
-                //                 });
-                //             }else{
-                //                 res.json({
-                //                     status: '0',
-                //                     info: '撤单失败'
-                //                 });
-                //             }
-                //         },
-                //         error: function (req, stat, err) {
-                //             res.json({
-                //                 status: '0',
-                //                 info: '撤单失败'
-                //             });
-                //
-                //         }
-                //     });
-                // }
-
-                res.json({
-                    status: '1',
-                    info: '撤单成功',
-                    data:result
-                });
-            });
-
-            connection.query(sql.deleteOrder, [param.orderID], function (err, result) {
-                if (err) {
-                    console.log('database connection error');
-                    return;
+                if (result[0].buyOrSell === '0') {
+                    //fund解冻操作
+                    //err返回
+                    var submitJSON = {money:result[0].orderNum*result[0].price*100,username:param.userID};
+                    $.ajax({
+                        url: "112.74.124.145:3001/withdrawForBack",
+                        type: "post",
+                        data: submitJSON,
+                        dataType: "json",
+                        async: false,
+                        success: function (data) {
+                            var obj = data;
+                            if(obj.success == 'yes'){
+                                res.json({
+                                    status: '1',
+                                    info: '撤单成功',
+                                    data:result
+                                });
+                                connection.query(sql.deleteOrder, [param.orderID], function (err, result) {
+                                    if (err) {
+                                        console.log('database connection error');
+                                        return;
+                                    }
+                                });
+                
+                            }else{
+                                res.json({
+                                    status: '0',
+                                    info: '撤单失败'
+                                });
+                            }
+                        },
+                        error: function (req, stat, err) {
+                            res.json({
+                                status: '0',
+                                info: '撤单失败'
+                            });
+                        }
+                    });
                 }
+                else {
+                    //stock返回操作
+                    //err返回
+                    var submitJSON = {type:1,id:param.stockID,number:result[0].orderNum,username:param.userID};
+                    $.ajax({
+                        url: "112.74.124.145:3002/users/trade",
+                        type: "post",
+                        data: submitJSON,
+                        dataType: "json",
+                        async: false,
+                        success: function (data,status) {
+                            var obj = data;
+                            if(status == 'success'){
+                                connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
+                                    if (err) {
+                                        res.json({
+                                            status: '0',
+                                            info: '撤单失败'
+                                        });
+                                        return;
+                                    }
+                                    res.json({
+                                        status: '1',
+                                        info: '撤单成功',
+                                        data:result
+                                    });
+                                    connection.query(sql.deleteOrder, [param.orderID], function (err, result) {
+                                        if (err) {
+                                            console.log('database connection error');
+                                            return;
+                                        }
+                                    });
+                                });
+                            }else{
+                                res.json({
+                                    status: '0',
+                                    info: '撤单失败'
+                                });
+                            }
+                        },
+                        error: function (req, stat, err) {
+                            res.json({
+                                status: '0',
+                                info: '撤单失败'
+                            });
+                
+                        }
+                    });
+                }
+
+//                 res.json({
+//                     status: '1',
+//                     info: '撤单成功',
+//                     data:result
+//                 });
             });
+
+//             connection.query(sql.deleteOrder, [param.orderID], function (err, result) {
+//                 if (err) {
+//                     console.log('database connection error');
+//                     return;
+//                 }
+//             });
 
 
 
