@@ -83,7 +83,7 @@ function match(param) {
                                     var request = require('request');
 
                                     request.post(
-                                        '112.74.124.145:3001/withdrawForBack',
+                                        'http://112.74.124.145:3001/withdrawForBack',
                                         { json:submitJSON},
                                         function (error, response, body) {
                                             if (!error && response.statusCode == 200) {
@@ -109,7 +109,7 @@ function match(param) {
                                    
 
                                     request.post(
-                                        '112.74.124.145:3002/users/trade',
+                                        'http://112.74.124.145:3002/users/trade',
                                         { json: submitJSON},
                                         function (error, response, body) {
                                             if (!error && response.statusCode == 200) {
@@ -483,7 +483,7 @@ module.exports = {
                                                     var submitJSON = {username:message.seller,money:message.orderNum*message.price*100};
                                                     var request = require('request');
                                                      request.post(
-                                                        '112.74.124.145:3001/withdrawForBack',
+                                                        'http://112.74.124.145:3001/withdrawForBack',
                                                         { json:submitJSON},
                                                         function (error, response, body) {
                                                             if (!error && response.statusCode == 200) {
@@ -506,7 +506,7 @@ module.exports = {
                                                     //err返回
                                                     var submitJSON = {type:1,username:message.buyer,id:message.stockID,number:message.orderNum};
                                                     request.post(
-                                                        '112.74.124.145:3002/users/trade',
+                                                        'http://112.74.124.145:3002/users/trade',
                                                         { json: submitJSON},
                                                         function (error, response, body) {
                                                             if (!error && response.statusCode == 200) {
