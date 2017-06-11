@@ -114,7 +114,7 @@ function match(param) {
                                         function (error, response, body) {
                                             if (!error && response.statusCode == 200) {
                                                 console.log(body)
-                                               if(body.success == 1){
+                                               if(body.success){
                                                   console.log("股票操作成功");
                                                 }else{
                                                     console.log("股票操作失败");
@@ -511,7 +511,7 @@ module.exports = {
                                                         function (error, response, body) {
                                                             if (!error && response.statusCode == 200) {
                                                                 console.log(body)
-                                                               if(body.success == 1){
+                                                               if(body.success){
                                                                   console.log("股票操作成功");
                                                                 }else{
                                                                     console.log("股票操作失败");
