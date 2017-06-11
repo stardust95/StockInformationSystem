@@ -34,9 +34,10 @@ def createDbEngine(section, configName = 'config.ini'):
     config.read(configName)
     host = config.get(section, 'db_host')
     dbuser = config.get(section, 'db_user')
+    dbport = int(config.get(section, 'db_port'))
     dbpass = config.get(section, 'db_pass')
     dbname = config.get(section, 'db_name')
-    return create_engine('mysql+pymysql://%s:%s@%s/%s?charset=utf8mb4' % (dbuser, dbpass, host, dbname), convert_unicode=True)
+    return create_engine('mysql+pymysql://%s:%s@%s:%s/%s?charset=utf8mb4' % (dbuser, dbpass, host, dbport, dbname), convert_unicode=True)
     
 class Singleton(object):
     _instance = None
@@ -88,7 +89,9 @@ class StockInfoFetcher(IDataFetcher):
             # db, dbname = connectConfigDB('database')
             engine = createDbEngine('database')
             res = ts.get_stock_basics()
-            res.to_sql(tableName, engine, if_exists='replace')
+            res.to_sql(tableName, engine, if_exists='replace', index=False)
+            # with engine.begin() as conn:
+                # conn.execute("ALTER TABLE `%s`  MODIFY  `%s` VARCHAR(255);" % (tableName, 'code'))
             
             # cursor = db.cursor()
             # cursor.execute("SET NAMES utf8mb4;")

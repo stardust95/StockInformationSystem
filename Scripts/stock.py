@@ -64,10 +64,10 @@ def DayLast():
 
         i = i + 1
 
-    cursor.execute('delete from stockList where date != %s', ('',))
+    # cursor.execute('delete from stockList where date != %s', ('',))
     conn.commit()
 
-    cursor.execute('truncate table indexList')
+    # cursor.execute('truncate table indexList')
     conn.commit()
 
     conn.close()
