@@ -130,6 +130,14 @@ router.get('/records', function (req, res) {
     }
 })
 
+// router.get('/profile', function (req, res, next) {
+//
+// })
+
+router.get('/signout', function (req, res, next) {
+    req.session.username = null;
+})
+
 
 router.post('/getList', function (req, res, next) {
     admin.getList(req, res, next);

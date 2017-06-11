@@ -8,7 +8,7 @@ var config = {
     host: "tdsql-219vguff.sh.cdb.myqcloud.com",
     user: "group5",
     password: "group5..",
-    port: "23",
+    port: "26",
     database: "stockG5"
 };
 
