@@ -27,15 +27,16 @@ function createOrder(res, param) {
             //fund冻结操作
             //err返回
             var submitJSON = {money: Number(param.price)*Number(param.orderNum)*100,username:param.userID};
-            $.ajax({
-                url: "112.74.124.145:3001/withdrawForBack",
-                type: "post",
-                data: submitJSON,
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    var obj = data;
-                    if(obj.success == 'yes'){
+            
+            var request = require('request');
+
+            request.post(
+                '112.74.124.145:3001/withdrawForBack',
+                { json:submitJSON },
+                function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        console.log(body);
+                         if(body.success == 'yes'){
                         connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
                             if (err) {
                                 res.json({
@@ -57,65 +58,68 @@ function createOrder(res, param) {
                     }else{
                         res.json({
                             status: '0',
-                            info:obj.error
+                            info:body.error
                         });
                     }
-                },
-                error: function (req, stat, err) {
-                    res.json({
-                        status: '0',
-                        info:'挂单失败'
-                    });
-        
+                        
+                    }else{
+                        res.json({
+                            status: '0',
+                            info:'挂单失败'
+                        });
+                    }
+                   
                 }
-            });
+            );
         }
         else {
             //stock冻结操作
             //err返回
             var submitJSON = {type:0,username:param.userID,id:param.stockID,number:Number(param.orderNum)};
-            $.ajax({
-                url: "112.74.124.145:3002/users/trade",
-                type: "post",
-                data: submitJSON,
-                dataType: "json",
-                async: false,
-                success: function (data,status) {
-                    var obj = data;
-                    if(status == 'success'){
-                        connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
-                            if (err) {
-                                res.json({
-                                    status: '0',
-                                    info: '后台挂单出错'
-                                });
-                                return;
-                            }
-                            res.json({
-                                status: '1',
-                                info: '挂单成功',
-                                data:{  orderNum: param.orderNum,
-                                    price: param.price,
-                                    orderID: result.insertId,
-                                    buyOrSell: param.buyOrSell
+            var request = require('request');
+
+            request.post(
+                '112.74.124.145:3002/users/trade',
+                { json: submitJSON},
+                function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                         if(body.success == 1){
+                         connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
+                                if (err) {
+                                    res.json({
+                                        status: '0',
+                                        info: '后台挂单出错'
+                                    });
+                                    return;
                                 }
+                                res.json({
+                                    status: '1',
+                                    info: '挂单成功',
+                                    data:{  orderNum: param.orderNum,
+                                        price: param.price,
+                                        orderID: result.insertId,
+                                        buyOrSell: param.buyOrSell
+                                    }
+                                 });
+                           });
+                        }else{
+                            res.json({
+                                status: '0',
+                                info:'您的股票数量不足'
                             });
-                        });
+                        }
                     }else{
                         res.json({
-                            status: '0',
-                            info:'您的股票数量不足'
-                        });
-                    }
-                },
-                error: function (req, stat, err) {
-                    res.json({
                         status: '0',
                         info:'后台出错'
-                    });
-        
+                         });
+                        
+                        return;
+                    }
+                    
+                    
                 }
-            });
+            );
         }
 //         connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
 //             if (err) {
@@ -354,55 +358,56 @@ module.exports = {
                     //fund解冻操作
                     //err返回
                     var submitJSON = {money:result[0].orderNum*result[0].price*100,username:param.userID};
-                    $.ajax({
-                        url: "112.74.124.145:3001/withdrawForBack",
-                        type: "post",
-                        data: submitJSON,
-                        dataType: "json",
-                        async: false,
-                        success: function (data) {
-                            var obj = data;
-                            if(obj.success == 'yes'){
-                                res.json({
-                                    status: '1',
-                                    info: '撤单成功',
-                                    data:result
-                                });
-                                connection.query(sql.deleteOrder, [param.orderID], function (err, result) {
-                                    if (err) {
-                                        console.log('database connection error');
-                                        return;
-                                    }
-                                });
-                
+                    var request = require('request');
+
+                    request.post(
+                        '112.74.124.145:3001/withdrawForBack',
+                        { json:submitJSON},
+                        function (error, response, body) {
+                            if (!error && response.statusCode == 200) {
+                                console.log(body);
+                                if(body.success == 'yes'){
+                                    res.json({
+                                        status: '1',
+                                        info: '撤单成功',
+                                        data:result
+                                    });
+                                    connection.query(sql.deleteOrder, [param.orderID], function (err, result) {
+                                        if (err) {
+                                            console.log('database connection error');
+                                            return;
+                                        }
+                                    });
+                                }else{
+                                    res.json({
+                                        status: '0',
+                                        info: '撤单失败'
+                                    });
+                                }
+                                
                             }else{
-                                res.json({
+                                 res.json({
                                     status: '0',
                                     info: '撤单失败'
                                 });
                             }
-                        },
-                        error: function (req, stat, err) {
-                            res.json({
-                                status: '0',
-                                info: '撤单失败'
-                            });
                         }
-                    });
+                    );
+               
                 }
                 else {
                     //stock返回操作
                     //err返回
                     var submitJSON = {type:1,id:param.stockID,number:result[0].orderNum,username:param.userID};
-                    $.ajax({
-                        url: "112.74.124.145:3002/users/trade",
-                        type: "post",
-                        data: submitJSON,
-                        dataType: "json",
-                        async: false,
-                        success: function (data,status) {
-                            var obj = data;
-                            if(status == 'success'){
+                    var request = require('request');
+
+                    request.post(
+                        '112.74.124.145:3002/users/trade',
+                        { json:submitJSON},
+                        function (error, response, body) {
+                            if (!error && response.statusCode == 200) {
+                                console.log(body);
+                                 if(body.success == 1){
                                 connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
                                     if (err) {
                                         res.json({
@@ -429,16 +434,17 @@ module.exports = {
                                     info: '撤单失败'
                                 });
                             }
-                        },
-                        error: function (req, stat, err) {
-                            res.json({
-                                status: '0',
-                                info: '撤单失败'
-                            });
-                
+                                
+                            }else{
+                                res.json({
+                                    status: '0',
+                                    info: '撤单失败'
+                                });
+                            }
                         }
-                    });
-                }
+                    );
+                    
+                
 
 //                 res.json({
 //                     status: '1',
