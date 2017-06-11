@@ -83,6 +83,8 @@ function createOrder(res, param) {
                 { json: submitJSON},
                 function (error, response, body) {
                     if (!error && response.statusCode == 200) {
+                        console.log(body);
+
                         if(body.success){
                             connection.query(sql.createOrder, [param.stockID, param.buyOrSell, "1", param.orderNum, param.price, param.userID, 0], function (err, result) {
                                 if (err) {
