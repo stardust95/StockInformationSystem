@@ -171,7 +171,7 @@ function match(param) {
                                                 }
                                             });
 
-                                            connection.query(sql.queryBuyOrder5,function (err, buy5) {
+                                            connection.query(sql.queryBuyOrder5,[message.stockID],function (err, buy5) {
                                                 if (err) {
                                                     console.log('query err');
                                                     return;
@@ -184,7 +184,7 @@ function match(param) {
                                                     buy5.push({price:0, orderNum:0});
                                                 }
 
-                                                connection.query(sql.querySellOrder5,function (err, sell5) {
+                                                connection.query(sql.querySellOrder5,[message.stockID],function (err, sell5) {
                                                     if (err) {
                                                         console.log('query err');
                                                         return;
@@ -564,7 +564,7 @@ module.exports = {
                                                                     }
                                                                 });
 
-                                                                connection.query(sql.queryBuyOrder5,function (err, buy5) {
+                                                                connection.query(sql.queryBuyOrder5,[message.stockID],function (err, buy5) {
                                                                     if (err) {
                                                                         console.log('query err');
                                                                         return;
@@ -577,7 +577,7 @@ module.exports = {
                                                                         buy5.push({price:0, orderNum:0});
                                                                     }
 
-                                                                    connection.query(sql.querySellOrder5,function (err, sell5) {
+                                                                    connection.query(sql.querySellOrder5,[message.stockID],function (err, sell5) {
                                                                         if (err) {
                                                                             console.log('query err');
                                                                             return;
@@ -723,7 +723,7 @@ module.exports = {
                                                                     }
                                                                 });
 
-                                                                connection.query(sql.queryBuyOrder5,function (err, buy5) {
+                                                                connection.query(sql.queryBuyOrder5,[message.stockID],function (err, buy5) {
                                                                     if (err) {
                                                                         console.log('query err');
                                                                         return;
@@ -736,7 +736,7 @@ module.exports = {
                                                                         buy5.push({price:0, orderNum:0});
                                                                     }
 
-                                                                    connection.query(sql.querySellOrder5,function (err, sell5) {
+                                                                    connection.query(sql.querySellOrder5,[message.stockID],function (err, sell5) {
                                                                         if (err) {
                                                                             console.log('query err');
                                                                             return;
