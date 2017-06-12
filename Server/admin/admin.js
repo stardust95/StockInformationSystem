@@ -293,9 +293,11 @@ module.exports = {
     },
     getList: function (req, res, next) {
         var param = req.body;
+        param.userID = req.session.username;
+        param.stockID = req.session.stockID;
         backend.getConnection(function (err, connection) {
             if(param.buyOrSell == '0'){
-                connection.query(sql.getBuyList, [param.buyOrSell, parseInt(param.from), parseInt(param.num)], function (err, result) {
+                connection.query(sql.getBuyList, [param.buyOrSell, param.stockID,parseInt(param.from), parseInt(param.num)], function (err, result) {
                     if (err) {
                         console.log('database connection error');
                         return;
@@ -304,7 +306,7 @@ module.exports = {
                     connection.release();
                 });
             }else{
-                connection.query(sql.getSellList, [param.buyOrSell, parseInt(param.from), parseInt(param.num)], function (err, result) {
+                connection.query(sql.getSellList, [param.buyOrSell, param.stockID,parseInt(param.from), parseInt(param.num)], function (err, result) {
                     if (err) {
                         console.log('database connection error');
                         return;
@@ -319,8 +321,9 @@ module.exports = {
     getUserList: function (req, res, next) {
         var param = req.body;
         param.userID = req.session.username;
+        param.stockID = req.session.stockID;
         backend.getConnection(function (err, connection) {
-            connection.query(sql.getUserList, [param.userID], function (err, result) {
+            connection.query(sql.getUserList, [param.userID,param.stockID], function (err, result) {
                 if (err) {
                     console.log('database connection error');
                     return;
