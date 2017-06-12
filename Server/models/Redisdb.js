@@ -45,8 +45,8 @@ exports.middleware = (req, res, next) => {
             }else if( reply ){      // if user logged in
                 console.log("reply = " + reply);
                 res.locals.session = JSON.parse(reply);
-                // var name = res.locals.session.user.username
-                var name = res.locals.session.username
+                var name = res.locals.session.user.username
+                // var name = res.locals.session.username
                 req.session.username = name;
                 res.locals.username = name;
                 console.log("username = " + name);
