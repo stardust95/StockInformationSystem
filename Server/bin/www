@@ -53,6 +53,9 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
+var admin = require('../admin/trade');
+setInterval(admin.trade,5000);
+
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;

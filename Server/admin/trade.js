@@ -77,8 +77,8 @@ function match(param) {
                                 //买家stock增加
                                 //卖家stock减少
 
-                                    fund解冻操作
-                                    err返回
+                                    //fund解冻操作
+                                    //err返回
                                     var submitJSON = {username:message.seller,money:message.orderNum*message.price*100};
                                     var request = require('request');
 
@@ -142,8 +142,8 @@ function match(param) {
                                         }
                                         if (result.length != 0 ) {
                                             var curtime = new Date();
-                                            message.date = curtime.toLocaleDateString();
-                                            message.time = curtime.toLocaleTimeString();
+                                            message.date = [curtime.getFullYear(), curtime.getMonth(), curtime.getDate()].join("-");
+                                            message.time = curtime.toTimeString().split(' ')[0];
                                             message.preprice =  result[0].price;
                                             message.high = result[0].high;
                                             message.low = result[0].low;
