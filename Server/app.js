@@ -40,12 +40,12 @@ app.use(session({
         charset: 'alphabetic'
     }),
     cookie: {
+        domain: "112.74.124.145:3002/",
         maxAge: 60000*1000
     },
     resave: true,
     saveUninitialized: true
 }));
-//
 
 app.use(redis.middleware);
 
