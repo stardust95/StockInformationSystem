@@ -1,6 +1,6 @@
 var sql = {
     createOrder: 'insert into orders(orderID,stockID,time,buyOrSell,way,orderNum,price,userID,userAccount) VALUES(NULL,?,CURRENT_TIMESTAMP,?,?,?,?,?,?)',
-    queryOrder: 'select buyOrSell,orderNum,price,orderID from orders where orderID = ?',
+    queryOrder: 'select buyOrSell,orderNum,price,orderID from orders where orderID = ?,stockID = ?',
     queryAllOrder: 'select stockID,userID,orderNum,price,buyOrSell from orders where stockID = ? order by price asc,time desc',
     querySellOrder: 'select stockID,userID,orderID,buyOrSell,orderNum,price from orders where stockID=? and buyOrSell=? and price<=? order by price asc,time asc',
     queryBuyOrder: 'select stockID,userID,orderID,buyOrSell,orderNum,price from orders where stockID=? and buyOrSell=? and price>=? order by price desc,time asc',
