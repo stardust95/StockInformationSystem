@@ -83,7 +83,7 @@ function match(param) {
                                     var request = require('request');
 
                                     request.post(
-                                        'http://112.74.124.145:3001/withdrawForBack',
+                                        'http://112.74.124.145:3001/depositForBack',
                                         { json:submitJSON},
                                         function (error, response, body) {
                                             if (!error && response.statusCode == 200) {
@@ -142,7 +142,7 @@ function match(param) {
                                         }
                                         if (result.length != 0 ) {
                                             var curtime = new Date();
-                                            message.date = [curtime.getFullYear(), curtime.getMonth(), curtime.getDate()].join("-");
+                                            message.date = [curtime.getFullYear(), curtime.getMonth()+1, curtime.getDate()].join("-");
                                             message.time = curtime.toTimeString().split(' ')[0];
                                             message.preprice =  result[0].price;
                                             message.high = result[0].high;
@@ -214,11 +214,7 @@ function match(param) {
                                                     });
 
                                                 });
-
                                             });
-
-
-
                                         }
                                         else {
                                             console.log('query null');

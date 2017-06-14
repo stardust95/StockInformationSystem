@@ -16,6 +16,7 @@ let client = redis.createClient(option.port, option.host);
 client.on("error", function (err) {
     console.log("Redis Error: " + err)
 });
+
 exports.client = client;
 exports.cache = function(key, value, notExpire, time) {
     if( notExpire )
@@ -35,15 +36,21 @@ exports.middleware = (req, res, next) => {
     if( req.session && req.session.username ){
         res.locals.username = req.session.username;
     }
-    if( req.query.session && req.query.session !== "#" ){
-        let sessionKey = prefix + req.query.session
-        console.log("url = " + req.url)
+
+    console.log("query = " + JSON.stringify(req.query));
+    if( req.query.stockID ){
+        res.cookie("stockID", req.query.stockID);
+        console.log("set stockID in cookies");
+    }
+
+    if( (req.query.session && req.query.session !== "#") || req.cookies.sessionid ){
+        let sessionKey = prefix + (req.cookies.sessionid ? req.cookies.sessionid : req.query.session);
+        // console.log("url = " + req.url)
         console.log("In redisdb.js, sessionKey = " + sessionKey)
         client.get(sessionKey, function (err, reply) {
             if( err ){
                 console.log(err)
             }else if( reply ){      // if user logged in
-                console.log("reply = " + reply);
                 res.locals.session = JSON.parse(reply);
                 var name = res.locals.session.user.username
                 // var name = res.locals.session.username
@@ -51,9 +58,11 @@ exports.middleware = (req, res, next) => {
                 res.locals.username = name;
                 console.log("username = " + name);
             }
+            console.log("reply = " + reply);
             next()
         })
     }else{
         next()
     }
+
 }

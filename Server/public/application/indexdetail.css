@@ -4,9 +4,13 @@
 }
 
 .table td {
-
     text-align: center;
 }
+
+body{
+    padding-top: 50px;
+}
+
 .table th {
     text-align: center;
 }

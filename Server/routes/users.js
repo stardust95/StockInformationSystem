@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var UserData = require('../models/UserData')
 var admin = require('../admin/admin');
+var oneSignal = require('../models/onesignal')
+var request = require('request')
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -153,6 +155,14 @@ router.post('/getUserList', function (req, res, next) {
 router.post('/deleteOrder', function (req, res, next) {
     admin.deleteOrder(req, res, next);
 });
+//
+//
+//
+// router.get('/hotNews', function (req, res, next) {
+//
+//     res.json({})
+//
+// })
 
 
 module.exports = router;

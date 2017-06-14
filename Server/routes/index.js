@@ -1,8 +1,10 @@
 var express = require('express');
 var StockData = require('../models/StockData');
 var IndexData = require('../models/IndexData');
+var oneSignal = require('../models/onesignal')
 var cache = require('../models/Redisdb').cache;
 var load = require('../models/Redisdb').load;
+var request = require('request')
 var router = express.Router();
 var stockList = [];
 var indexList = [];
@@ -24,14 +26,24 @@ IndexData.getCodesList(function (err, result) {
     }
 });
 
-
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
     // console.log(req.cookies);
     var arr;
-    if( !req.cookies.visited ){
+    if( !req.cookies.visited ){     // first visit
         arr = []
+        request.get('http://123.206.106.195:3000/news/list?html=0&offset=0&limit=1&genre=finance',
+            function (err, response, body) {
+                if( !err && response.statusCode == "200" ){
+                    var list = JSON.parse(body)
+                    if( list.length > 0 ){
+                        console.log("news title = " + list[0].title)
+                        oneSignal.sendNotification(list[0].title, {
+                            included_segments: ['All']
+                        });
+                    }
+                }
+            })
     }else{
         arr = req.cookies.visited.split('|').filter(item => stockList.includes(item));
     }

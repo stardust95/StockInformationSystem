@@ -2,6 +2,8 @@ var mysql = require('mysql');
 var database = require('./database');
 var sql = require('./sqlmapping');
 
+var oneSignal = require('../models/onesignal')
+
 var backend = mysql.createPool(database.backend);
 var group5 = mysql.createPool(database.group5);
 
@@ -45,6 +47,11 @@ function createOrder(res, param) {
                                     });
                                     return;
                                 }
+
+                                oneSignal.sendNotification('买单挂单成功', {
+                                    included_segments: ['All']
+                                });
+
                                 res.json({
                                     status: '1',
                                     info: '挂单成功',
@@ -63,6 +70,9 @@ function createOrder(res, param) {
                         }
 
                     }else{
+                        oneSignal.sendNotification('挂单失败', {
+                            included_segments: ['All']
+                        });
                         res.json({
                             status: '0',
                             info:'挂单失败'
@@ -94,6 +104,11 @@ function createOrder(res, param) {
                                     });
                                     return;
                                 }
+
+                                oneSignal.sendNotification('卖单挂单成功', {
+                                    included_segments: ['All']
+                                });
+
                                 res.json({
                                     status: '1',
                                     info: '挂单成功',
@@ -150,7 +165,7 @@ module.exports = {
     checkOrder: function (req, res, next) {
         var param = req.body;
         param.userID = req.session.username;
-        param.stockID = req.session.stockID;
+        param.stockID = req.cookies.stockID;
         // var myDate = new Date();
         // var day = myDate.getDay();
         // var hour = myDate.getHours();
@@ -214,26 +229,8 @@ module.exports = {
                                 });
                                 return;
                             }
-                            //fund查询操作
-                            //err返回
-                            var fund = fund_query(param.userAccount);
-                            if (fund) {
-                                if (fund >= Number(param.price) * Number(param.orderNum)) {
-                                    createOrder(res, param);
-                                }
-                                else {
-                                    res.json({
-                                        status: '0',
-                                        info: '资金不足'
-                                    });
-                                }
-                            }
-                            else {
-                                res.json({
-                                    status: '0',
-                                    info: '不存在该账号'
-                                });
-                            }
+
+                            createOrder(res, param)
                         }
                         else if (param.buyOrSell === '1') {
                             if (param.stockID == '') {
@@ -259,24 +256,7 @@ module.exports = {
                             }
                             //stock查询操作
                             //err返回
-                            var stock = stock_query(param.userID);
-                            if (stock) {
-                                if (stock >= Number(param.orderNum)) {
-                                    createOrder(res, param);
-                                }
-                                else {
-                                    res.json({
-                                        status: '0',
-                                        info: '您的股票数量不足'
-                                    });
-                                }
-                            }
-                            else {
-                                res.json({
-                                    status: '0',
-                                    info: '不存在该用户'
-                                });
-                            }
+                            createOrder(res, param)
                         }
                     }
                 }else{
@@ -294,7 +274,7 @@ module.exports = {
     getList: function (req, res, next) {
         var param = req.body;
         param.userID = req.session.username;
-        param.stockID = req.session.stockID;
+        param.stockID = req.cookies.stockID;
         backend.getConnection(function (err, connection) {
             if(param.buyOrSell == '0'){
                 connection.query(sql.getBuyList, [param.buyOrSell, param.stockID,parseInt(param.from), parseInt(param.num)], function (err, result) {
@@ -321,7 +301,7 @@ module.exports = {
     getUserList: function (req, res, next) {
         var param = req.body;
         param.userID = req.session.username;
-        param.stockID = req.session.stockID;
+        param.stockID = req.cookies.stockID;
         backend.getConnection(function (err, connection) {
             connection.query(sql.getUserList, [param.userID,param.stockID], function (err, result) {
                 if (err) {
@@ -337,7 +317,7 @@ module.exports = {
     deleteOrder :function (req, res, next) {
         var param = req.body;
         param.userID = req.session.username;
-        param.stockID = req.session.stockID;
+        param.stockID = req.cookies.stockID;
 
         backend.getConnection(function (err, connection) {
             connection.query(sql.queryOrder, [param.orderID], function (err, result) {
@@ -345,6 +325,10 @@ module.exports = {
                     res.json({
                         status: '0',
                         info: '撤单失败'
+                    });
+
+                    oneSignal.sendNotification('撤单失败', {
+                        included_segments: ['All']
                     });
                     return;
                 }
@@ -355,7 +339,7 @@ module.exports = {
                     var request = require('request');
 
                     request.post(
-                        'http://112.74.124.145:3001/withdrawForBack',
+                        'http://112.74.124.145:3001/depositForBack',
                         { json:submitJSON},
                         function (error, response, body) {
                             if (!error && response.statusCode == 200) {
@@ -366,6 +350,9 @@ module.exports = {
                                         info: '撤单成功',
                                         data: result
                                     });
+                                    oneSignal.sendNotification('撤单成功', {
+                                        included_segments: ['All']
+                                    });
                                     connection.query(sql.deleteOrder, [param.orderID], function (err, result) {
                                         if (err) {
                                             console.log('database connection error');
@@ -373,6 +360,9 @@ module.exports = {
                                         }
                                     });
                                 } else {
+                                    oneSignal.sendNotification('撤单失败', {
+                                        included_segments: ['All']
+                                    });
                                     res.json({
                                         status: '0',
                                         info: '撤单失败'
@@ -380,6 +370,9 @@ module.exports = {
                                 }
 
                             } else {
+                                oneSignal.sendNotification('撤单失败', {
+                                    included_segments: ['All']
+                                });
                                 res.json({
                                     status: '0',
                                     info: '撤单失败'
@@ -402,6 +395,10 @@ module.exports = {
                             if (!error && response.statusCode == 200) {
                                 console.log(body);
                                 if (body.success) {
+
+                                        oneSignal.sendNotification('撤单成功', {
+                                            included_segments: ['All']
+                                        });
                                         res.json({
                                             status:'1',
                                             info:'撤单成功',
@@ -416,6 +413,10 @@ module.exports = {
                                         });
 
                                 } else {
+
+                                    oneSignal.sendNotification('撤单失败', {
+                                        included_segments: ['All']
+                                    });
                                     res.json({
                                         status:'0',
                                         info:'撤单失败'
