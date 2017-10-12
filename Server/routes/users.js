@@ -140,7 +140,7 @@ router.get('/signout', function (req, res, next) {
     req.session.username = null;
 })
 
-
+/*
 router.post('/getList', function (req, res, next) {
     admin.getList(req, res, next);
 });
@@ -164,5 +164,5 @@ router.post('/deleteOrder', function (req, res, next) {
 //
 // })
 
-
+*/
 module.exports = router;
